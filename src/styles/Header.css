@@ -1,0 +1,28 @@
+header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background-color: #ffffff;
+  height: 10vh;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+.logo img{
+  height: 10vh;
+}
+.signIn button{
+  background-color: #01329d;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.signIn button:hover{
+  background-color: #002472;
+}

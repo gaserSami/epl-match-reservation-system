@@ -1,0 +1,84 @@
+.matchCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f2f2f2; /* match the background color */
+  border: 1px solid #ddd; /* assuming a light grey border */
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 95%;
+  margin: auto; /* center in the parent element */
+  margin-bottom: 1%;
+}
+
+.date {
+  flex: 1;
+  text-align: center; /* center date info */
+  color: #333; /* dark grey color for text */
+border-right: 1px solid #ddd; /* light grey border on the right */
+  margin-right: 20px; /* space between date and info */
+}
+
+.month, .day, .year {
+  display: block; /* each on its own line */
+}
+
+.day{
+  font-size: 2em; /* larger font size */
+  font-weight: bold; /* make the date bold */
+}
+
+.info {
+  flex: 3;
+  flex-grow: 3; /* allow the info section to grow */
+  text-align: left; /* left info */
+}
+
+.info h2 {
+  color: #999; /* light grey color */
+  font-size: 0.8em; /* smaller font size */
+  margin: 0; /* remove default margin */
+  padding: 0; /* remove default padding */
+}
+
+.teams {
+  color: #000; /* black color */
+  margin: 0.5em 0; /* margin for spacing */
+}
+
+.time{
+  display: block; /* each on its own line */
+  font-size: 1rem;
+  font-weight: bold;
+  color: #57b728; /* medium grey color */
+}
+
+.stadium {
+  display: block; /* each on its own line */
+  color: #666; /* medium grey color */
+}
+
+.price {
+  flex: 1;
+  font-size: 1.5em; /* larger font size */
+  color: #e60000; /* red color for price */
+  font-weight: bold; /* make the price bold */
+  margin-right: 20px; /* space between price and buttons */
+}
+.buttons
+{
+  flex:1;
+}
+
+.buttons button {
+  font-size: 1rem;
+  background-color: #9c9c9c; /* red background */
+  color: white; /* white text */
+  border: none; /* no border */
+  padding: 10px 20px; /* padding inside the button */
+  text-transform: uppercase; /* uppercase text */
+  border-radius: 15px; /* rounded corners for button */
+  cursor: pointer; /* cursor for click */
+  font-weight: bold; /* bold text */
+}
+

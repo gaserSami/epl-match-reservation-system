@@ -1,0 +1,51 @@
+.mainPage{
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.landingSection
+{
+  background-image: URL('../../public/images/aboSalah.jpeg');
+  opacity: 0.8;
+  background-size: cover;
+  background-blend-mode:overlay;
+  height: 85vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #01329d;
+  color: white;
+  padding: 20px;
+}
+
+.mainPage > h1{
+color: white;
+}
+
+.matchesContainer{
+  min-height: 200px;
+  width: 90%;
+  padding: 20px;
+  background-color: #3b52898c;
+  box-shadow: 0px 0px 10px 0px #000000;
+}
+.sideButton{
+  position: fixed;
+  bottom: 3%;
+  left: 2%;
+  background-color: #ffcd29;
+  color: #0c0c0c;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: scale 0.3s;
+}
+.sideButton:hover{
+  background-color: #cea520;
+  scale: 1.05;
+}

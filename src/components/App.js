@@ -1,9 +1,15 @@
 import '../styles/App.css';
+import './Header'
+import Header from './Header';
+import MainPage from './MainPage';
 
 function App() {
   return (
     // testing
-    <h1>hello</h1>
+    <div className="App">
+      <Header />
+      <MainPage />
+    </div>
   );
 }
 
