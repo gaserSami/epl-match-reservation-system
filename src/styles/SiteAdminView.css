@@ -1,0 +1,70 @@
+.SiteAdminView
+{
+  height: 100%;
+  width: 100%;
+}
+.main{
+  height: 100%;
+  width: auto;
+  margin-left: 15%;
+  padding: 20px;
+}
+.usersContainer{
+  background-color: rgb(255, 255, 255);
+  min-height: 500px;
+  width: 100%;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow for styling */
+}
+
+.user-table th, .user-table td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-table th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+td.button {
+width: 10%;
+}
+
+
+.user-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+}
+
+.approve {
+  background-color: #4CAF50; /* Green */
+}
+
+.decline {
+  background-color: #f44336; /* Red */
+}
+
+.btn:focus {
+  outline: none; /* Removes the outline on focus for buttons */
+}
+
+/* Hover effects */
+.btn:hover {
+  opacity: 0.8;
+}

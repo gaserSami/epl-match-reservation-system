@@ -1,0 +1,40 @@
+.sidebar {
+  height: 90vh;
+  position: fixed;
+  background-color: #4C6EA5; /* Replace with the exact color code from the image */
+  color: white;
+  width: 15%; /* Adjust width to match your design */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.menu-item {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #365882; /* Darker shade for the border */
+  background-color: #365882;
+  cursor: pointer;
+}
+
+.menu-item > span {
+  color: white;
+}
+
+.menu-item.active{
+  background-color: #01329d;
+}
+
+.menu-item:last-child {
+  border-bottom: none; /* No border for the last item */
+}
+
+.menu-item.settings {
+  align-self: flex-end; /* Align settings to the bottom */
+  position: absolute; /* Position at the bottom */
+  bottom: 0px;
+  width: 100%;
+  background-color: #444444;
+}
+
+/* Icons and further styling can be added with pseudo-elements or additional spans/classes */
