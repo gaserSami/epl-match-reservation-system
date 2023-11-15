@@ -1,16 +1,14 @@
 import React from "react";
 import '../styles/Sidebar.css'
 
-function Sidebar() {
+function Sidebar(props) {
+  const listItems = props.listItems.map((item) => (<div className={`menu-item ${item.status}`}>
+  <span>{item.name}</span>
+</div>));
 return (
 <div class="sidebar">
-  <div class="menu-item">
-    <span>New Users</span>
-  </div>
-  <div class="menu-item active">
-    <span>Existing Users</span>
-  </div>
-  <div class="menu-item settings">
+  {listItems}
+  <div className="menu-item settings">
     <img src="" alt="" className="sideIcon" />
     <span>Settings</span>
   </div>

@@ -67,12 +67,14 @@ border-right: 1px solid #ddd; /* light grey border on the right */
 }
 .buttons
 {
-  flex:1;
+  flex:1.5;
+  display: flex;
+  flex-direction: row;
 }
 
 .buttons button {
   font-size: 1rem;
-  background-color: #9c9c9c; /* red background */
+  background-color: #5cbc2d; /* red background */
   color: white; /* white text */
   border: none; /* no border */
   padding: 10px 20px; /* padding inside the button */
@@ -80,5 +82,15 @@ border-right: 1px solid #ddd; /* light grey border on the right */
   border-radius: 15px; /* rounded corners for button */
   cursor: pointer; /* cursor for click */
   font-weight: bold; /* bold text */
+  margin-right: 10px;
+}
+
+.buttons button:hover {
+  background-color: #4CAF50; /* darker background on hover */
+}
+
+.buttons button.disabled {
+  background-color: #ccc; /* grey background */
+  cursor: not-allowed; /* cursor for disabled button */
 }
 

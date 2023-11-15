@@ -1,0 +1,36 @@
+.EFAview
+{
+  height: 100%;
+  width: 100%;
+}
+.main{
+  height: 100%;
+  width: auto;
+  margin-left: 15%;
+  padding: 20px;
+}
+.cardsContainer{
+  background-color: rgba(1, 23, 70, 0.808);
+  min-height: 500px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.addSideButton{
+  position: fixed;
+  bottom: 3%;
+  right: 2%;
+  background-color: #ffcd29;
+  color: #0c0c0c;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: scale 0.3s;
+  width: 10%;
+}
+.addSideButton:hover{
+  background-color: #cea520;
+  scale: 1.05;
+}

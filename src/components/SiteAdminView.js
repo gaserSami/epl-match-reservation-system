@@ -3,9 +3,10 @@ import '../styles/SiteAdminView.css'
 import Sidebar from "./Sidebar";
 
 function SiteAdminView() {
+  const listItems = [{name:"New Users",status:"notActive"}, {name:"Existing Users",status:"active"}];
 return (
   <div className="SiteAdminView">
-  <Sidebar />
+  <Sidebar listItems = {listItems} />
   <div className="main">
     <div className="usersContainer">
     <table class="user-table">
