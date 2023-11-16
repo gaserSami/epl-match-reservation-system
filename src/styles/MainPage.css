@@ -7,7 +7,7 @@ align-items: center;
 
 .landingSection
 {
-  background-image: URL('../../public/images/aboSalah.jpeg');
+  background-image: URL('../assets/aboSalah.jpeg');
   opacity: 0.8;
   background-size: cover;
   background-blend-mode:overlay;

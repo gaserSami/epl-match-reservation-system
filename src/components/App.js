@@ -4,13 +4,15 @@ import Header from './Header';
 import MainPage from './MainPage';
 import SiteAdminView from './SiteAdminView';
 import EFAView from './EFAview';
+import FanView from './FanView';
+import LoginPage from './LoginPage';
 
 function App() {
   return (
     // testing
     <div className="App">
       <Header />
-      <EFAView />
+      <LoginPage />
     </div>
   );
 }

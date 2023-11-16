@@ -1,0 +1,128 @@
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full screen height */
+  background-color: #e9ecef; /* Light grey background */
+}
+
+.signup-box {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Adjust width as needed */
+  max-width: 800px; /* Set a max-width for larger screens */
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+p {
+  color: #6c757d; /* Grey text */
+  margin-bottom: 20px;
+}
+
+label {
+ font-weight:600;
+}
+
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Ensure it wraps on smaller screens */
+}
+
+.input-group {
+  margin-bottom: 20px;
+  flex-basis: calc(25% - 10px); /* Adjust width of the input fields */
+  text-align: left;
+}
+
+.input-group.full-width {
+  flex-basis: 100%; /* Full width input field */
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1f4ba9;
+  color: white;
+  cursor: pointer;
+  margin-top: 20px; /* Space above the button */
+}
+
+button:hover {
+  background-color: #03297a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .input-group {
+    flex-basis: calc(50% - 10px); /* Make inputs take half-width on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .input-group {
+    flex-basis: 100%; /* Stack inputs on very small screens */
+  }
+}
+
+
+.select-group, .gender {
+  flex-basis: calc(50% - 10px); /* Adjust width for select and radio group */
+}
+
+/* Style the select dropdown */
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: white;
+  appearance: none;
+}
+
+.genderContainer
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Style individual radio button labels */
+.gender label {
+flex: 0.15;
+}
+
+/* Space out the radio buttons */
+.gender input[type="radio"] {
+  flex: 0.15;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .input-group, .select-group, .gender {
+    flex-basis: 100%; /* Make inputs take full-width on smaller screens */
+  }
+}
+
+

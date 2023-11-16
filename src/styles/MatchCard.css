@@ -11,7 +11,9 @@
   margin-bottom: 1%;
 }
 
-.date {
+
+
+.matchCard .date {
   flex: 1;
   text-align: center; /* center date info */
   color: #333; /* dark grey color for text */
@@ -19,60 +21,64 @@ border-right: 1px solid #ddd; /* light grey border on the right */
   margin-right: 20px; /* space between date and info */
 }
 
-.month, .day, .year {
+.matchCard .month,.matchCard .day,.matchCard .year {
   display: block; /* each on its own line */
 }
 
-.day{
+.matchCard .day{
   font-size: 2em; /* larger font size */
   font-weight: bold; /* make the date bold */
 }
 
-.info {
+.matchCard .info {
   flex: 3;
   flex-grow: 3; /* allow the info section to grow */
+  display: flex;
+  flex-direction: column;
   text-align: left; /* left info */
+  align-items:flex-start;
 }
 
-.info h2 {
+.matchCard .info h2 {
   color: #999; /* light grey color */
-  font-size: 0.8em; /* smaller font size */
+  font-size: 0.8rem; /* smaller font size */
   margin: 0; /* remove default margin */
   padding: 0; /* remove default padding */
 }
 
-.teams {
+.matchCard .teams {
   color: #000; /* black color */
   margin: 0.5em 0; /* margin for spacing */
 }
 
-.time{
+.matchCard .time{
   display: block; /* each on its own line */
   font-size: 1rem;
   font-weight: bold;
   color: #57b728; /* medium grey color */
 }
 
-.stadium {
+.matchCard .stadium {
   display: block; /* each on its own line */
   color: #666; /* medium grey color */
 }
 
-.price {
+.matchCard .price {
   flex: 1;
   font-size: 1.5em; /* larger font size */
   color: #e60000; /* red color for price */
   font-weight: bold; /* make the price bold */
   margin-right: 20px; /* space between price and buttons */
 }
-.buttons
+.matchCard .buttons
 {
-  flex:1.5;
-  display: flex;
-  flex-direction: row;
+  flex:2;
+display: flex;
+flex-direction: row;
+align-items: center;
 }
 
-.buttons button {
+.matchCard .buttons button:not(:has(img)) {
   font-size: 1rem;
   background-color: #5cbc2d; /* red background */
   color: white; /* white text */
@@ -85,12 +91,37 @@ border-right: 1px solid #ddd; /* light grey border on the right */
   margin-right: 10px;
 }
 
-.buttons button:hover {
+.matchCard .buttons button:has(img) {
+  color: white; /* white text */
+  border: none; /* no border */
+  padding: 10px 20px; /* padding inside the button */
+  text-transform: uppercase; /* uppercase text */
+  border-radius: 15px; /* rounded corners for button */
+  cursor: pointer; /* cursor for click */
+  font-weight: bold; /* bold text */
+  margin-right: 10px;
+}
+
+.matchCard .buttons img{
+  height: 4rem;
+  margin-right: 10px;
+  margin-left: 10%;
+}
+
+.matchCard .buttons button:not(:has(img)):hover {
   background-color: #4CAF50; /* darker background on hover */
 }
 
-.buttons button.disabled {
+.matchCard .buttons button.disabled {
   background-color: #ccc; /* grey background */
   cursor: not-allowed; /* cursor for disabled button */
+}
+
+.matchCard .buttons button.cancel {
+  background-color: #ee1d1d; /* grey background */
+}
+
+.matchCard .buttons button.cancel:hover {
+  background-color: #e00; /* darker background on hover */
 }
 
