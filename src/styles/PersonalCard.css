@@ -1,4 +1,4 @@
-.signup-container {
+.personal-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,7 +6,7 @@
   background-color: #e9ecef; /* Light grey background */
 }
 
-.signup-container .signup-box {
+.personal-container .personal-card-box {
   background-color: #fff;
   padding: 40px;
   border-radius: 10px;
@@ -16,48 +16,50 @@
   text-align: center;
 }
 
-.signup-container h2 {
+.personal-container h2 {
+  color: black;
   margin-bottom: 10px;
 }
 
-.signup-container p {
+.personal-container p {
   color: #6c757d; /* Grey text */
   margin-bottom: 20px;
 }
 
-.signup-container label {
+.personal-container label {
  font-weight:600;
 }
 
-.signup-container .input-row {
+.personal-container .input-row {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap; /* Ensure it wraps on smaller screens */
 }
 
-.signup-container .input-group {
+.personal-container .input-group {
   margin-bottom: 20px;
+  margin-right: 5%;
   flex-basis: calc(25% - 10px); /* Adjust width of the input fields */
   text-align: left;
 }
 
-.signup-container .input-group.full-width {
+.personal-container .input-group.full-width {
   flex-basis: 100%; /* Full width input field */
 }
 
-.signup-container .input-group label {
+.personal-container .input-group label {
   display: block;
   margin-bottom: 5px;
 }
 
-.signup-container .input-group input {
+.personal-container .input-group input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ced4da;
   border-radius: 5px;
 }
 
-.signup-container button {
+.personal-container button {
   width: 100%;
   padding: 10px;
   border: none;
@@ -68,7 +70,7 @@
   margin-top: 20px; /* Space above the button */
 }
 
-.signup-container button:hover {
+.personal-container button:hover {
   background-color: #03297a;
 }
 
@@ -86,12 +88,12 @@
 }
 
 
-.select-group, .gender {
+.personal-container .select-group, .gender {
   flex-basis: calc(50% - 10px); /* Adjust width for select and radio group */
 }
 
 /* Style the select dropdown */
-.signup-container select {
+.personal-container select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ced4da;
@@ -100,7 +102,7 @@
   appearance: none;
 }
 
-.signup-container .genderContainer
+.personal-container .genderContainer
 {
   display: flex;
   flex-direction: row;
@@ -108,12 +110,12 @@
 }
 
 /* Style individual radio button labels */
-.signup-container .gender label {
+.personal-container .gender label {
 flex: 0.15;
 }
 
 /* Space out the radio buttons */
-.signup-container .gender input[type="radio"] {
+.personal-container .gender input[type="radio"] {
   flex: 0.15;
 }
 

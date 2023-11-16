@@ -6,13 +6,15 @@ import SiteAdminView from './SiteAdminView';
 import EFAView from './EFAview';
 import FanView from './FanView';
 import LoginPage from './LoginPage';
+import MatchDetailsCard from './MatchDetailsCard';
+import PersonalCard from './PersonalCard';
 
 function App() {
   return (
     // testing
     <div className="App">
       <Header />
-      <LoginPage />
+      <PersonalCard />
     </div>
   );
 }
