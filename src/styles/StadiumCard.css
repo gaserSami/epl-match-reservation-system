@@ -15,11 +15,19 @@
   flex: 1;
   text-align: center; /* center date info */
   color: #333; /* dark grey color for text */
+  padding-right: 2%;
 border-right: 1px solid #ddd; /* light grey border on the right */
   margin-right: 20px; /* space between date and info */
 }
 
+.StadiumCard .icon img {
+  width: 100%;
+  height: auto;
+
+}
+
 .StadiumCard .info{
+  flex: 4;
   display: flex;
   flex-direction: row;
   justify-content: space-around;

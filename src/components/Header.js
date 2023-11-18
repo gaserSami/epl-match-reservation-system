@@ -37,6 +37,7 @@ const userView = (
     currentPage === 'signUp' || currentPage === 'signIn' ? idleView :
     currentPage === 'mainPage' ? guestView :
     currentPage === 'fanPage' ? userView :
+    currentPage === 'EFAPage' ? userView :
     null
   );
 

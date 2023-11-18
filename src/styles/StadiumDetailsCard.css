@@ -1,0 +1,74 @@
+
+/* =============================
+==================================
+*/
+
+.stadium-form-card {
+background-color: #fff;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+width: 80%;
+margin: 20px auto;
+}
+
+.stadium-form-card  h2 {
+text-align: center;
+color: #4CAF50;
+}
+
+.stadium-form-card  .form-row {
+display: flex;
+gap: 10px;
+justify-content: space-between;
+margin-bottom: 10px;
+}
+
+.stadium-form-card  .input-group {
+flex-basis: calc(50% - 10px);
+margin-bottom: 10px;
+}
+
+.stadium-form-card  .input-group label {
+display: block;
+margin-bottom: 5px;
+}
+
+.stadium-form-card  .input-group input[type="date"],
+.stadium-form-card  .input-group input[type="time"],
+.stadium-form-card  .input-group input[type="number"],
+.stadium-form-card  .input-group input[type="text"],
+.stadium-form-card  .input-group select {
+width: 95%;
+padding: 8px;
+border: 1px solid #ced4da;
+border-radius: 5px;
+}
+
+.stadium-form-card  button {
+width: 100%;
+padding: 10px;
+border: none;
+border-radius: 5px;
+background-color: #4CAF50;
+color: white;
+cursor: pointer;
+font-size: 1em;
+}
+
+.stadium-form-card  button:hover:not(.disabled) {
+background-color: #43a047;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+.input-group {
+  flex-basis: 100%; /* Make inputs take full-width on smaller screens */
+}
+
+.form-row {
+  flex-direction: column;
+}
+}
+

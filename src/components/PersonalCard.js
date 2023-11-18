@@ -1,79 +1,156 @@
-import React from "react";
+import React, { useState } from "react";
 import '../styles/PersonalCard.css';
 
-
 function PersonalCard(props) {
+  const [firstName, setFirstName] = useState(props.personalDetails.firstName);
+  const [lastName, setLastName] = useState(props.personalDetails.lastName);
+  const [city, setCity] = useState(props.personalDetails.city);
+  const [gender, setGender] = useState(props.personalDetails.gender);
+  const [email, setEmail] = useState(props.personalDetails.email);
+  const [birthdate, setBirthdate] = useState(props.personalDetails.birthdate);
+  const [password, setPassword] = useState(props.personalDetails.password);
+  const [address, setAddress] = useState(props.personalDetails.address);
 
-const personalDetails = props.personalDetails;
-const firstName = personalDetails.firstName;
-const lastName = personalDetails.lastName;
-const city = personalDetails.city;
-const gender = personalDetails.gender;
-const email = personalDetails.email;
-const birthdate = personalDetails.birthdate;
-const password = personalDetails.password;
-const address = personalDetails.address;
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
 
-return(
-<div className="personal-container">
-  <div className="personal-card-box">
-    <h2>Personal Info</h2>
-    <p>Please enter your details.</p>
-    <form>
-      <div className="input-row">
-        <div className="input-group">
-          <label for="first-name" >First Name</label>
-          <input type="text" id="first-name" placeholder="example" value={firstName}/>
-        </div>
-        <div className="input-group">
-          <label for="last-name">Last Name</label>
-          <input type="text" id="last-name" placeholder="example" value={lastName}/>
-        </div>
-        <div className="input-group">
-          <label for="city">City</label>
-          <select id="city" value={city}>
-            <option value="">Select a city</option>
-            <option value="Cairo">Cairo</option>
-            <option value="Alexandria">Alexandria</option>
-            <option value="Giza">Giza</option>
-          </select>
-        </div>
-        <div className="input-group gender">
-          <label>Gender</label>
-          <div className="genderContainer">
-            <label for="male">Male</label>
-            <input type="radio" id="male" name="gender" value="male" checked={gender === "male"}/>
+  const handleLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
+
+  const handleCityChange = (event) => {
+    setCity(event.target.value);
+  };
+
+  const handleGenderChange = (event) => {
+    setGender(event.target.value);
+  };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleBirthdateChange = (event) => {
+    setBirthdate(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleAddressChange = (event) => {
+    setAddress(event.target.value);
+  };
+
+  return (
+    <div className="personal-container">
+      <div className="personal-card-box">
+        <h2>Personal Info</h2>
+        <p>Please enter your details.</p>
+        <form>
+          <div className="input-row">
+            <div className="input-group">
+              <label htmlFor="first-name">First Name</label>
+              <input
+                type="text"
+                id="first-name"
+                placeholder="example"
+                value={firstName}
+                onChange={handleFirstNameChange}
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="last-name">Last Name</label>
+              <input
+                type="text"
+                id="last-name"
+                placeholder="example"
+                value={lastName}
+                onChange={handleLastNameChange}
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="city">City</label>
+              <select id="city" value={city} onChange={handleCityChange}>
+                <option value="">Select a city</option>
+                <option value="Cairo">Cairo</option>
+                <option value="Alexandria">Alexandria</option>
+                <option value="Giza">Giza</option>
+              </select>
+            </div>
+            <div className="input-group gender">
+              <label>Gender</label>
+              <div className="genderContainer">
+                <label htmlFor="male">Male</label>
+                <input
+                  type="radio"
+                  id="male"
+                  name="gender"
+                  value="male"
+                  checked={gender === "male"}
+                  onChange={handleGenderChange}
+                />
+              </div>
+              <div className="genderContainer">
+                <label htmlFor="female">Female</label>
+                <input
+                  type="radio"
+                  id="female"
+                  name="gender"
+                  value="female"
+                  checked={gender === "female"}
+                  onChange={handleGenderChange}
+                />
+              </div>
+            </div>
           </div>
-          <div className="genderContainer">
-            <label for="female">Female</label>
-            <input type="radio" id="female" name="gender" value="female" checked={gender === "female"}/>
+          <div className="input-row">
+            <div className="input-group">
+              <label htmlFor="email">Email address</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="example@gmail.com"
+                value={email}
+                onChange={handleEmailChange}
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="birthdate">Birth Date</label>
+              <input
+                type="date"
+                id="birthdate"
+                value={birthdate}
+                onChange={handleBirthdateChange}
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="********"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+            </div>
           </div>
-        </div>
+          <div className="input-group full-width">
+            <label htmlFor="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              placeholder="136 example, example"
+              value={address}
+              onChange={handleAddressChange}
+            />
+          </div>
+          <button type="submit">Save</button>
+        </form>
       </div>
-      <div className="input-row">
-        <div className="input-group">
-          <label for="email" >Email address</label>
-          <input type="email" id="email" placeholder="example@gmail.com" value ={email}/>
-        </div>
-        <div className="input-group">
-          <label for="birthdate">Birth Date</label>
-          <input type="date" id="birthdate" value={birthdate}/>
-        </div>
-        <div className="input-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" placeholder="********" value={password}/>
-        </div>
-      </div>
-      <div className="input-group full-width">
-        <label for="address">Address</label>
-        <input type="text" id="address" placeholder="136 example, example" value={address}/>
-      </div>
-      <button type="submit">Save</button>
-    </form>
-  </div>
-</div>
-
-);
+    </div>
+  );
 }
 
 export default PersonalCard;

@@ -10,13 +10,17 @@ import OverlayContainer from './OverlayContainer';
 import FanView from './FanView';
 import PersonalCard from './PersonalCard';
 import { useEffect } from 'react';
+import EFAview from './EFAview';
+import StadiumDetailsCard from './StadiumDetailsCard';
 
  
 
 function App() {
-  const [page, setPage] = useState('fanPage');
+  const [page, setPage] = useState('EFAPage');
   const [username, setUsername] = useState('guest');
   const [showMatchDetails, setShowMatchDetails] = useState(false);
+  const [addNewMatch, setAddNewMatch] = useState(false);
+  const [addNewStadium, setAddNewStadium] = useState(false);
   const [showPersonalDetails, setShowPersonalDetails] = useState(false);
   const [MatchDetailsCardView, setMatchDetailsCardView] = useState('guestView');
   const [matchDetails, setMatchDetails] = useState({});
@@ -30,9 +34,17 @@ const handleSettingsClick = (personalDetails) => {
   setShowPersonalDetails(true);
   setPersonalDetails(personalDetails)
 }
+const handleAddNewMatch = () => {
+  setAddNewMatch(true);
+}
+const handleAddNewStadium = () => {
+  setAddNewStadium(true);
+}
   const handleClose = () => {
     setShowMatchDetails(false);
     setShowPersonalDetails(false);
+    setAddNewMatch(false);
+    setAddNewStadium(false);
   };
   const handleSignIn = () => {
     setPage('signIn');
@@ -59,6 +71,13 @@ const handleSettingsClick = (personalDetails) => {
       <PersonalCard personalDetails={personalDetails}/>
       </OverlayContainer>}
       {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick}/>}
+      {page === 'EFAPage' && <EFAview handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleAddNewStadium={handleAddNewStadium}/>}
+      {addNewMatch && <OverlayContainer onClose={handleClose}>
+      <MatchDetailsCard view="editView"/>
+      </OverlayContainer>}
+      {addNewStadium && <OverlayContainer onClose={handleClose}>
+      <StadiumDetailsCard view="editView"/>
+      </OverlayContainer>}
     </div>
   );
 }
