@@ -7,41 +7,58 @@ import MatchDetailsCard from './MatchDetailsCard';
 import React, { useState } from 'react';
 import MainPage from './MainPage';
 import OverlayContainer from './OverlayContainer';
+import FanView from './FanView';
+import PersonalCard from './PersonalCard';
+import { useEffect } from 'react';
 
-
+ 
 
 function App() {
-  const [page, setPage] = useState('MainPage');
+  const [page, setPage] = useState('fanPage');
+  const [username, setUsername] = useState('guest');
   const [showMatchDetails, setShowMatchDetails] = useState(false);
+  const [showPersonalDetails, setShowPersonalDetails] = useState(false);
   const [MatchDetailsCardView, setMatchDetailsCardView] = useState('guestView');
   const [matchDetails, setMatchDetails] = useState({});
+  const [personalDetails, setPersonalDetails] = useState({});
   const handleTicketsClick = (view, matchDetails) => {
     setMatchDetailsCardView(view);
       setShowMatchDetails(true);
       setMatchDetails(matchDetails);
-      console.log(showMatchDetails);
   };
-
+const handleSettingsClick = (personalDetails) => {
+  setShowPersonalDetails(true);
+  setPersonalDetails(personalDetails)
+}
   const handleClose = () => {
     setShowMatchDetails(false);
+    setShowPersonalDetails(false);
   };
   const handleSignIn = () => {
-    setPage('SignIn');
+    setPage('signIn');
   };
+
+
   const handleSignUp = () => {
-    setPage('SignUp');
+    setPage('signUp');
   };
+
+  useEffect(() => {
+  }, [page]);
+
   return (
    <div className="App">
-      <Header currentPage={page} onSignIn={handleSignIn}/>
-      {page === 'MainPage' && <MainPage onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick}/>}
-      {page === 'SignIn' && <SignIn onSignUp={handleSignUp} />}
-      {page === 'SignUp' && <SignUp />}
+      <Header currentPage={page} onSignIn={handleSignIn} username={username}/>
+      {page === 'mainPage' && <MainPage onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick}/>}
+      {page === 'signIn' && <SignIn onSignUp={handleSignUp} />}
+      {page === 'signUp' && <SignUp />}
       {showMatchDetails && <OverlayContainer onClose={handleClose}>
       <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails}/>
       </OverlayContainer>}
-      
-      {/* ... other pages */}
+      {showPersonalDetails && <OverlayContainer onClose={handleClose}>
+      <PersonalCard personalDetails={personalDetails}/>
+      </OverlayContainer>}
+      {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick}/>}
     </div>
   );
 }
