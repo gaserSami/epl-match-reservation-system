@@ -114,39 +114,39 @@ justify-content: flex-end;
   margin: 20px auto;
 }
 
-h2 {
+.match-form-card  h2 {
   text-align: center;
   color: #4CAF50;
 }
 
-.form-row {
+.match-form-card  .form-row {
   display: flex;
   gap: 10px;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.input-group {
+.match-form-card  .input-group {
   flex-basis: calc(50% - 10px);
   margin-bottom: 10px;
 }
 
-.input-group label {
+.match-form-card  .input-group label {
   display: block;
   margin-bottom: 5px;
 }
 
-.input-group input[type="date"],
-.input-group input[type="time"],
-.input-group input[type="number"],
-.input-group select {
+.match-form-card  .input-group input[type="date"],
+.match-form-card  .input-group input[type="time"],
+.match-form-card  .input-group input[type="number"],
+.match-form-card  .input-group select {
   width: 95%;
   padding: 8px;
   border: 1px solid #ced4da;
   border-radius: 5px;
 }
 
-button {
+.match-form-card  button {
   width: 100%;
   padding: 10px;
   border: none;
@@ -157,9 +157,10 @@ button {
   font-size: 1em;
 }
 
-button:hover {
+.match-form-card  button:hover:not(.disabled) {
   background-color: #43a047;
 }
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -170,4 +171,9 @@ button:hover {
   .form-row {
     flex-direction: column;
   }
+}
+
+.MatchDetailsCard .ticketInfo button.disabled {
+  background-color: #ccc; /* grey background */
+  cursor: not-allowed; /* cursor for disabled button */
 }

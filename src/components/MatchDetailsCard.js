@@ -4,26 +4,59 @@ import stadiumIcon from '../assets/stadium.png';
 
 
 
-function MatchDetailsCard() {
+function MatchDetailsCard(props) {
+
+  const matchDetails = props.matchDetails;
+  const date = new Date(matchDetails.date);
+  const month = date.toLocaleString('default', { month: 'long' });
+  const time = matchDetails.time;
+  const homeTeam = matchDetails.homeTeam;
+  const awayTeam = matchDetails.awayTeam;
+  const stadium = matchDetails.stadium;
+  const price = matchDetails.price;
+
+
+
   const bookView = (<div className="MatchDetailsCard">
   <div className="teams">
-    <span>AL AHlY</span>
+    <span>{homeTeam}</span>
     <img src={stadiumIcon} alt="" />
-    <span>AL GOUNA</span>
+    <span>{awayTeam}</span>
   </div>
-  <p className="stadiumInfo">Cairo Stadium, Cairo, Egypt</p>
+  <p className="stadiumInfo">{stadium}, Cairo, Egypt</p>
   <span className="gray">Choose your seat</span>
   <div className="seats">
 
   </div>
   <div className="ticketInfo">
     <div className="datetime">
-    <span className="date gray">25 November 2023</span>
-    <span className="time">12:30</span>
+    <span className="date gray">{date.getDate()} {month} {date.getFullYear()}</span>
+    <span className="time">{time}</span>
     </div>
     <div className="priceBook">
-      <span className="price">69.99L.E</span>
+      <span className="price">{price} L.E</span>
     <button>Book now!</button></div>
+  </div>
+</div>);
+  const guestView = (<div className="MatchDetailsCard">
+  <div className="teams">
+    <span>{homeTeam}</span>
+    <img src={stadiumIcon} alt="" />
+    <span>{awayTeam}</span>
+  </div>
+  <p className="stadiumInfo">{stadium}, Cairo, Egypt</p>
+  <span className="gray">Choose your seat</span>
+  <div className="seats">
+
+  </div>
+  <div className="ticketInfo">
+    <div className="datetime">
+    <span className="date gray">{date.getDate()} {month} {date.getFullYear()}</span>
+    <span className="time">{time}</span>
+    </div>
+    <div className="priceBook">
+      <span className="price">{price} L.E</span>
+    <button className="disabled">Book now!</button></div>
   </div>
 </div>);
 const editView = (<div className="match-form-card">
@@ -34,7 +67,7 @@ const editView = (<div className="match-form-card">
       <label for="home-team">Home Team</label>
       <select id="home-team">
         <option value="">Select home team</option>
-        <option value="al-ahly">Al Ahly</option>
+        <option value="al-ahly">{homeTeam}</option>
       </select>
     </div>
     <div className="input-group">
@@ -46,11 +79,11 @@ const editView = (<div className="match-form-card">
     </div>
     <div className="input-group">
       <label for="date">Date</label>
-      <input type="date" id="date"/>
+      <input type="date" id="date" value={date}/>
     </div>
     <div className="input-group">
       <label for="time">Time</label>
-      <input type="time" id="time"/>
+      <input type="time" id="time" value={time}/>
     </div>
   </div>
   <div className="form-row">
@@ -63,16 +96,23 @@ const editView = (<div className="match-form-card">
     </div>
     <div className="input-group">
       <label for="price">Price</label>
-      <input type="number" id="price" placeholder="Enter price"/>
+      <input type="number" id="price" placeholder="Enter price" value={price}/>
     </div>
   </div>
   <button type="submit">Save</button>
 </form>
 </div>
 );
-return (
-  editView
-);
+switch (props.view) {
+  case 'guestView':
+    return guestView;
+  case 'editView':
+    return editView;
+  case 'bookView':
+    return bookView;
+  default:
+    return guestView;
+}
 }
 
 export default MatchDetailsCard;

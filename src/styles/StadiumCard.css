@@ -11,7 +11,7 @@
   margin-bottom: 1%;
 }
 
-.icon {
+.StadiumCard .icon {
   flex: 1;
   text-align: center; /* center date info */
   color: #333; /* dark grey color for text */
@@ -19,16 +19,16 @@ border-right: 1px solid #ddd; /* light grey border on the right */
   margin-right: 20px; /* space between date and info */
 }
 
-.info{
+.StadiumCard .info{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
 }
 
-.info .name{
+.StadiumCard .info .name{
   align-self:flex-start;
 }
-.info .shape, .info .size{
+.StadiumCard .info .shape, .info .size{
   font-size: 1.1rem;
 }

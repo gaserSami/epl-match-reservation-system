@@ -6,7 +6,7 @@
   background-color: #e9ecef; /* Light grey background */
 }
 
-.signin-box {
+.signin-container .signin-box {
   background-color: #fff;
   padding: 40px;
   border-radius: 10px;
@@ -15,56 +15,56 @@
   text-align: center;
 }
 
-h2 {
+.signin-container h2 {
   margin-bottom: 10px;
 }
 
-p {
+.signin-container p {
   color: #6c757d; /* Grey text */
   margin-bottom: 20px;
 }
 
-.input-group {
+.signin-container .input-group {
   margin-bottom: 20px;
   text-align: left;
 }
 
-.input-group label {
+.signin-container .input-group label {
   display: block;
   margin-bottom: 5px;
 }
 
-.input-group input {
+.signin-container .input-group input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ced4da;
   border-radius: 5px;
 }
 
-button {
+.signin-container button {
   width: 100%;
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: #1f4ba9;
   color: white;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+.signin-container button:hover {
+  background-color: #03297a;
 }
 
-.signup-text {
+.signin-container .signup-text {
   margin-top: 20px;
   font-size: 0.9em;
 }
 
-.signup-text a {
+.signin-container .signup-text a {
   color: #007bff;
   text-decoration: none;
 }
 
-.signup-text a:hover {
+.signin-container .signup-text a:hover {
   text-decoration: underline;
 }

@@ -3,17 +3,17 @@ import '../styles/Header.css';
 import userIcon  from '../assets/user.png';
 import logo from '../assets/logo.png';
 
-function Header() {
-  const guestView = (<header>
+function Header({ onSignIn, currentPage }) {
+  const guestView = (<header className='Header'>
   <div className="logo">
-    <img src="../components/logo.png" alt="Logo" />
+    <img src={logo} alt="Logo" />
   </div>
   <div className="signIn">
-    <button>Sign In</button>
+    <button onClick={onSignIn}>Sign In</button>
   </div>
 </header>);
 const userView = (
-<header>
+<header className='Header'>
       <div className="logo">
         <img src={logo} alt="Logo" />
       </div>
@@ -23,9 +23,21 @@ const userView = (
       </div>
     </header>
   );
+  const idleView = (
+    <header className='Header'>
+          <div className="logo">
+            <img src={logo} alt="Logo" />
+          </div>
+          <div className="userInfo">
+          </div>
+        </header>
+      );
   return (
-    userView
+    currentPage === 'SignUp' || currentPage === 'SignIn' ? idleView :
+    currentPage === 'MainPage' ? guestView :
+    null
   );
+
 }
 
 export default Header;

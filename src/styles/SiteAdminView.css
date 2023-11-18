@@ -3,19 +3,19 @@
   height: 100%;
   width: 100%;
 }
-.main{
+.SiteAdminView .main{
   height: 100%;
   width: auto;
   margin-left: 15%;
   padding: 20px;
 }
-.usersContainer{
+.SiteAdminView .usersContainer{
   background-color: rgb(255, 255, 255);
   min-height: 500px;
   width: 100%;
 }
 
-.user-table {
+.SiteAdminView .user-table {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
@@ -23,27 +23,27 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow for styling */
 }
 
-.user-table th, .user-table td {
+.SiteAdminView .user-table th, .user-table td {
   text-align: left;
   padding: 8px;
   border-bottom: 1px solid #ddd;
 }
 
-.user-table th {
+.SiteAdminView .user-table th {
   background-color: #4CAF50;
   color: white;
 }
 
-td.button {
+.SiteAdminView td.button {
 width: 10%;
 }
 
 
-.user-table tbody tr:nth-child(even) {
+.SiteAdminView .user-table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-.btn {
+.SiteAdminView .btn {
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
@@ -52,19 +52,19 @@ width: 10%;
   font-size: 16px;
 }
 
-.approve {
+.SiteAdminView .approve {
   background-color: #4CAF50; /* Green */
 }
 
-.decline {
+.SiteAdminView .decline {
   background-color: #f44336; /* Red */
 }
 
-.btn:focus {
+.SiteAdminView .btn:focus {
   outline: none; /* Removes the outline on focus for buttons */
 }
 
 /* Hover effects */
-.btn:hover {
+.SiteAdminView .btn:hover {
   opacity: 0.8;
 }

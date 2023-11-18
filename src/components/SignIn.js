@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/SignIn.css";
 
-function SignIn() {
+function SignIn({ onSignUp}) {
 return (
 <div className="signin-container">
   <div className="signin-box">
@@ -18,7 +18,9 @@ return (
       </div>
       <button type="submit">SIGN IN</button>
     </form>
-    <p className="signup-text">Don't have an account? <a href="#">Sign Up</a></p>
+    <p className="signup-text">Don't have an account? <span onClick={onSignUp} style={{ cursor: 'pointer', color: 'blue' }}>
+          Sign Up
+        </span></p>
   </div>
 </div>
 );

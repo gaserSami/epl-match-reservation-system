@@ -9,7 +9,7 @@
   box-sizing: border-box;
 }
 
-.menu-item {
+.sidebar .menu-item {
   padding: 20px;
   text-align: center;
   border-bottom: 1px solid #365882; /* Darker shade for the border */
@@ -17,19 +17,19 @@
   cursor: pointer;
 }
 
-.menu-item > span {
+.sidebar .menu-item > span {
   color: white;
 }
 
-.menu-item.active{
+.sidebar .menu-item.active{
   background-color: #01329d;
 }
 
-.menu-item:last-child {
+.sidebar .menu-item:last-child {
   border-bottom: none; /* No border for the last item */
 }
 
-.menu-item.settings {
+.sidebar .menu-item.settings {
   align-self: flex-end; /* Align settings to the bottom */
   position: absolute; /* Position at the bottom */
   bottom: 0px;
