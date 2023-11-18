@@ -38,6 +38,7 @@ const userView = (
     currentPage === 'mainPage' ? guestView :
     currentPage === 'fanPage' ? userView :
     currentPage === 'EFAPage' ? userView :
+    currentPage === 'siteAdminPage' ? userView :
     null
   );
 

@@ -12,11 +12,13 @@ import PersonalCard from './PersonalCard';
 import { useEffect } from 'react';
 import EFAview from './EFAview';
 import StadiumDetailsCard from './StadiumDetailsCard';
+import SiteAdminView from './SiteAdminView';
 
  
 
 function App() {
-  const [page, setPage] = useState('EFAPage');
+  const pages = ['mainPage', 'fanPage', 'EFAPage', 'siteAdminPage']; //just for testing
+  const [page, setPage] = useState(pages[2]);
   const [username, setUsername] = useState('guest');
   const [showMatchDetails, setShowMatchDetails] = useState(false);
   const [addNewMatch, setAddNewMatch] = useState(false);
@@ -63,6 +65,7 @@ const handleAddNewStadium = () => {
       <Header currentPage={page} onSignIn={handleSignIn} username={username}/>
       {page === 'mainPage' && <MainPage onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick}/>}
       {page === 'signIn' && <SignIn onSignUp={handleSignUp} />}
+      {page === 'siteAdminPage' && <SiteAdminView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick}/>}
       {page === 'signUp' && <SignUp />}
       {showMatchDetails && <OverlayContainer onClose={handleClose}>
       <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails}/>
