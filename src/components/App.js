@@ -16,12 +16,23 @@ import SiteAdminView from './SiteAdminView';
 import SuccessCard from './SuccessCard';
 import FailedCard from './FailedCard';
 import PaymentCard from './PaymentCard';
+import axios from 'axios';
+
+axios.get('http://localhost:5000/users')
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.error('There was an error!', error);
+  });
 
  
 
 function App() {
+  
+
   const pages = ['mainPage', 'fanPage', 'EFAPage', 'siteAdminPage']; //just for testing
-  const [page, setPage] = useState(pages[1]);
+  const [page, setPage] = useState('mainPage');
   const [username, setUsername] = useState('guest');
   const [showMatchDetails, setShowMatchDetails] = useState(false);
   const [addNewMatch, setAddNewMatch] = useState(false);
