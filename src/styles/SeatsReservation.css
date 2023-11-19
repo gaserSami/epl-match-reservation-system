@@ -1,0 +1,53 @@
+/* SeatsReservation.css */
+
+.seats-container:not(.disabled) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  border: 1px solid #000;
+  margin-top: 2%;
+  background-color: rgb(218, 218, 218);
+  box-shadow: 0 0 5px #ccc; /* assuming a light grey shadow */
+}
+.seats-container.disabled {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  border: 1px solid #000;
+  margin-top: 2%;
+  background-color: rgb(39, 39, 39);
+  box-shadow: 0 0 5px #ccc; /* assuming a light grey shadow */
+  cursor: not-allowed;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  flex: 1;
+}
+
+.seat {
+  flex: 1;
+  min-height: 5px;
+  margin: 0.3%;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+
+.seat.vacant {
+  background-color: green;
+}
+
+.seat.reserved {
+  background-color: red;
+}
+
+.seat.mine {
+  background-color: yellow;
+}

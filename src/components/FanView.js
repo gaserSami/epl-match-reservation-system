@@ -12,14 +12,15 @@ function FanView({handleTicketsClick, handleSettingsClick}) {
   const handleItemClick = (item) => {
     setActiveItem(item);
   };
-  const matchesDetails = [
+  const reservedMatchesDetails = [
     {
       date: '2023-01-01',
       time: '18:00',
       homeTeam: 'Al AHLY',
       awayTeam: 'Al GOUNA',
       stadium: 'Cairo Stadium',
-      price: 69.99
+      price: 69.99,
+      ticketNumber: 7782
     },
     {
       date: '2023-04-11',
@@ -27,7 +28,8 @@ function FanView({handleTicketsClick, handleSettingsClick}) {
       homeTeam: 'Al BHLY',
       awayTeam: 'GESOOO',
       stadium: 'Giza Stadium',
-      price: 79.99
+      price: 79.99,
+      ticketNumber: 1234
     },
     {
       date: '2023-11-21',
@@ -35,7 +37,8 @@ function FanView({handleTicketsClick, handleSettingsClick}) {
       homeTeam: 'AYMOOON',
       awayTeam: 'AL ATTAWY',
       stadium: 'Cairo Stadium',
-      price: 89.99
+      price: 89.99,
+      ticketNumber: 5678
     },
     {
       date: '2023-02-03',
@@ -43,10 +46,11 @@ function FanView({handleTicketsClick, handleSettingsClick}) {
       homeTeam: 'FAHDOKA',
       awayTeam: 'GHANNA',
       stadium: 'Cairo Stadium',
-      price: 99.99
+      price: 99.99,
+      ticketNumber: 91011
     }
   ];
-  const reservedMatchesDetails = [
+  const matchesDetails = [
     {
       date: '2023-01-01',
       time: '18:00',

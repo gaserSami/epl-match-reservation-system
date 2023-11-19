@@ -19,6 +19,7 @@
   color: #333; /* dark grey color for text */
 border-right: 1px solid #ddd; /* light grey border on the right */
   margin-right: 20px; /* space between date and info */
+  min-width: 20%;
 }
 
 .matchCard .month,.matchCard .day,.matchCard .year {

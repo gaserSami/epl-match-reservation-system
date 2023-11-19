@@ -1,16 +1,40 @@
 import React, { useState } from "react";
 import "../styles/MatchDetailsCard.css";
 import stadiumIcon from '../assets/stadium.png';
+import SeatsReservation from "./SeatsReservation";
+import { useEffect } from "react";
+import { useRef } from "react";
 
 function MatchDetailsCard(props) {
+  const rows =20;
+  const cols = 20;
   const [matchDetails, setMatchDetails] = useState(props.matchDetails || {
     homeTeam: "",
     awayTeam: "",
     date: new Date(),
     time: "",
     stadium: "",
-    price: ""
+    price: "",
+    ticketNumber: ""
   });
+
+  const cardRef = useRef();
+
+  useEffect(() => {
+    if (cardRef.current) {
+      var height = cardRef.current.offsetHeight;
+      let marginTop = height * 0.00; // adjust the multiplier as needed
+      const marginBottom = height * 0.00; // adjust the multiplier as needed
+      if(rows >=50 && rows < 100){
+       marginTop = height * 0.02; // adjust the multiplier as needed
+      }
+      else if(rows >=100 && rows <= 150){
+        marginTop = height * 0.05; // adjust the multiplier as needed
+      }
+      cardRef.current.style.marginTop = `${marginTop}%`;
+      cardRef.current.style.marginBottom = `${marginBottom}%`;
+    }
+  }, []);
 
   const handleHomeTeamChange = (e) => {
     setMatchDetails({ ...matchDetails, homeTeam: e.target.value });
@@ -37,7 +61,7 @@ function MatchDetailsCard(props) {
   };
 
   const bookView = (
-    <div className="MatchDetailsCard">
+    <div className="MatchDetailsCard" ref={cardRef}>
       <div className="teams">
         <span>{matchDetails.homeTeam}</span>
         <img src={stadiumIcon} alt="" />
@@ -45,8 +69,8 @@ function MatchDetailsCard(props) {
       </div>
       <p className="stadiumInfo">{matchDetails.stadium}, Cairo, Egypt</p>
       <span className="gray">Choose your seat</span>
-      <div className="seats"></div>
-      <div className="ticketInfo">
+      <SeatsReservation rows={rows} cols={cols}/>
+            <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
             {new Date(matchDetails.date).getDate()} {new Date(matchDetails.date).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.date).getFullYear()}
@@ -70,9 +94,32 @@ function MatchDetailsCard(props) {
       </div>
       <p className="stadiumInfo">{matchDetails.stadium}, Cairo, Egypt</p>
       <span className="gray">Choose your seat</span>
-      <div className="seats">
-   
+      <SeatsReservation rows={rows} cols={cols}/>
+      <div className="ticketInfo">
+        <div className="datetime">
+          <span className="date gray">
+            {new Date(matchDetails.date).getDate()} {new Date(matchDetails.date).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.date).getFullYear()}
+          </span>
+          <span className="time">{matchDetails.time}</span>
+        </div>
+        <div className="priceBook">
+          <span className="price">{matchDetails.price} L.E</span>
+          <button className="disabled">Book now!</button>
+        </div>
       </div>
+    </div>
+  );
+
+  const reservedView = (
+    <div className="MatchDetailsCard">
+      <div className="teams">
+        <span>{matchDetails.homeTeam}</span>
+        <img src={stadiumIcon} alt="" />
+        <span>{matchDetails.awayTeam}</span>
+      </div>
+      <p className="stadiumInfo">{matchDetails.stadium}, Cairo, Egypt</p>
+      <span className="gray">Ticket#{matchDetails.ticketNumber} | your Seats are in yellow </span>
+      <SeatsReservation rows={rows} cols={cols} disabled={true}/>
       <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
@@ -162,6 +209,8 @@ function MatchDetailsCard(props) {
       return editView;
     case "bookView":
       return bookView;
+    case "reservedView":
+      return reservedView;
     default:
       return guestView;
   }

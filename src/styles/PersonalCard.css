@@ -32,14 +32,14 @@
 
 .personal-container .input-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   flex-wrap: wrap; /* Ensure it wraps on smaller screens */
 }
 
 .personal-container .input-group {
   margin-bottom: 20px;
   margin-right: 5%;
-  flex-basis: calc(25% - 10px); /* Adjust width of the input fields */
+  flex:1;
   text-align: left;
 }
 

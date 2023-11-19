@@ -13,6 +13,7 @@ const MatchCard = (props) => {
   const title = homeTeam + ' vs ' + awayTeam;
   const stadium = matchDetails.stadium;
   const price = matchDetails.price;
+  const ticketNumber = matchDetails.ticketNumber;
 
   const guestView = (
     <div className="matchCard">
@@ -89,7 +90,7 @@ const MatchCard = (props) => {
         <span className="year">{date.getFullYear()}</span>
       </div>
       <div className="info">
-        <h2>EGYPTIAN PREMIER LEAGUE</h2>
+        <h2>#{ticketNumber}</h2>
         <h1 className='teams'>{title}</h1>
         <span className='time'>{time}</span>
         <p className='stadium'>{stadium}, Egypt</p>
@@ -98,7 +99,7 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-     <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
+     <button onClick={() => props.handleTicketsClick('reservedView', matchDetails)}>Tickets</button>
         <button className='cancel'>Cancel</button>
       </div>
     </div>

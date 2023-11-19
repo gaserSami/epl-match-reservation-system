@@ -10,6 +10,7 @@ function PersonalCard(props) {
   const [birthdate, setBirthdate] = useState(props.personalDetails.birthdate);
   const [password, setPassword] = useState(props.personalDetails.password);
   const [address, setAddress] = useState(props.personalDetails.address);
+  const [username, setUsername] = useState(props.personalDetails.username);
 
   const handleFirstNameChange = (event) => {
     setFirstName(event.target.value);
@@ -43,6 +44,10 @@ function PersonalCard(props) {
     setAddress(event.target.value);
   };
 
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+
   return (
     <div className="personal-container">
       <div className="personal-card-box">
@@ -50,6 +55,17 @@ function PersonalCard(props) {
         <p>Please enter your details.</p>
         <form>
           <div className="input-row">
+            <div className="input-group">
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                placeholder="example"
+                value={username}
+                onChange={handleUsernameChange}
+                disabled
+              />
+            </div>
             <div className="input-group">
               <label htmlFor="first-name">First Name</label>
               <input
@@ -90,6 +106,7 @@ function PersonalCard(props) {
                   value="male"
                   checked={gender === "male"}
                   onChange={handleGenderChange}
+                  disabled
                 />
               </div>
               <div className="genderContainer">
@@ -101,6 +118,7 @@ function PersonalCard(props) {
                   value="female"
                   checked={gender === "female"}
                   onChange={handleGenderChange}
+                  disabled
                 />
               </div>
             </div>

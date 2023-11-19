@@ -1,5 +1,6 @@
 .overlay {
   position: fixed;
+  box-sizing: border-box;
   top: 0;
   left: 0;
   width: 100%;
@@ -8,6 +9,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: auto; /* Add vertical scroll if necessary */
+  max-height: 100vh; /* Limit height to viewport height */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  /* Add some padding to prevent the close button from overlapping the content */
   z-index: 10000;
 }
 
