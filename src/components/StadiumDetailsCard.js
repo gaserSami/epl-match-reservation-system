@@ -43,16 +43,12 @@ function StadiumDetailsCard(props) {
           </div>
           <div className="input-group">
             <label htmlFor="shape">Shape</label>
-            <select
+            <input
+              type="text"
               id="shape"
-              value={stadiumDetails.shape}
-              onChange={handleShapeChange}
-            >
-              <option value="">Select shape</option>
-              <option value="oval">Oval</option>
-              <option value="rectangular">Rectangular</option>
-              <option value="circle">Circle</option>
-            </select>
+              value="rectangular"
+              disabled
+            />
           </div>
           <div className="input-group">
             <label htmlFor="rows">Rows</label>

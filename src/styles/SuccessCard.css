@@ -1,0 +1,22 @@
+/* SuccessCard.css */
+
+.success-card {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  background-color: white;
+}
+
+.success-card .checkmark {
+  font-size: 50px;
+  color: green;
+}
+
+.success-card .title {
+  margin-top: 10px;
+}
+
+.success-card .message {
+  margin-top: 20px;
+}

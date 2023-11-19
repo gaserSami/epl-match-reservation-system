@@ -1,0 +1,22 @@
+/* FailedCard.css */
+
+.failed-card {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  background-color: white;
+}
+
+.failed-card .crossmark {
+  font-size: 50px;
+  color: red;
+}
+
+.failed-card .title {
+  margin-top: 10px;
+}
+
+.failed-card .message {
+  margin-top: 20px;
+}

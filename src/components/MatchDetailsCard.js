@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/MatchDetailsCard.css";
 import stadiumIcon from '../assets/stadium.png';
+import SeatsReservation from "./SeatsReservation";
 
 function MatchDetailsCard(props) {
   const [matchDetails, setMatchDetails] = useState(props.matchDetails || {
@@ -55,7 +56,7 @@ function MatchDetailsCard(props) {
         </div>
         <div className="priceBook">
           <span className="price">{matchDetails.price} L.E</span>
-          <button>Book now!</button>
+          <button onClick={() => props.handlePaymentCard()}>Book now!</button>
         </div>
       </div>
     </div>
@@ -70,7 +71,9 @@ function MatchDetailsCard(props) {
       </div>
       <p className="stadiumInfo">{matchDetails.stadium}, Cairo, Egypt</p>
       <span className="gray">Choose your seat</span>
-      <div className="seats"></div>
+      <div className="seats">
+        <SeatsReservation />
+      </div>
       <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
@@ -148,7 +151,7 @@ function MatchDetailsCard(props) {
             />
           </div>
         </div>
-        <button type="submit">Save</button>
+        <button type="submit" >Save</button>
       </form>
     </div>
   );

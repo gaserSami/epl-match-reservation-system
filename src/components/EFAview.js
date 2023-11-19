@@ -55,13 +55,13 @@ function EFAview({handleTicketsClick, handleSettingsClick, handleAddNewMatch, ha
     },
     {
       name: 'Giza Stadium',
-      shape: 'Oval',
+      shape: 'rectangular',
       rows: 40,
       columns: 40
     },
     {
       name: 'Alex Stadium',
-      shape: 'Oval',
+      shape: 'rectangular',
       rows: 50,
       columns: 60
     },
