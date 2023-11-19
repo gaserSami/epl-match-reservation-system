@@ -15,13 +15,20 @@ const SeatsReservation = (props) => {
   const [mySeats, setMySeats] = useState([]);
 
   const handleSeatClick = (row, col) => {
-    if(props.disabled) return;
+    if (props.disabled) return;
+    
     if (seats[row][col] === 'vacant') {
       const updatedSeats = [...seats];
       updatedSeats[row] = [...updatedSeats[row]];
       updatedSeats[row][col] = 'reserved';
       setSeats(updatedSeats);
-      setMySeats([...mySeats, {row, col}]);
+      setMySeats([...mySeats, { row, col }]);
+    } else if (seats[row][col] === 'reserved' && isMySeat(row, col)) {
+      const updatedSeats = [...seats];
+      updatedSeats[row] = [...updatedSeats[row]];
+      updatedSeats[row][col] = 'vacant';
+      setSeats(updatedSeats);
+      setMySeats(mySeats.filter(seat => !(seat.row === row && seat.col === col)));
     } else {
       alert('This seat is already reserved.');
     }
