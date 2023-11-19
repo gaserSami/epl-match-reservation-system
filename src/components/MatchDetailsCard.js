@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../styles/MatchDetailsCard.css";
 import stadiumIcon from '../assets/stadium.png';
-import SeatsReservation from "./SeatsReservation";
 
 function MatchDetailsCard(props) {
   const [matchDetails, setMatchDetails] = useState(props.matchDetails || {
@@ -72,7 +71,7 @@ function MatchDetailsCard(props) {
       <p className="stadiumInfo">{matchDetails.stadium}, Cairo, Egypt</p>
       <span className="gray">Choose your seat</span>
       <div className="seats">
-        <SeatsReservation />
+   
       </div>
       <div className="ticketInfo">
         <div className="datetime">
