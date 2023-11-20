@@ -1,43 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import "../styles/MainPage.css";
 import MatchCard from "./MatchCard";
 
 
 function MainPage({ onSignUp, handleTicketsClick}) {
-  const matchesDetails = [
-    {
-      date: '2023-01-01',
-      time: '18:00',
-      homeTeam: 'Al AHLY',
-      awayTeam: 'Al GOUNA',
-      stadium: 'Cairo Stadium',
-      price: 69.99
-    },
-    {
-      date: '2023-04-11',
-      time: '12:00',
-      homeTeam: 'Al BHLY',
-      awayTeam: 'GESOOO',
-      stadium: 'Giza Stadium',
-      price: 79.99
-    },
-    {
-      date: '2023-11-21',
-      time: '11:00',
-      homeTeam: 'AYMOOON',
-      awayTeam: 'AL ATTAWY',
-      stadium: 'Cairo Stadium',
-      price: 89.99
-    },
-    {
-      date: '2023-02-03',
-      time: '10:00',
-      homeTeam: 'FAHDOKA',
-      awayTeam: 'GHANNA',
-      stadium: 'Cairo Stadium',
-      price: 99.99
-    }
-  ];
+  const [matchesDetails, setMatchesDetails] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/matches') // Adjust the URL as necessary
+      .then(response => {
+        setMatchesDetails(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+  }, []);
+
   return (
     <div className="mainPage">
       <div className="landingSection">
@@ -52,10 +31,9 @@ function MainPage({ onSignUp, handleTicketsClick}) {
       </div>
       <h1>UPCOMING MATCHES</h1>
       <div className="matchesContainer">
-      <MatchCard matchDetails={matchesDetails[0]} handleTicketsClick={handleTicketsClick} view="guestView"/>
-      <MatchCard matchDetails={matchesDetails[1]} handleTicketsClick={handleTicketsClick} view="guestView"/>
-      <MatchCard matchDetails={matchesDetails[2]} handleTicketsClick={handleTicketsClick} view="guestView"/>
-      <MatchCard matchDetails={matchesDetails[3]} handleTicketsClick={handleTicketsClick} view="guestView"/>
+      {matchesDetails.map((match, index) => (
+     <MatchCard key={index} matchDetails={match} handleTicketsClick={handleTicketsClick} view="guestView"/>
+     ))}
       </div>
       <button className="sideButton" onClick={onSignUp}>Sign in now to book your ticket!</button>
     </div>

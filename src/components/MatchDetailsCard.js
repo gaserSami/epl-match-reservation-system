@@ -8,15 +8,11 @@ import { useRef } from "react";
 function MatchDetailsCard(props) {
   const rows =20;
   const cols = 20;
-  const [matchDetails, setMatchDetails] = useState(props.matchDetails || {
-    homeTeam: "",
-    awayTeam: "",
-    date: new Date(),
-    time: "",
-    stadium: "",
-    price: "",
-    ticketNumber: ""
-  });
+  const [matchDetails, setMatchDetails] = useState({ HomeTeam: '', AwayTeam: '', MatchDate: new Date() });
+  const [stadiumDetails, setStadiumDetails] = useState(props.stadiumDetails);
+  const stadium = stadiumDetails ? stadiumDetails.StadiumName : 'Loading...';
+
+ 
 
   const cardRef = useRef();
 
@@ -37,48 +33,48 @@ function MatchDetailsCard(props) {
   }, []);
 
   const handleHomeTeamChange = (e) => {
-    setMatchDetails({ ...matchDetails, homeTeam: e.target.value });
+    setMatchDetails({ ...matchDetails, HomeTeam: e.target.value });
   };
 
   const handleAwayTeamChange = (e) => {
-    setMatchDetails({ ...matchDetails, awayTeam: e.target.value });
+    setMatchDetails({ ...matchDetails, AwayTeam: e.target.value });
   };
 
   const handleDateChange = (e) => {
-    setMatchDetails({ ...matchDetails, date: new Date(e.target.value) });
+    setMatchDetails({ ...matchDetails, MatchDate: new Date(e.target.value) });
   };
 
   const handleTimeChange = (e) => {
-    setMatchDetails({ ...matchDetails, time: e.target.value });
+    setMatchDetails({ ...matchDetails, MatchTime: e.target.value });
   };
 
   const handleStadiumChange = (e) => {
-    setMatchDetails({ ...matchDetails, stadium: e.target.value });
+    setMatchDetails({ ...matchDetails, StadiumID: e.target.value });
   };
 
   const handlePriceChange = (e) => {
-    setMatchDetails({ ...matchDetails, price: e.target.value });
+    setMatchDetails({ ...matchDetails, Price: e.target.value });
   };
 
   const bookView = (
     <div className="MatchDetailsCard" ref={cardRef}>
       <div className="teams">
-        <span>{matchDetails.homeTeam}</span>
+        <span>{matchDetails.HomeTeam}</span>
         <img src={stadiumIcon} alt="" />
-        <span>{matchDetails.awayTeam}</span>
+        <span>{matchDetails.AwayTeam}</span>
       </div>
-      <p className="stadiumInfo">{matchDetails.stadium}, Cairo, Egypt</p>
+      <p className="stadiumInfo">{stadium}, Cairo, Egypt</p>
       <span className="gray">Choose your seat</span>
       <SeatsReservation rows={rows} cols={cols}/>
             <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
-            {new Date(matchDetails.date).getDate()} {new Date(matchDetails.date).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.date).getFullYear()}
+            {new Date(matchDetails.MatchDate).getDate()} {new Date(matchDetails.MatchDate).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.MatchDate).getFullYear()}
           </span>
-          <span className="time">{matchDetails.time}</span>
+          <span className="time">{matchDetails.MatchTime}</span>
         </div>
         <div className="priceBook">
-          <span className="price">{matchDetails.price} L.E</span>
+          <span className="price">{matchDetails.Price} L.E</span>
           <button onClick={() => props.handlePaymentCard()}>Book now!</button>
         </div>
       </div>
@@ -88,22 +84,22 @@ function MatchDetailsCard(props) {
   const guestView = (
     <div className="MatchDetailsCard">
       <div className="teams">
-        <span>{matchDetails.homeTeam}</span>
+        <span>{matchDetails.HomeTeam}</span>
         <img src={stadiumIcon} alt="" />
-        <span>{matchDetails.awayTeam}</span>
+        <span>{matchDetails.AwayTeam}</span>
       </div>
-      <p className="stadiumInfo">{matchDetails.stadium}, Cairo, Egypt</p>
+      <p className="stadiumInfo">{stadium}, Cairo, Egypt</p>
       <span className="gray">Choose your seat</span>
-      <SeatsReservation rows={rows} cols={cols}/>
+      <SeatsReservation rows={rows} cols={cols} disabled={true}/>
       <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
-            {new Date(matchDetails.date).getDate()} {new Date(matchDetails.date).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.date).getFullYear()}
+            {new Date(matchDetails.MatchDate).getDate()} {new Date(matchDetails.MatchDate).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.MatchDate).getFullYear()}
           </span>
-          <span className="time">{matchDetails.time}</span>
+          <span className="time">{matchDetails.MatchTime}</span>
         </div>
         <div className="priceBook">
-          <span className="price">{matchDetails.price} L.E</span>
+          <span className="price">{matchDetails.Price} L.E</span>
           <button className="disabled">Book now!</button>
         </div>
       </div>
@@ -113,22 +109,22 @@ function MatchDetailsCard(props) {
   const reservedView = (
     <div className="MatchDetailsCard">
       <div className="teams">
-        <span>{matchDetails.homeTeam}</span>
+        <span>{matchDetails.HomeTeam}</span>
         <img src={stadiumIcon} alt="" />
-        <span>{matchDetails.awayTeam}</span>
+        <span>{matchDetails.AwayTeam}</span>
       </div>
-      <p className="stadiumInfo">{matchDetails.stadium}, Cairo, Egypt</p>
+      <p className="stadiumInfo">{stadium}, Cairo, Egypt</p>
       <span className="gray">Ticket#{matchDetails.ticketNumber} | your Seats are in yellow </span>
       <SeatsReservation rows={rows} cols={cols} disabled={true}/>
       <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
-            {new Date(matchDetails.date).getDate()} {new Date(matchDetails.date).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.date).getFullYear()}
+            {new Date(matchDetails.MatchDate).getDate()} {new Date(matchDetails.MatchDate).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.MatchDate).getFullYear()}
           </span>
-          <span className="time">{matchDetails.time}</span>
+          <span className="time">{matchDetails.MatchTime}</span>
         </div>
         <div className="priceBook">
-          <span className="price">{matchDetails.price} L.E</span>
+          <span className="price">{matchDetails.Price} L.E</span>
           <button className="disabled">Book now!</button>
         </div>
       </div>
@@ -144,24 +140,24 @@ function MatchDetailsCard(props) {
             <label htmlFor="home-team">Home Team</label>
             <select
               id="home-team"
-              value={matchDetails.homeTeam}
+              value={matchDetails.HomeTeam}
               onChange={handleHomeTeamChange}
             >
               <option value="">Select home team</option>
-              <option value={matchDetails.homeTeam}>{matchDetails.homeTeam}</option>
-              <option value={matchDetails.awayTeam}>{matchDetails.awayTeam}</option>
+              <option value={matchDetails.HomeTeam}>{matchDetails.HomeTeam}</option>
+              <option value={matchDetails.AwayTeam}>{matchDetails.AwayTeam}</option>
             </select>
           </div>
           <div className="input-group">
             <label htmlFor="away-team">Away Team</label>
             <select
               id="away-team"
-              value={matchDetails.awayTeam}
+              value={matchDetails.AwayTeam}
               onChange={handleAwayTeamChange}
             >
               <option value="">Select away team</option>
-              <option value={matchDetails.homeTeam}>{matchDetails.homeTeam}</option>
-              <option value={matchDetails.awayTeam}>{matchDetails.awayTeam}</option>
+              <option value={matchDetails.HomeTeam}>{matchDetails.HomeTeam}</option>
+              <option value={matchDetails.AwayTeam}>{matchDetails.AwayTeam}</option>
             </select>
           </div>
           <div className="input-group">
@@ -169,21 +165,21 @@ function MatchDetailsCard(props) {
             <input
               type="date"
               id="date"
-              value={new Date(matchDetails.date).toISOString().split("T")[0]}
+              value={new Date(matchDetails.MatchDate).toISOString().split("T")[0]}
               onChange={handleDateChange}
             />
           </div>
           <div className="input-group">
             <label htmlFor="time">Time</label>
-            <input type="time" id="time" value={matchDetails.time} onChange={handleTimeChange} />
+            <input type="time" id="time" value={matchDetails.MatchTime} onChange={handleTimeChange} />
           </div>
         </div>
         <div className="form-row">
           <div className="input-group">
             <label htmlFor="stadium">Stadium</label>
-            <select id="stadium" value={matchDetails.stadium} onChange={handleStadiumChange}>
+            <select id="stadium" value={stadium} onChange={handleStadiumChange}>
               <option value="">Select stadium</option>
-              <option value={matchDetails.stadium}>{matchDetails.stadium}</option>
+              <option value={stadium}>{stadium}</option>
             </select>
           </div>
           <div className="input-group">
@@ -192,7 +188,7 @@ function MatchDetailsCard(props) {
               type="number"
               id="price"
               placeholder="Enter price"
-              value={matchDetails.price}
+              value={matchDetails.Price}
               onChange={handlePriceChange}
             />
           </div>
