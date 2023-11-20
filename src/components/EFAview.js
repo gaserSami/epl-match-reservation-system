@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import MatchCard from "./MatchCard";
 import StadiumCard from "./StadiumCard";
 
-function EFAview({handleTicketsClick, handleSettingsClick, handleAddNewMatch, handleAddNewStadium, matchDetails,userID}) {
+function EFAview({handleTicketsClick, handleSettingsClick, handleAddNewMatch, handleAddNewStadium, matchDetails,userID, handleEditMatch}) {
   const listItems = ["Stadiums", "Matches"];
   const [matchesDetails, setMatchesDetails] = useState([]);
   const [stadiumsDetails, setStadiumsDetails] = useState([{}]);

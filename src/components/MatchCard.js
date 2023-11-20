@@ -107,7 +107,7 @@ const MatchCard = (props) => {
       </div>
       <div className="buttons">
       <button onClick={() => props.handleTicketsClick('guestView', matchDetails, stadiumDetails)}>Tickets</button>
-        <button onClick={() => props.handleTicketsClick('editView', matchDetails)}><img src={editIcon} alt="" /></button>
+        <button onClick={() => props.handleTicketsClick('editView', matchDetails, stadiumDetails)}><img src={editIcon} alt="" /></button>
       </div>
     </div>
   );

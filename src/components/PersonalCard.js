@@ -105,7 +105,8 @@ function PersonalCard(props) {
       Password: password,
       Address: address,
       Username: username,
-      UserType: props.personalDetails.UserType
+      UserType: props.personalDetails.UserType,
+      State: props.personalDetails.State
     };
   
     try {

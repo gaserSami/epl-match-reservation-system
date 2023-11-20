@@ -23,6 +23,7 @@ function App() {
   const [page, setPage] = useState('mainPage');
   const [showMatchDetails, setShowMatchDetails] = useState(false);
   const [addNewMatch, setAddNewMatch] = useState(false);
+  const [editMatch, setEditMatch] = useState(false);
   const [addNewStadium, setAddNewStadium] = useState(false);
   const [showPersonalDetails, setShowPersonalDetails] = useState(false);
   const [showSuccessCard, setShowSuccessCard] = useState(false);
@@ -32,6 +33,31 @@ function App() {
   const [matchDetails, setMatchDetails] = useState({});
   const [personalDetails, setPersonalDetails] = useState({});
   const [stadiumDetails, setStadiumDetails] = useState({});
+  //general
+  const [teams, setTeams] = useState([]);
+  const [stadiums, setStadiums] = useState([]);
+  const [linesmen, setLinesmen] = useState([]);
+  const [referees, setReferees] = useState([]);
+
+  useEffect(() => {
+    const fetchTeamsAndStadiums = async () => {
+      try {
+        const teamsResponse = await axios.get('http://localhost:5000/teams');
+        setTeams(teamsResponse.data);
+        const stadiumsResponse = await axios.get('http://localhost:5000/stadiums');
+        setStadiums(stadiumsResponse.data);
+        const refereesResponse = await axios.get('http://localhost:5000/referees');
+        setReferees(refereesResponse.data);
+        const linesmenResponse = await axios.get('http://localhost:5000/linesmen');
+        setLinesmen(linesmenResponse.data);
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    };
+
+    fetchTeamsAndStadiums();
+  }, []);
+  
 
   const handleTicketsClick = (view, matchdetails,stadiumdetails) => {
     console.log(matchdetails);
@@ -107,9 +133,15 @@ function App() {
     setAddNewMatch(true);
   };
 
+  const handleEditMatch = () => {
+    setEditMatch(true);
+  }
+
   const handleAddNewStadium = () => {
     setAddNewStadium(true);
   };
+
+
 
   const handleClose = () => {
     setShowMatchDetails(false);
@@ -119,6 +151,7 @@ function App() {
     setShowSuccessCard(false);
     setShowFailedCard(false);
     setShowPaymentCard(false);
+    setEditMatch(false);
   };
 
   const handleSignIn = () => {
@@ -135,7 +168,7 @@ function App() {
       <Header currentPage={page} onSignIn={handleSignIn} username={username}/>
       {page === 'mainPage' && <MainPage onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick} />}
       {page === 'signIn' && <SignIn onSignUp={handleSignUp} onLogin={onLogin} />}
-      {page === 'siteAdminPage' && <SiteAdminView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} />}
+      {page === 'siteAdminPage' && <SiteAdminView handleSettingsClick={handleSettingsClick} userID={userID} />}
       {page === 'signUp' && <SignUp />}
       {showMatchDetails && (
         <OverlayContainer onClose={handleClose}>
@@ -149,11 +182,16 @@ function App() {
       )}
       {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} userID={userID} />}
       {page === 'EFAPage' && (
-        <EFAview handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleAddNewStadium={handleAddNewStadium} matchDetails={matchDetails} userID={userID}/>
+        <EFAview handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleEditMatch={handleEditMatch} handleAddNewStadium={handleAddNewStadium} matchDetails={matchDetails} userID={userID}/>
       )}
       {addNewMatch && (
         <OverlayContainer onClose={handleClose}>
-          <MatchDetailsCard view="editView" stadiumDetails={stadiumDetails}/>
+          <MatchDetailsCard view="addView" stadiumDetails={stadiumDetails} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen}/>
+        </OverlayContainer>
+      )}
+      {editMatch && (
+        <OverlayContainer onClose={handleClose}>
+          <MatchDetailsCard view="editView" matchDetails={matchDetails} stadiumDetails={stadiumDetails} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen}/>
         </OverlayContainer>
       )}
       {addNewStadium && (
