@@ -1,3 +1,20 @@
+to use this project y shbab
+cd backend
+npm init -y
+npm install express
+
+cd app
+npm install axios
+w b2et el 7aga
+
+to start go to backend
+cd backend
+node server.js
+
+cd app
+npm start
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

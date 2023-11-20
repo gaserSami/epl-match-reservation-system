@@ -1,19 +1,37 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import '../styles/MatchCard.css';
 import editIcon from '../assets/editing.png';
 
 const MatchCard = (props) => {
+   // Function to fetch stadium details based on StadiumID
+   const [stadiumDetails, setStadiumDetails] = useState(null);
+    const matchDetails = props.matchDetails;
 
-  const matchDetails = props.matchDetails;
-  const date = new Date(matchDetails.date);
+  useEffect(() => {
+    const fetchStadiumDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/stadiums/${matchDetails.StadiumID}`);
+        setStadiumDetails(response.data);
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    };
+
+    fetchStadiumDetails();
+  }, [matchDetails.StadiumID]);
+
+  const date = new Date(matchDetails.MatchDate);
   const month = date.toLocaleString('default', { month: 'long' });
-  const time = matchDetails.time;
-  const homeTeam = matchDetails.homeTeam;
-  const awayTeam = matchDetails.awayTeam;
+  const time = matchDetails.MatchTime;
+  const homeTeam = matchDetails.HomeTeam;
+  const awayTeam = matchDetails.AwayTeam;
   const title = homeTeam + ' vs ' + awayTeam;
-  const stadium = matchDetails.stadium;
-  const price = matchDetails.price;
-  const ticketNumber = matchDetails.ticketNumber;
+  // Call the function to get the stadium detail
+  const stadium = stadiumDetails ? stadiumDetails.StadiumName : 'Loading...';
+  const price = matchDetails.Price;
+  const ticketNumber = matchDetails.TicketNumber;
 
   const guestView = (
     <div className="matchCard">
@@ -29,10 +47,10 @@ const MatchCard = (props) => {
         <p className='stadium'>{stadium}, Egypt</p>
       </div>
       <div className="price">
-        {price} L.E L.E
+        {price} L.E
       </div>
       <div className="buttons">
-     <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
+     <button onClick={() => props.handleTicketsClick('guestView', matchDetails, stadiumDetails)}>Tickets</button>
       </div>
     </div>
   );
@@ -54,7 +72,7 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-      <button onClick={() => props.handleTicketsClick('bookView', matchDetails)}>Tickets</button>
+      <button onClick={() => props.handleTicketsClick('bookView', matchDetails, stadiumDetails)}>Tickets</button>
       </div>
     </div>
   );
@@ -76,7 +94,7 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-      <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
+      <button onClick={() => props.handleTicketsClick('guestView', matchDetails, stadiumDetails)}>Tickets</button>
         <button onClick={() => props.handleTicketsClick('editView', matchDetails)}><img src={editIcon} alt="" /></button>
       </div>
     </div>
@@ -99,7 +117,7 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-     <button onClick={() => props.handleTicketsClick('reservedView', matchDetails)}>Tickets</button>
+      <button onClick={() => props.handleTicketsClick('guestView', matchDetails, stadiumDetails)}>Tickets</button>
         <button className='cancel'>Cancel</button>
       </div>
     </div>
