@@ -1,16 +1,17 @@
-.mainPage{
-height: 100%;
-display: flex;
-flex-direction: column;
-align-items: center;
+/* Style for the main page container */
+.mainPage {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.mainPage .landingSection
-{
+/* Style for the landing section of the main page */
+.mainPage .landingSection {
   background-image: URL('../assets/aboSalah.jpeg');
   opacity: 0.8;
   background-size: cover;
-  background-blend-mode:overlay;
+  background-blend-mode: overlay;
   height: 85vh;
   width: 100%;
   display: flex;
@@ -21,11 +22,13 @@ align-items: center;
   padding: 20px;
 }
 
-.mainPage > h1{
-color: white;
+/* Style for the main heading on the main page */
+.mainPage > h1 {
+  color: white;
 }
 
-.mainPage .matchesContainer{
+/* Style for the container that holds the matches on the main page */
+.mainPage .matchesContainer {
   min-height: 200px;
   width: 90%;
   padding: 20px;
@@ -33,7 +36,9 @@ color: white;
   background-color: #3b52898c;
   box-shadow: 0px 0px 10px 0px #000000;
 }
-.mainPage .sideButton{
+
+/* Style for the side button on the main page */
+.mainPage .sideButton {
   position: fixed;
   bottom: 3%;
   left: 2%;
@@ -46,7 +51,9 @@ color: white;
   cursor: pointer;
   transition: scale 0.3s;
 }
-.mainPage .sideButton:hover{
+
+/* Style for the side button on hover */
+.mainPage .sideButton:hover {
   background-color: #cea520;
   scale: 1.05;
 }

@@ -51,6 +51,9 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const stadium = await Stadium.findById(id);
+    if (!stadium) return res.status(404).send('Stadium not found.');
+
     const { error } = stadiumValidationSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
@@ -61,13 +64,15 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-  
 });
 
 // Delete a Stadium
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const stadium = await Stadium.findById(id);
+    if (!stadium) return res.status(404).send('Stadium not found.');
+
     await Stadium.findByIdAndDelete(id);
     res.json({ message: 'Stadium deleted successfully' });
   } catch (error) {

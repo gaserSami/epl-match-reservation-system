@@ -1,3 +1,4 @@
+/* Container for the sign-in form */
 .signin-container {
   display: flex;
   justify-content: center;
@@ -6,6 +7,7 @@
   background-color: #e9ecef; /* Light grey background */
 }
 
+/* Box containing the sign-in form */
 .signin-container .signin-box {
   background-color: #fff;
   padding: 40px;
@@ -15,32 +17,38 @@
   text-align: center;
 }
 
+/* Heading for the sign-in form */
 .signin-container h2 {
   margin-bottom: 10px;
 }
 
+/* Paragraph text in the sign-in form */
 .signin-container p {
   color: #6c757d; /* Grey text */
   margin-bottom: 20px;
 }
 
+/* Input group container */
 .signin-container .input-group {
   margin-bottom: 20px;
   text-align: left;
 }
 
+/* Label for the input group */
 .signin-container .input-group label {
   display: block;
   margin-bottom: 5px;
 }
 
+/* Input field in the input group */
 .signin-container .input-group input {
-  width: 100%;
+  width: 92%;
   padding: 10px;
   border: 1px solid #ced4da;
   border-radius: 5px;
 }
 
+/* Sign-in button */
 .signin-container button {
   width: 100%;
   padding: 10px;
@@ -51,20 +59,24 @@
   cursor: pointer;
 }
 
+/* Hover effect for the sign-in button */
 .signin-container button:hover {
   background-color: #03297a;
 }
 
+/* Text below the sign-in form for sign-up option */
 .signin-container .signup-text {
   margin-top: 20px;
   font-size: 0.9em;
 }
 
+/* Link for sign-up option */
 .signin-container .signup-text a {
   color: #007bff;
   text-decoration: none;
 }
 
+/* Hover effect for the sign-up link */
 .signin-container .signup-text a:hover {
   text-decoration: underline;
 }

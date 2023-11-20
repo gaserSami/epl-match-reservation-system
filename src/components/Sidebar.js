@@ -31,10 +31,11 @@ function Sidebar(props) {
 
   return (
     <div className="sidebar">
-      {listItems} {/* Render list items */}
+      {error && <div className="error">{error}</div>}
+      {listItems}
       <div className="menu-item settings">
         <img src="" alt="" className="sideIcon" />
-        {personalDetails && <span onClick={() => props.handleSettingsClick(personalDetails)} >Personal Info</span>} {/* Render personal info if personalDetails is not null */}
+        {personalDetails && <span onClick={() => props.handleSettingsClick(personalDetails)} >Personal Info</span>}
       </div>
     </div>
   );

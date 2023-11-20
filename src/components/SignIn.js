@@ -3,21 +3,28 @@ import axios from 'axios';
 import "../styles/SignIn.css";
 
 function SignIn(props) {
-  const [Username, setUsername] = useState('');
-  const [Password, setPassword] = useState('');
+  const [Username, setUsername] = useState(''); // State variable to store the username
+  const [Password, setPassword] = useState(''); // State variable to store the password
+  const [error, setError] = useState(null); // State variable to store the error message
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Validate inputs
+    if (!Username || !Password) {
+      setError('Please enter your username and password.'); // Set error message if username or password is empty
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:5000/login', { Username, Password });
+      const response = await axios.post('http://localhost:5000/login', { Username, Password }); // Send a POST request to the login endpoint with username and password
       // Extract id and authority from response
       const { _id, UserType } = response.data;
-    // Call the callback function with id and authority
-    props.onLogin(_id, UserType);
+      // Call the callback function with id and authority
+      props.onLogin(_id, UserType);
     } catch (error) {
+      setError(error.response.data); // Set error message if there is an error during login
       console.error('Error logging in:', error);
-      // Handle error here
     }
   };
 
@@ -26,14 +33,15 @@ function SignIn(props) {
       <div className="signin-box">
         <h2>Sign In</h2>
         <p>Please enter your details.</p>
+        {error && <div className="error" style={{ color: 'red' }}>{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="Username">Username</label>
-            <input type="text" id="Username" placeholder="Username" value={Username} onChange={e => setUsername(e.target.value)} />
+            <input type="text" id="Username" placeholder="Username" value={Username} onChange={e => setUsername(e.target.value)} required />
           </div>
           <div className="input-group">
             <label htmlFor="Password">Password</label>
-            <input type="Password" id="Password" placeholder="Password" value={Password} onChange={e => setPassword(e.target.value)} />
+            <input type="password" id="Password" placeholder="Password" value={Password} onChange={e => setPassword(e.target.value)} required />
           </div>
           <button type="submit">SIGN IN</button>
         </form>

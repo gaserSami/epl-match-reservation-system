@@ -1,22 +1,30 @@
+// Import necessary libraries and components
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "../styles/MainPage.css";
 import MatchCard from "./MatchCard";
 
-
+// Define MainPage component
 function MainPage({ onSignUp, handleTicketsClick}) {
+  // Define state variables
   const [matchesDetails, setMatchesDetails] = useState([]);
+  const [error, setError] = useState(null);
 
+  // Use useEffect to fetch match details when the component mounts
   useEffect(() => {
     axios.get('http://localhost:5000/matches') // Adjust the URL as necessary
       .then(response => {
+        // On successful fetch, update matchesDetails state
         setMatchesDetails(response.data);
       })
       .catch(error => {
+        // On error, update error state with a user-friendly message
+        setError('There was an error fetching match details.');
         console.error('There was an error!', error);
       });
   }, []);
 
+  // Render the component
   return (
     <div className="mainPage">
       <div className="landingSection">
@@ -31,9 +39,14 @@ function MainPage({ onSignUp, handleTicketsClick}) {
       </div>
       <h1>UPCOMING MATCHES</h1>
       <div className="matchesContainer">
-      {matchesDetails.map((match, index) => (
-     <MatchCard key={index} matchDetails={match} handleTicketsClick={handleTicketsClick} view="guestView"/>
-     ))}
+      {/* If there's an error, display it. Otherwise, map over matchesDetails and render a MatchCard for each match. */}
+      {error ? (
+        <div>Error: {error}</div>
+      ) : (
+        matchesDetails.map((match, index) => (
+          <MatchCard key={index} matchDetails={match} handleTicketsClick={handleTicketsClick} view="guestView"/>
+        ))
+      )}
       </div>
       <button className="sideButton" onClick={onSignUp}>Sign in now to book your ticket!</button>
     </div>
