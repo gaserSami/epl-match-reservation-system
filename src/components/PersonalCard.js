@@ -3,11 +3,7 @@ import axios from 'axios';
 import '../styles/PersonalCard.css';
 
 function PersonalCard(props) {
-
-  console.log("====================================")
-  console.log("in personal card");
-  console.log(props.personalDetails);
-  console.log("====================================")
+  // State variables for personal details
   const [userID, setUserID] = useState(props.personalDetails._id);
   const [firstName, setFirstName] = useState(props.personalDetails.FirstName);
   const [lastName, setLastName] = useState(props.personalDetails.LastName);
@@ -19,21 +15,58 @@ function PersonalCard(props) {
   const [address, setAddress] = useState(props.personalDetails.Address);
   const [username, setUsername] = useState(props.personalDetails.Username);
 
+  // Fetch user data when component mounts
   useEffect(() => {
-    if (props.personalDetails) {
-      setUserID(props.personalDetails._id);
-      setFirstName(props.personalDetails.FirstName);
-      setLastName(props.personalDetails.LastName);
-      setCity(props.personalDetails.City);
-      setGender(props.personalDetails.Gender);
-      setEmail(props.personalDetails.Email);
-      setBirthdate(new Date(props.personalDetails.DateOfBirth).toISOString().split('T')[0]);
-      setPassword(props.personalDetails.Password);
-      setAddress(props.personalDetails.Address);
-      setUsername(props.personalDetails.Username);
-    }
-  }, [props.personalDetails]);
+    fetchUserData();
+  }, []);
 
+  // Fetch user data from the server
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/users/${userID}`);
+      const user = response.data;
+      setFirstName(user.FirstName);
+      setLastName(user.LastName);
+      setCity(user.City);
+      setGender(user.Gender);
+      setEmail(user.Email);
+      setBirthdate(new Date(user.DateOfBirth).toISOString().split('T')[0]);
+      setPassword(user.Password);
+      setAddress(user.Address);
+      setUsername(user.Username);
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
+
+  // Update user data on form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const updatedUser = {
+      FirstName: firstName,
+      LastName: lastName,
+      City: city,
+      Gender: gender,
+      Email: email,
+      DateOfBirth: new Date(birthdate),
+      Password: password,
+      Address: address,
+      Username: username,
+      UserType: props.personalDetails.UserType,
+      State: props.personalDetails.State
+    };
+
+    try {
+      const response = await axios.put(`http://localhost:5000/users/${userID}`, updatedUser);
+      fetchUserData(); // Fetch the latest user data after updating it
+      console.log(response.data);
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
+
+  // Event handlers for input changes
   const handleFirstNameChange = (event) => {
     setFirstName(event.target.value);
   };
@@ -70,54 +103,6 @@ function PersonalCard(props) {
     setUsername(event.target.value);
   };
 
-  const fetchUserData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:5000/users/${userID}`);
-      const user = response.data;
-      setFirstName(user.FirstName);
-      setLastName(user.LastName);
-      setCity(user.City);
-      setGender(user.Gender);
-      setEmail(user.Email);
-      setBirthdate(new Date(user.DateOfBirth).toISOString().split('T')[0]);
-      setPassword(user.Password);
-      setAddress(user.Address);
-      setUsername(user.Username);
-    } catch (error) {
-      console.error('There was an error!', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-  
-    const updatedUser = {
-      FirstName: firstName,
-      LastName: lastName,
-      City: city,
-      Gender: gender,
-      Email: email,
-      DateOfBirth: new Date(birthdate),
-      Password: password,
-      Address: address,
-      Username: username,
-      UserType: props.personalDetails.UserType,
-      State: props.personalDetails.State
-    };
-  
-    try {
-      const response = await axios.put(`http://localhost:5000/users/${userID}`, updatedUser);
-      fetchUserData(); // Fetch the latest user data after updating it
-      console.log(response.data);
-    } catch (error) {
-      console.error('There was an error!', error);
-    }
-  };
-
   return (
     <div className="personal-container">
       <div className="personal-card-box">
@@ -134,6 +119,7 @@ function PersonalCard(props) {
                 value={username}
                 onChange={handleUsernameChange}
                 disabled
+                required
               />
             </div>
             <div className="input-group">
@@ -144,6 +130,7 @@ function PersonalCard(props) {
                 placeholder="example"
                 value={firstName}
                 onChange={handleFirstNameChange}
+                required
               />
             </div>
             <div className="input-group">
@@ -154,11 +141,12 @@ function PersonalCard(props) {
                 placeholder="example"
                 value={lastName}
                 onChange={handleLastNameChange}
+                required
               />
             </div>
             <div className="input-group">
               <label htmlFor="city">City</label>
-              <select id="city" value={city} onChange={handleCityChange}>
+              <select id="city" value={city} onChange={handleCityChange} required>
                 <option value="">Select a city</option>
                 <option value="Cairo">Cairo</option>
                 <option value="Alexandria">Alexandria</option>
@@ -177,6 +165,7 @@ function PersonalCard(props) {
                   checked={gender === "male"}
                   onChange={handleGenderChange}
                   disabled
+                  required
                 />
               </div>
               <div className="genderContainer">
@@ -189,6 +178,7 @@ function PersonalCard(props) {
                   checked={gender === "female"}
                   onChange={handleGenderChange}
                   disabled
+                  required
                 />
               </div>
             </div>
@@ -202,6 +192,7 @@ function PersonalCard(props) {
                 placeholder="example@gmail.com"
                 value={email}
                 onChange={handleEmailChange}
+                required
               />
             </div>
             <div className="input-group">
@@ -211,6 +202,7 @@ function PersonalCard(props) {
                 id="birthdate"
                 value={birthdate}
                 onChange={handleBirthdateChange}
+                required
               />
             </div>
             <div className="input-group">
@@ -221,6 +213,7 @@ function PersonalCard(props) {
                 placeholder="********"
                 value={password}
                 onChange={handlePasswordChange}
+                required
               />
             </div>
           </div>
@@ -232,6 +225,7 @@ function PersonalCard(props) {
               placeholder="136 example, example"
               value={address}
               onChange={handleAddressChange}
+              required
             />
           </div>
           <button type="submit">Save</button>

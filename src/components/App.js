@@ -15,6 +15,7 @@ import SiteAdminView from './SiteAdminView';
 import SuccessCard from './SuccessCard';
 import FailedCard from './FailedCard';
 import PaymentCard from './PaymentCard';
+import { set } from 'mongoose';
 
 function App() {
   const [userID, setUserID] = useState(null);
@@ -27,6 +28,8 @@ function App() {
   const [addNewStadium, setAddNewStadium] = useState(false);
   const [showPersonalDetails, setShowPersonalDetails] = useState(false);
   const [showSuccessCard, setShowSuccessCard] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [failedMessage, setFailedMessage] = useState(''); 
   const [showFailedCard, setShowFailedCard] = useState(false);
   const [showPaymentCard, setShowPaymentCard] = useState(false);
   const [MatchDetailsCardView, setMatchDetailsCardView] = useState('guestView');
@@ -109,11 +112,13 @@ function App() {
     setShowPersonalDetails(true);
   };
 
-  const handleSuccessCard = () => {
+  const handleSuccessCard = (message) => {
+    setSuccessMessage(message);
     setShowSuccessCard(true);
   };
 
-  const handleFailedCard = () => {
+  const handleFailedCard = (message) => {
+    setFailedMessage(message);
     setShowFailedCard(true);
   };
 
@@ -168,7 +173,7 @@ function App() {
       <Header currentPage={page} onSignIn={handleSignIn} username={username}/>
       {page === 'mainPage' && <MainPage onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick} />}
       {page === 'signIn' && <SignIn onSignUp={handleSignUp} onLogin={onLogin} />}
-      {page === 'siteAdminPage' && <SiteAdminView handleSettingsClick={handleSettingsClick} userID={userID} />}
+      {page === 'siteAdminPage' && <SiteAdminView handleSettingsClick={handleSettingsClick}  userID={userID} />}
       {page === 'signUp' && <SignUp />}
       {showMatchDetails && (
         <OverlayContainer onClose={handleClose}>
@@ -206,12 +211,12 @@ function App() {
       )}
       {showSuccessCard && (
         <OverlayContainer onClose={handleClose}>
-          <SuccessCard message="you can view your tickets anytime in your reserved tab" />
+          <SuccessCard message={successMessage} />
         </OverlayContainer>
       )}
       {showFailedCard && (
         <OverlayContainer onClose={handleClose}>
-          <FailedCard message="Something went wrong. Please try again." />
+          <FailedCard message={failedMessage} />
         </OverlayContainer>
       )}
     </div>
