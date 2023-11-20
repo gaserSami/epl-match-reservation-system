@@ -8,7 +8,7 @@ import { useRef } from "react";
 function MatchDetailsCard(props) {
   const rows =20;
   const cols = 20;
-  const [matchDetails, setMatchDetails] = useState({ HomeTeam: '', AwayTeam: '', MatchDate: new Date() });
+  const [matchDetails, setMatchDetails] = useState(props.matchDetails);
   const [stadiumDetails, setStadiumDetails] = useState(props.stadiumDetails);
   const stadium = stadiumDetails ? stadiumDetails.StadiumName : 'Loading...';
 

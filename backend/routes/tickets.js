@@ -5,17 +5,16 @@ const Joi = require('joi');
 
 // Validation schema for Ticket
 const ticketValidationSchema = Joi.object({
-  MatchID: Joi.string().required(),
-  Username: Joi.string().required(),
-  SeatsNumber: Joi.number().integer().min(1).required(),
-  Price: Joi.number().integer().min(0).required(),
-  Status: Joi.string().valid('Booked', 'Available').required()
+  MatchID: Joi.string().required(), // Assuming MatchID is a string representation of an ObjectId
+  UserID: Joi.string().required(), // Assuming UserID is a string representation of an ObjectId
+  SeatsNumber: Joi.array().items(Joi.number().integer().min(1)).required(), // Array of seat numbers
+  Price: Joi.number().min(0).required()
 });
 
 // Get all Tickets
 router.get('/', async (req, res) => {
   try {
-    const tickets = await Ticket.find({});
+    const tickets = await Ticket.find({}).populate('MatchID').populate('UserID');
     res.json(tickets);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -25,7 +24,7 @@ router.get('/', async (req, res) => {
 // Fetch a single ticket by id
 router.get('/:id', async (req, res) => {
   try {
-    const ticket = await Ticket.findById(req.params.id);
+    const ticket = await Ticket.findById(req.params.id).populate('MatchID').populate('UserID');
     if (!ticket) return res.status(404).send('Ticket not found.');
     res.send(ticket);
   } catch (error) {
@@ -41,7 +40,13 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const newTicket = new Ticket(req.body);
+    const newTicket = new Ticket({
+      MatchID: req.body.MatchID,
+      UserID: req.body.UserID,
+      SeatsNumber: req.body.SeatsNumber,
+      Price: req.body.Price
+    });
+
     const savedTicket = await newTicket.save();
     res.status(201).json(savedTicket);
   } catch (error) {

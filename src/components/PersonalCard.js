@@ -1,16 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import '../styles/PersonalCard.css';
 
 function PersonalCard(props) {
-  const [firstName, setFirstName] = useState(props.personalDetails.firstName);
-  const [lastName, setLastName] = useState(props.personalDetails.lastName);
-  const [city, setCity] = useState(props.personalDetails.city);
-  const [gender, setGender] = useState(props.personalDetails.gender);
-  const [email, setEmail] = useState(props.personalDetails.email);
-  const [birthdate, setBirthdate] = useState(props.personalDetails.birthdate);
-  const [password, setPassword] = useState(props.personalDetails.password);
-  const [address, setAddress] = useState(props.personalDetails.address);
-  const [username, setUsername] = useState(props.personalDetails.username);
+
+  console.log("====================================")
+  console.log("in personal card");
+  console.log(props.personalDetails);
+  console.log("====================================")
+  const [userID, setUserID] = useState(props.personalDetails._id);
+  const [firstName, setFirstName] = useState(props.personalDetails.FirstName);
+  const [lastName, setLastName] = useState(props.personalDetails.LastName);
+  const [city, setCity] = useState(props.personalDetails.City);
+  const [gender, setGender] = useState(props.personalDetails.Gender);
+  const [email, setEmail] = useState(props.personalDetails.Email);
+  const [birthdate, setBirthdate] = useState(new Date(props.personalDetails.DateOfBirth).toISOString().split('T')[0]);
+  const [password, setPassword] = useState(props.personalDetails.Password);
+  const [address, setAddress] = useState(props.personalDetails.Address);
+  const [username, setUsername] = useState(props.personalDetails.Username);
+
+  useEffect(() => {
+    if (props.personalDetails) {
+      setUserID(props.personalDetails._id);
+      setFirstName(props.personalDetails.FirstName);
+      setLastName(props.personalDetails.LastName);
+      setCity(props.personalDetails.City);
+      setGender(props.personalDetails.Gender);
+      setEmail(props.personalDetails.Email);
+      setBirthdate(new Date(props.personalDetails.DateOfBirth).toISOString().split('T')[0]);
+      setPassword(props.personalDetails.Password);
+      setAddress(props.personalDetails.Address);
+      setUsername(props.personalDetails.Username);
+    }
+  }, [props.personalDetails]);
 
   const handleFirstNameChange = (event) => {
     setFirstName(event.target.value);
@@ -48,12 +70,59 @@ function PersonalCard(props) {
     setUsername(event.target.value);
   };
 
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/users/${userID}`);
+      const user = response.data;
+      setFirstName(user.FirstName);
+      setLastName(user.LastName);
+      setCity(user.City);
+      setGender(user.Gender);
+      setEmail(user.Email);
+      setBirthdate(new Date(user.DateOfBirth).toISOString().split('T')[0]);
+      setPassword(user.Password);
+      setAddress(user.Address);
+      setUsername(user.Username);
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    const updatedUser = {
+      FirstName: firstName,
+      LastName: lastName,
+      City: city,
+      Gender: gender,
+      Email: email,
+      DateOfBirth: new Date(birthdate),
+      Password: password,
+      Address: address,
+      Username: username,
+      UserType: props.personalDetails.UserType
+    };
+  
+    try {
+      const response = await axios.put(`http://localhost:5000/users/${userID}`, updatedUser);
+      fetchUserData(); // Fetch the latest user data after updating it
+      console.log(response.data);
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
+
   return (
     <div className="personal-container">
       <div className="personal-card-box">
         <h2>Personal Info</h2>
         <p>Please enter your details.</p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="input-row">
             <div className="input-group">
               <label htmlFor="username">Username</label>

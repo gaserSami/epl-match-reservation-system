@@ -1,81 +1,67 @@
 import React from "react";
-import axios from 'axios';
 import { useEffect } from "react";
 import '../styles/FanView.css'
 import Sidebar from "./Sidebar";
 import MatchCard from "./MatchCard";
 import StadiumCard from "./StadiumCard";
 import { useState } from "react";
+import axios from 'axios';
 
 function FanView(props) {
 
   const listItems = ["Reserved", "Matches"];
   const [matchesDetails, setMatchesDetails] = useState([]);
+  const [reservedMatchesDetails, setReservedMatchesDetails] = useState([]);
+  const [userID, setUserID] = useState(props.userID);
   useEffect(() => {
-    axios.get('http://localhost:5000/matches') // Adjust the URL as necessary
+    axios.get('http://localhost:5000/matches')
       .then(response => {
-        setMatchesDetails(response.data);
+        const allMatches = response.data;
+        const nonUserMatches = allMatches.filter(match => !reservedMatchesDetails.some(userMatch => userMatch._id === match._id));
+        setMatchesDetails(nonUserMatches);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
-  }, []);
+  }, [reservedMatchesDetails]);
   const [activeItem, setActiveItem] = useState(listItems[1]);
+  
   const handleItemClick = (item) => {
     setActiveItem(item);
   };
-  const reservedMatchesDetails = [
-    {
-      date: '2023-01-01',
-      time: '18:00',
-      homeTeam: 'Al AHLY',
-      awayTeam: 'Al GOUNA',
-      stadium: 'Cairo Stadium',
-      price: 69.99,
-      ticketNumber: 7782
-    },
-    {
-      date: '2023-04-11',
-      time: '12:00',
-      homeTeam: 'Al BHLY',
-      awayTeam: 'GESOOO',
-      stadium: 'Giza Stadium',
-      price: 79.99,
-      ticketNumber: 1234
-    },
-    {
-      date: '2023-11-21',
-      time: '11:00',
-      homeTeam: 'AYMOOON',
-      awayTeam: 'AL ATTAWY',
-      stadium: 'Cairo Stadium',
-      price: 89.99,
-      ticketNumber: 5678
-    },
-    {
-      date: '2023-02-03',
-      time: '10:00',
-      homeTeam: 'FAHDOKA',
-      awayTeam: 'GHANNA',
-      stadium: 'Cairo Stadium',
-      price: 99.99,
-      ticketNumber: 91011
-    }
-  ];
-
+ 
+  useEffect(() => {
+    const fetchReservedMatches = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/tickets`);
+        const allTickets = response.data;
+    
+        const userTickets = allTickets.filter(ticket => ticket.UserID._id === userID);
+    
+        console.log(userTickets);
+    
+        const userMatches = userTickets.map(ticket => ticket.MatchID);
+        setReservedMatchesDetails(userMatches);
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    };
+  
+    fetchReservedMatches();
+  }, []);
   
 
 return (
   <div className="FanView">
-    <Sidebar listItems={listItems} activeItem={activeItem} handleItemClick={handleItemClick} handleSettingsClick={() => props.handleSettingsClick()}/>
+    <Sidebar listItems={listItems} activeItem={activeItem} handleItemClick={handleItemClick} handleSettingsClick={() => props.handleSettingsClick()} userID={props.userID}/>
       <div className="main">
         <div className="cardsContainer">
           {activeItem === 'Matches' ? (
             matchesDetails.map((match, index) => (
-              <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="fanView"/>
+              <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="guestView"/>
             ))
           ) : (
-            matchesDetails.map((match, index) => (
+            reservedMatchesDetails.map((match, index) => (
               <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="reservedView"/>
             ))
           )}

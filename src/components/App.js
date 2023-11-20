@@ -33,9 +33,11 @@ function App() {
   const [personalDetails, setPersonalDetails] = useState({});
   const [stadiumDetails, setStadiumDetails] = useState({});
 
-  const handleTicketsClick = (view, matchDetails,stadiumDetails) => {
-    setMatchDetails(matchDetails);
-    setStadiumDetails(stadiumDetails);
+  const handleTicketsClick = (view, matchdetails,stadiumdetails) => {
+    console.log(matchdetails);
+    console.log(stadiumdetails);
+    setMatchDetails(matchdetails);
+    setStadiumDetails(stadiumdetails);
     setMatchDetailsCardView(view);
     setShowMatchDetails(true);
   };
@@ -59,7 +61,7 @@ function App() {
           case 'fan':
             setPage('fanPage');
             break;
-          case 'EFAmanger':
+          case 'EFAmanager':
             setPage('EFAPage');
             break;
           case 'siteAdmin':
@@ -76,9 +78,9 @@ function App() {
 
 
 
-  const handleSettingsClick = (userid) => {
-    const { userID } = userid; // Extract userID from personalDetails object
-    setUserID(userID);
+  const handleSettingsClick = (personaldetails) => {
+    setPersonalDetails(personalDetails);
+    setShowPersonalDetails(true);
   };
 
   const handleSuccessCard = () => {
@@ -130,7 +132,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header currentPage={page} onSignIn={handleSignIn} username={username} />
+      <Header currentPage={page} onSignIn={handleSignIn} username={username}/>
       {page === 'mainPage' && <MainPage onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick} />}
       {page === 'signIn' && <SignIn onSignUp={handleSignUp} onLogin={onLogin} />}
       {page === 'siteAdminPage' && <SiteAdminView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} />}
@@ -145,9 +147,9 @@ function App() {
           <PersonalCard personalDetails={personalDetails} />
         </OverlayContainer>
       )}
-      {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} />}
+      {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} userID={userID} />}
       {page === 'EFAPage' && (
-        <EFAview handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleAddNewStadium={handleAddNewStadium} />
+        <EFAview handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleAddNewStadium={handleAddNewStadium} matchDetails={matchDetails} userID={userID}/>
       )}
       {addNewMatch && (
         <OverlayContainer onClose={handleClose}>

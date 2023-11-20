@@ -59,6 +59,7 @@ router.post('/', async (req, res) => {
 // Update a user by id
 router.put('/:id', async (req, res) => {
   try {
+    console.log(req.body);
     const { id } = req.params;
     const { error } = userValidationSchema.validate(req.body);
     if (error) {

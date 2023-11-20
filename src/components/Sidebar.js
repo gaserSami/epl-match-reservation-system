@@ -1,33 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import '../styles/Sidebar.css'
 
 function Sidebar(props) {
+  const [personalDetails, setPersonalDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchPersonalDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/users/${props.userID}`);
+        setPersonalDetails(response.data);
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    };
+
+    fetchPersonalDetails();
+  }, [props.userID]);
+
   const listItems = props.listItems.map((item, index) => (
     <div key={index} className={`menu-item ${props.activeItem === item ? 'active' : ''}`} onClick={() => props.handleItemClick(item)}>
       <span>{item}</span>
     </div>
   ));
 
-  //given props.username
-  //query get user details
-  const personalDetails = {
-    username: 'Username',
-    email: 'gasersami@gmail.com',
-    password: 'ksadmsd',
-    firstName: 'Gaser',
-    lastName: 'Sami',
-    city:'Giza',
-    address:'136, hadayek el bte5',
-    birthdate:"2023-01-01",
-    gender:"male"
-  };
-
   return (
     <div className="sidebar">
       {listItems}
       <div className="menu-item settings">
         <img src="" alt="" className="sideIcon" />
-        <span onClick={() => props.handleSettingsClick(personalDetails)} >Settings</span>
+        {personalDetails && <span onClick={() => props.handleSettingsClick(personalDetails)} >Settings</span>}
       </div>
     </div>
   );

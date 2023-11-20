@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "../styles/StadiumDetailsCard.css";
 import stadiumIcon from '../assets/stadium.png';
 
@@ -26,10 +27,24 @@ function StadiumDetailsCard(props) {
     setStadiumDetails({ ...stadiumDetails, columns: e.target.value });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Make a POST request to the backend server to add the stadium details to the database
+    axios.post("/stadiums", stadiumDetails)
+      .then(response => {
+        // Handle the response from the server
+        console.log(response.data); // You can customize this based on your requirements
+      })
+      .catch(error => {
+        // Handle any errors that occur during the request
+        console.error(error);
+      });
+  };
+
   const editView = (
     <div className="stadium-form-card">
       <h2>Stadium Details</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="input-group">
             <label htmlFor="name">Name</label>

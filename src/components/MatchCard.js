@@ -7,7 +7,9 @@ import editIcon from '../assets/editing.png';
 const MatchCard = (props) => {
    // Function to fetch stadium details based on StadiumID
    const [stadiumDetails, setStadiumDetails] = useState(null);
-    const matchDetails = props.matchDetails;
+   const [matchDetails, setMatchDetails] = useState(props.matchDetails);
+
+
 
   useEffect(() => {
     const fetchStadiumDetails = async () => {
@@ -22,6 +24,11 @@ const MatchCard = (props) => {
     fetchStadiumDetails();
   }, [matchDetails.StadiumID]);
 
+  // Update matchDetails when props.matchDetails changes
+  useEffect(() => {
+    setMatchDetails(props.matchDetails);
+  }, [props.matchDetails]);
+
   const date = new Date(matchDetails.MatchDate);
   const month = date.toLocaleString('default', { month: 'long' });
   const time = matchDetails.MatchTime;
@@ -32,6 +39,11 @@ const MatchCard = (props) => {
   const stadium = stadiumDetails ? stadiumDetails.StadiumName : 'Loading...';
   const price = matchDetails.Price;
   const ticketNumber = matchDetails.TicketNumber;
+
+
+  console.log("i am here in match card");
+  console.log(matchDetails);
+  console.log(stadiumDetails);
 
   const guestView = (
     <div className="matchCard">
