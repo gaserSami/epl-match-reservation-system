@@ -9,11 +9,11 @@ function MainPage({ onSignUp, handleTicketsClick, matchesDetails}) {
   const [matches, setMatches] = useState(matchesDetails || []);
   const [error, setError] = useState(null);
 
-  console.log(matches);
 
   // Use useEffect to fetch match details when the component mounts
   useEffect(() => {
     setMatches(matches);
+    console.log(matches);
   }, [matchesDetails]);
 
   // Render the component

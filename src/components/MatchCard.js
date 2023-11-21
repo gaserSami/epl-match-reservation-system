@@ -7,6 +7,11 @@ const MatchCard = (props) => {
   // State to store match details
   const [matchDetails, setMatchDetails] = useState(props.matchDetails || {});
 
+  // Update matchDetails when props.matchDetails changes
+  useEffect(() => {
+    setMatchDetails(props.matchDetails);
+  }, [props.matchDetails]);
+
   // Destructure matchDetails object
   const {
     HomeTeamID: { TeamName: homeTeamName } = {},
@@ -25,11 +30,6 @@ const MatchCard = (props) => {
   const ticketNumber = Math.floor(Math.random() * 1000000) + 1;
   // Generate match title
   const title = `${homeTeamName} vs ${awayTeamName}`;
-
-  // Update matchDetails when props.matchDetails changes
-  useEffect(() => {
-    setMatchDetails(props.matchDetails);
-  }, [props.matchDetails]);
 
   // Guest view of the match card
   const guestView = (

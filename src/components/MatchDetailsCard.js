@@ -14,8 +14,8 @@ function MatchDetailsCard(props) {
   const [date, setMatchDate] = useState(new Date());
   const [time, setTime] = useState('');
   const [stadium, setStadium] = useState('');
-  const [rows, setRows] = useState(0);
-  const [cols, setCols] = useState(0);
+  const [rows, setRows] = useState(20);
+  const [cols, setCols] = useState(20);
   const [refereeName, setRefereeName] = useState('');
   const [lineman1Name, setLineman1Name] = useState('');
   const [lineman2Name, setLineman2Name] = useState('');
@@ -23,9 +23,19 @@ function MatchDetailsCard(props) {
   // Destructure matchDetails object
   
 
- // Update matchDetails when props.matchDetails changes
+ // fetch data initially
  useEffect(() => {
   setMatchDetails(props.matchDetails);
+  console.log("====================================")
+  console.log(matchDetails);
+  console.log(props.matchDetails);
+  console.log("====================================")
+  const {
+    StadiumID: { Rows: rows } = {},
+    StadiumID: { Columns: cols } = {},
+  } = props.matchDetails || {};
+  setRows(rows);
+  setCols(cols);
 }, [props.matchDetails]);
 
   useEffect(() => {
@@ -35,8 +45,6 @@ function MatchDetailsCard(props) {
       MatchDate: matchDate,
       MatchTime: time,
       StadiumID: { StadiumName: stadium } = {},
-      StadiumID: { Rows: rows } = {},
-      StadiumID: { Columns: cols } = {},
       MainRefereeID: { Name: refereeName } = {},
       Lineman1ID: { Name: lineman1Name } = {},
       Lineman2ID: { Name: lineman2Name }  = {},
@@ -45,11 +53,9 @@ function MatchDetailsCard(props) {
   
     setHomeTeamName(homeTeamName);
     setAwayTeamName(awayTeamName);
-    setMatchDate(new date(matchDate));
+    setMatchDate(isNaN(Date.parse(matchDate)) ? null : new Date(matchDate));
     setTime(time);
     setStadium(stadium);
-    setRows(rows);
-    setCols(cols);
     setRefereeName(refereeName);
     setLineman1Name(lineman1Name);
     setLineman2Name(lineman2Name);
@@ -173,7 +179,7 @@ function MatchDetailsCard(props) {
   );
 
   const guestView = (
-    <div className="MatchDetailsCard">
+    <div className="MatchDetailsCard" ref={cardRef}>
       <div className="teams">
         <span>{homeTeamName}</span>
         <img src={stadiumIcon} alt="" />
@@ -198,7 +204,7 @@ function MatchDetailsCard(props) {
   );
 
   const reservedView = (
-    <div className="MatchDetailsCard">
+    <div className="MatchDetailsCard" ref={cardRef}>
       <div className="teams">
         <span>{homeTeamName}</span>
         <img src={stadiumIcon} alt="" />
@@ -223,7 +229,7 @@ function MatchDetailsCard(props) {
   );
 
   const editView = (
-    <div className="match-form-card">
+    <div className="match-form-card" ref={cardRef}>
       <h2>EGYPTIAN PREMIER LEAGUE</h2>
       <form onSubmit={handleEditSubmit}>
         <div className="form-row">
@@ -352,7 +358,7 @@ function MatchDetailsCard(props) {
     </div>
   );
   const addView = (
-    <div className="match-form-card">
+    <div className="match-form-card" ref={cardRef}>
       <h2>EGYPTIAN PREMIER LEAGUE</h2>
       <form onSubmit={handleAddSubmit}>
         <div className="form-row">
