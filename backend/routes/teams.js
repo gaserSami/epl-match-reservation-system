@@ -29,6 +29,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+
 // Create a Team
 router.post('/', async (req, res) => {
   try {
@@ -44,6 +45,7 @@ router.post('/', async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 // Update a team by id
 router.put('/:id', async (req, res) => {

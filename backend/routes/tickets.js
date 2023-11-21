@@ -1,20 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const Ticket = require('../models/Ticket'); // Adjust the path as necessary
+const Ticket = require('../models/Ticket');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
 // Joi ObjectId validation extension
-const JoiObjectId = Joi.extend(require('joi-objectid')(Joi));
+Joi.objectId = require('joi-objectid')(Joi); // Extend Joi to include objectId as a type
 
 // Validation schema for Ticket
 const ticketValidationSchema = Joi.object({
-  MatchID: JoiObjectId().objectId().required(), // Validate MatchID as an ObjectId
-  UserID: JoiObjectId().objectId().required(), // Validate UserID as an ObjectId
+  MatchID: Joi.objectId().required(), // Validate MatchID as an ObjectId
+  UserID: Joi.objectId().required(), // Validate UserID as an ObjectId
   SeatsNumber: Joi.array().items(Joi.number().integer().min(1)).min(1).required(), // Array of seat numbers with at least one element
   Price: Joi.number().min(0).required() // Price should be greater than or equal to 0
 });
-
 // Get all Tickets
 router.get('/', async (req, res) => {
   try {
@@ -49,8 +48,8 @@ router.post('/', async (req, res) => {
     }
 
     const newTicket = new Ticket({
-      MatchID: mongoose.Types.ObjectId(req.body.MatchID),
-      UserID: mongoose.Types.ObjectId(req.body.UserID),
+      MatchID: new mongoose.Types.ObjectId(req.body.MatchID),
+      UserID: new mongoose.Types.ObjectId(req.body.UserID),
       SeatsNumber: req.body.SeatsNumber,
       Price: req.body.Price
     });

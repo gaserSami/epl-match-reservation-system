@@ -1,28 +1,20 @@
 // Import necessary libraries and components
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
 import "../styles/MainPage.css";
 import MatchCard from "./MatchCard";
 
 // Define MainPage component
-function MainPage({ onSignUp, handleTicketsClick}) {
+function MainPage({ onSignUp, handleTicketsClick, matchesDetails}) {
   // Define state variables
-  const [matchesDetails, setMatchesDetails] = useState([]);
+  const [matches, setMatches] = useState(matchesDetails || []);
   const [error, setError] = useState(null);
+
+  console.log(matches);
 
   // Use useEffect to fetch match details when the component mounts
   useEffect(() => {
-    axios.get('http://localhost:5000/matches') // Adjust the URL as necessary
-      .then(response => {
-        // On successful fetch, update matchesDetails state
-        setMatchesDetails(response.data);
-      })
-      .catch(error => {
-        // On error, update error state with a user-friendly message
-        setError('There was an error fetching match details.');
-        console.error('There was an error!', error);
-      });
-  }, []);
+    setMatches(matches);
+  }, [matchesDetails]);
 
   // Render the component
   return (

@@ -29,6 +29,22 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Create multiple referees
+router.post('/bulk', async (req, res) => {
+  try {
+    const referees = req.body;
+    if (!Array.isArray(referees)) {
+      return res.status(400).json({ message: 'Invalid input. Expected an array of referees.' });
+    }
+
+    const createdReferees = await Referee.create(referees);
+    res.status(201).json(createdReferees);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
 // Create a Referee
 router.post('/', async (req, res) => {
   try {

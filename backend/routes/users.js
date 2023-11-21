@@ -36,6 +36,30 @@ router.get('/:id', async (req, res) => {
   res.send(user);
 });
 
+// Create multiple Users
+router.post('/bulk', async (req, res) => {
+  try {
+    const users = req.body;
+    const validationResults = users.map(user => userValidationSchema.validate(user));
+    const errors = validationResults.filter(result => result.error);
+    if (errors.length > 0) {
+      return res.status(400).json({ message: errors[0].error.details[0].message });
+    }
+
+    const saltRounds = 10;
+    const usersWithHashedPasswords = await Promise.all(users.map(async user => {
+      const { Password, ...userData } = user;
+      const hashedPassword = await bcrypt.hash(Password, saltRounds);
+      return { ...userData, Password: hashedPassword };
+    }));
+
+    const newUsers = await User.insertMany(usersWithHashedPasswords);
+    res.status(201).json(newUsers);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 // Create a User
 router.post('/', async (req, res) => {
   try {

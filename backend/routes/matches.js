@@ -52,6 +52,27 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Create multiple Matches
+router.post('/bulk', async (req, res) => {
+  try {
+    const { error } = Joi.array().items(matchValidationSchema).validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const matches = req.body.map(match => ({
+      ...match,
+      Price: match.Price || 0 // Use the provided Price or default to 0
+    }));
+
+    const savedMatches = await Match.insertMany(matches);
+    res.status(201).json(savedMatches);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
 // Create a Match
 router.post('/', async (req, res) => {
   try {

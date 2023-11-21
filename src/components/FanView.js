@@ -3,33 +3,19 @@ import { useEffect } from "react";
 import '../styles/FanView.css'
 import Sidebar from "./Sidebar";
 import MatchCard from "./MatchCard";
-import StadiumCard from "./StadiumCard";
 import { useState } from "react";
 import axios from 'axios';
 
 function FanView(props) {
 
   const listItems = ["Reserved", "Matches"];
-  const [matchesDetails, setMatchesDetails] = useState([]);
-  const [reservedMatchesDetails, setReservedMatchesDetails] = useState([]);
+  const [matchesDetails, setMatchesDetails] = useState(props.matchesDetails || []);
+  const [reservedMatchesDetails, setReservedMatchesDetails] = useState(props.matchesDetails || []);
   const [userID, setUserID] = useState(props.userID);
-  useEffect(() => {
-    axios.get('http://localhost:5000/matches')
-      .then(response => {
-        const allMatches = response.data;
-        const nonUserMatches = allMatches.filter(match => !reservedMatchesDetails.some(userMatch => userMatch._id === match._id));
-        setMatchesDetails(nonUserMatches);
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
-  }, [reservedMatchesDetails]);
-  const [activeItem, setActiveItem] = useState(listItems[1]);
+  const [activeItem, setActiveItem] = useState(listItems[0]);
+
   
-  const handleItemClick = (item) => {
-    setActiveItem(item);
-  };
- 
+
   useEffect(() => {
     const fetchReservedMatches = async () => {
       try {
@@ -42,14 +28,21 @@ function FanView(props) {
     
         const userMatches = userTickets.map(ticket => ticket.MatchID);
         setReservedMatchesDetails(userMatches);
+  
+        // Set matchesDetails after reservedMatchesDetails has been updated
+        const matchesDetails = props.matchesDetails || [];
+        setMatchesDetails(matchesDetails.filter(match => !userMatches.some(userMatch => userMatch._id === match._id)));
       } catch (error) {
         console.error('There was an error!', error);
       }
     };
-  
+    
     fetchReservedMatches();
-  }, []);
-  
+  }, [props.matchesDetails, userID]); // Add userID to the dependency array
+
+  const handleItemClick = (item) => {
+    setActiveItem(item);
+  };
 
 return (
   <div className="FanView">
@@ -58,7 +51,7 @@ return (
         <div className="cardsContainer">
           {activeItem === 'Matches' ? (
             matchesDetails.map((match, index) => (
-              <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="guestView"/>
+              <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="fanView"/>
             ))
           ) : (
             reservedMatchesDetails.map((match, index) => (

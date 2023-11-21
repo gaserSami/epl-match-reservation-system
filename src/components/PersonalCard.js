@@ -162,7 +162,7 @@ function PersonalCard(props) {
                   id="male"
                   name="gender"
                   value="male"
-                  checked={gender === "male"}
+                  checked={gender === "Male"}
                   onChange={handleGenderChange}
                   disabled
                   required
@@ -175,7 +175,7 @@ function PersonalCard(props) {
                   id="female"
                   name="gender"
                   value="female"
-                  checked={gender === "female"}
+                  checked={gender === "Female"}
                   onChange={handleGenderChange}
                   disabled
                   required

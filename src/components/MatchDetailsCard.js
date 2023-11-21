@@ -1,28 +1,39 @@
-import React, { useState } from "react";
-import axios from 'axios';
+// Import dependencies
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+// import files
 import "../styles/MatchDetailsCard.css";
 import stadiumIcon from '../assets/stadium.png';
 import SeatsReservation from "./SeatsReservation";
-import { useEffect } from "react";
-import { useRef } from "react";
 
 function MatchDetailsCard(props) {
-  const rows =20;
-  const cols = 20;
-  const [matchDetails, setMatchDetails] = useState(props.matchDetails || {
-    HomeTeam: "",
-        AwayTeam: "",
-        MatchDate: new Date(),
-        MatchTime: "00:00:00",
-        StadiumID: "",
-        Price: "",
-        MainReferee: "",
-        Lineman1: "",
-        Lineman2: ""
-  });
-  const [stadiumDetails, setStadiumDetails] = useState(props.stadiumDetails);
-  const stadium = stadiumDetails ? stadiumDetails.StadiumName : 'Loading...';
+  // State to store match details
+  const [matchDetails, setMatchDetails] = useState(props.matchDetails);
 
+  // Destructure matchDetails object
+  const {
+    HomeTeamID: { TeamName: homeTeamName },
+    AwayTeamID: { TeamName: awayTeamName },
+    MatchDate: matchDate,
+    MatchTime: time,
+    StadiumID: { StadiumName: stadium },
+    StadiumID: { Rows: rows },
+    StadiumID: { Columns: cols },
+    MainRefereeID: { Name: refereeName },
+    Lineman1ID: { Name: lineman1Name },
+    Lineman2ID: { Name: lineman2Name },
+    Price: price
+  } = matchDetails || {};
+
+  // Format date
+  const date = new Date(matchDate);
+
+  // Update matchDetails when props.matchDetails changes
+  useEffect(() => {
+    setMatchDetails(props.matchDetails);
+  }, [props.matchDetails]);
+
+  // Handle form submit for editing match details
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -34,6 +45,7 @@ function MatchDetailsCard(props) {
     }
   };
 
+  // Handle form submit for adding a new match
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -41,33 +53,23 @@ function MatchDetailsCard(props) {
       console.log(newMatch);
       const response = await axios.post('http://localhost:5000/matches', newMatch);
       console.log(response.data);
-      setMatchDetails({
-        HomeTeam: "",
-        AwayTeam: "",
-        MatchDate: new Date(),
-        MatchTime: "00:00:00",
-        StadiumID: "",
-        Price: "",
-        MainReferee: "",
-        Lineman1: "",
-        Lineman2: ""
-      });
     } catch (error) {
       console.error('There was an error!', error);
     }
   };
 
+  // Reference to the match card element
   const cardRef = useRef();
 
+  // Adjust the margin of the match card based on the number of rows
   useEffect(() => {
     if (cardRef.current) {
       var height = cardRef.current.offsetHeight;
       let marginTop = height * 0.00; // adjust the multiplier as needed
       const marginBottom = height * 0.00; // adjust the multiplier as needed
-      if(rows >=50 && rows < 100){
-       marginTop = height * 0.02; // adjust the multiplier as needed
-      }
-      else if(rows >=100 && rows <= 150){
+      if (rows >= 50 && rows < 100) {
+        marginTop = height * 0.02; // adjust the multiplier as needed
+      } else if (rows >= 100 && rows <= 150) {
         marginTop = height * 0.05; // adjust the multiplier as needed
       }
       cardRef.current.style.marginTop = `${marginTop}%`;
@@ -75,75 +77,70 @@ function MatchDetailsCard(props) {
     }
   }, []);
 
+  // Handle home team selection change
   const handleHomeTeamChange = (e) => {
     setMatchDetails({ ...matchDetails, HomeTeam: e.target.value });
   };
 
+  // Handle away team selection change
   const handleAwayTeamChange = (e) => {
     setMatchDetails({ ...matchDetails, AwayTeam: e.target.value });
   };
 
+  // Handle match date change
   const handleDateChange = (e) => {
     setMatchDetails({ ...matchDetails, MatchDate: new Date(e.target.value) });
   };
 
+  // Handle match time change
   const handleTimeChange = (e) => {
     setMatchDetails({ ...matchDetails, MatchTime: e.target.value });
   };
 
+  // Handle stadium change
   const handleStadiumChange = (e) => {
     setMatchDetails({ ...matchDetails, StadiumID: e.target.value });
   };
 
+  // Handle price change
   const handlePriceChange = (e) => {
     setMatchDetails({ ...matchDetails, Price: e.target.value });
   };
 
+  // Handle referee change
   const handleRefereeChange = (e) => {
     setMatchDetails({ ...matchDetails, MainReferee: e.target.value });
   };
 
+  // Handle lineman 1 change
   const handleLineman1Change = (e) => {
     setMatchDetails({ ...matchDetails, Lineman1: e.target.value });
-
   };
 
+  // Handle lineman 2 change
   const handleLineman2Change = (e) => {
-    setMatchDetails({ ...matchDetails, Lineman2: e.target.value });
-  };
-
-  const handleMainRefereeChange = (e) => {
-    setMatchDetails({ ...matchDetails, MainReferee: e.target.value });
-  };
-
-  const handleLinesman1Change = (e) => {
-    setMatchDetails({ ...matchDetails, Lineman1: e.target.value });
-
-  };
-
-  const handleLinesman2Change = (e) => {
     setMatchDetails({ ...matchDetails, Lineman2: e.target.value });
   };
 
   const bookView = (
     <div className="MatchDetailsCard" ref={cardRef}>
       <div className="teams">
-        <span>{matchDetails.HomeTeam}</span>
+        <span>{homeTeamName}</span>
         <img src={stadiumIcon} alt="" />
-        <span>{matchDetails.AwayTeam}</span>
+        <span>{awayTeamName}</span>
       </div>
-      <p className="stadiumInfo">{stadium}, Cairo, Egypt</p>
+      <p className="stadiumInfo">{stadium}, Egypt</p>
       <span className="gray">Choose your seat</span>
       <SeatsReservation rows={rows} cols={cols}/>
             <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
-            {new Date(matchDetails.MatchDate).getDate()} {new Date(matchDetails.MatchDate).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.MatchDate).getFullYear()}
+            {date.getDate()} {date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}
           </span>
-          <span className="time">{matchDetails.MatchTime}</span>
+          <span className="time">{time}</span>
         </div>
         <div className="priceBook">
-          <span className="price">{matchDetails.Price} L.E</span>
+          <span className="price">{price} L.E</span>
           <button onClick={() => props.handlePaymentCard()}>Book now!</button>
         </div>
       </div>
@@ -153,22 +150,22 @@ function MatchDetailsCard(props) {
   const guestView = (
     <div className="MatchDetailsCard">
       <div className="teams">
-        <span>{matchDetails.HomeTeam}</span>
+        <span>{homeTeamName}</span>
         <img src={stadiumIcon} alt="" />
-        <span>{matchDetails.AwayTeam}</span>
+        <span>{awayTeamName}</span>
       </div>
-      <p className="stadiumInfo">{stadium}, Cairo, Egypt</p>
+      <p className="stadiumInfo">{stadium}, Egypt</p>
       <span className="gray">Choose your seat</span>
       <SeatsReservation rows={rows} cols={cols} disabled={true}/>
       <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
-            {new Date(matchDetails.MatchDate).getDate()} {new Date(matchDetails.MatchDate).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.MatchDate).getFullYear()}
+            {date.getDate()} {date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}
           </span>
-          <span className="time">{matchDetails.MatchTime}</span>
+          <span className="time">{time}</span>
         </div>
         <div className="priceBook">
-          <span className="price">{matchDetails.Price} L.E</span>
+          <span className="price">{price} L.E</span>
           <button className="disabled">Book now!</button>
         </div>
       </div>
@@ -178,22 +175,22 @@ function MatchDetailsCard(props) {
   const reservedView = (
     <div className="MatchDetailsCard">
       <div className="teams">
-        <span>{matchDetails.HomeTeam}</span>
+        <span>{homeTeamName}</span>
         <img src={stadiumIcon} alt="" />
-        <span>{matchDetails.AwayTeam}</span>
+        <span>{awayTeamName}</span>
       </div>
-      <p className="stadiumInfo">{stadium}, Cairo, Egypt</p>
+      <p className="stadiumInfo">{stadium}, Egypt</p>
       <span className="gray">Ticket#{matchDetails.ticketNumber} | your Seats are in yellow </span>
       <SeatsReservation rows={rows} cols={cols} disabled={true}/>
       <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
-            {new Date(matchDetails.MatchDate).getDate()} {new Date(matchDetails.MatchDate).toLocaleString('default', { month: 'long' })} {new Date(matchDetails.MatchDate).getFullYear()}
+            {date.getDate()} {date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}
           </span>
-          <span className="time">{matchDetails.MatchTime}</span>
+          <span className="time">{time}</span>
         </div>
         <div className="priceBook">
-          <span className="price">{matchDetails.Price} L.E</span>
+          <span className="price">{price} L.E</span>
           <button className="disabled">Book now!</button>
         </div>
       </div>
@@ -209,7 +206,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="home-team">Home Team</label>
             <select
               id="home-team"
-              value={matchDetails.HomeTeam}
+              value={homeTeamName}
               onChange={handleHomeTeamChange}
             >
               <option>Select home team</option>
@@ -225,7 +222,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="away-team">Away Team</label>
             <select
               id="away-team"
-              value={matchDetails.AwayTeam}
+              value={awayTeamName}
               onChange={handleAwayTeamChange}
             >
               <option value="">Select away team</option>
@@ -242,13 +239,13 @@ function MatchDetailsCard(props) {
             <input
               type="date"
               id="date"
-              value={new Date(matchDetails.MatchDate).toISOString().split("T")[0]}
+              value={date.toISOString().split("T")[0]}
               onChange={handleDateChange}
             />
           </div>
           <div className="input-group">
             <label htmlFor="time">Time</label>
-            <input type="time" id="time" value={matchDetails.MatchTime} onChange={handleTimeChange} />
+            <input type="time" id="time" value={time} onChange={handleTimeChange} />
           </div>
         </div>
         <div className="form-row">
@@ -270,7 +267,7 @@ function MatchDetailsCard(props) {
               type="number"
               id="price"
               placeholder="Enter price"
-              value={matchDetails.Price}
+              value={price}
               onChange={handlePriceChange}
             />
           </div>
@@ -297,7 +294,7 @@ function MatchDetailsCard(props) {
             <select
               id="linesman1"
               value={matchDetails.Linesman1}
-              onChange={handleLinesman1Change}
+              onChange={handleLineman1Change}
             >
               <option value="">Select linesman 1</option>
               {props.linesmen &&
@@ -313,7 +310,7 @@ function MatchDetailsCard(props) {
             <select
               id="linesman2"
               value={matchDetails.Linesman2}
-              onChange={handleLinesman2Change}
+              onChange={handleLineman2Change}
             >
               <option value="">Select linesman 2</option>
               {props.linesmen &&
@@ -338,7 +335,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="home-team">Home Team</label>
             <select
               id="home-team"
-              value={matchDetails.HomeTeam}
+              value={homeTeamName}
               onChange={handleHomeTeamChange}
             >
               <option value="">Select home team</option>
@@ -354,7 +351,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="away-team">Away Team</label>
             <select
               id="away-team"
-              value={matchDetails.AwayTeam}
+              value={awayTeamName}
               onChange={handleAwayTeamChange}
             >
               <option value="">Select away team</option>
@@ -371,13 +368,13 @@ function MatchDetailsCard(props) {
             <input
               type="date"
               id="date"
-              value={new Date(matchDetails.MatchDate).toISOString().split("T")[0]}
+              value={date.toISOString().split("T")[0]}
               onChange={handleDateChange}
             />
           </div>
           <div className="input-group">
             <label htmlFor="time">Time</label>
-            <input type="time" id="time" value={matchDetails.MatchTime} onChange={handleTimeChange} />
+            <input type="time" id="time" value={time} onChange={handleTimeChange} />
           </div>
         </div>
         <div className="form-row">
@@ -399,7 +396,7 @@ function MatchDetailsCard(props) {
               type="number"
               id="price"
               placeholder="Enter price"
-              value={matchDetails.Price}
+              value={price}
               onChange={handlePriceChange}
             />
           </div>
@@ -426,7 +423,7 @@ function MatchDetailsCard(props) {
             <select
               id="linesman1"
               value={matchDetails.Linesman1}
-              onChange={handleLinesman1Change}
+              onChange={handleLineman1Change}
             >
               <option value="">Select linesman 1</option>
               {props.linesmen &&
@@ -442,7 +439,7 @@ function MatchDetailsCard(props) {
             <select
               id="linesman2"
               value={matchDetails.Linesman2}
-              onChange={handleLinesman2Change}
+              onChange={handleLineman2Change}
             >
               <option value="">Select linesman 2</option>
               {props.linesmen &&

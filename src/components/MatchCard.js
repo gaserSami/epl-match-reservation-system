@@ -1,50 +1,37 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/MatchCard.css';
 import editIcon from '../assets/editing.png';
 
 const MatchCard = (props) => {
-   // Function to fetch stadium details based on StadiumID
-   const [stadiumDetails, setStadiumDetails] = useState(null);
-   const [matchDetails, setMatchDetails] = useState(props.matchDetails);
+  // State to store match details
+  const [matchDetails, setMatchDetails] = useState(props.matchDetails || {});
 
+  // Destructure matchDetails object
+  const {
+    HomeTeamID: { TeamName: homeTeamName } = {},
+    AwayTeamID: { TeamName: awayTeamName } = {},
+    MatchDate: matchDate,
+    MatchTime: time,
+    StadiumID: { StadiumName: stadium } = {},
+    Price: price
+  } = matchDetails || {};
 
+  // Format date
+  const date = new Date(matchDate);
+  const month = date.toLocaleString('default', { month: 'long' });
 
-  useEffect(() => {
-    const fetchStadiumDetails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/stadiums/${matchDetails.StadiumID}`);
-        setStadiumDetails(response.data);
-      } catch (error) {
-        console.error('There was an error!', error);
-      }
-    };
-
-    fetchStadiumDetails();
-  }, [matchDetails.StadiumID]);
+  // Generate random ticket number
+  const ticketNumber = Math.floor(Math.random() * 1000000) + 1;
+  // Generate match title
+  const title = `${homeTeamName} vs ${awayTeamName}`;
 
   // Update matchDetails when props.matchDetails changes
   useEffect(() => {
     setMatchDetails(props.matchDetails);
   }, [props.matchDetails]);
 
-  const date = new Date(matchDetails.MatchDate);
-  const month = date.toLocaleString('default', { month: 'long' });
-  const time = matchDetails.MatchTime;
-  const homeTeam = matchDetails.HomeTeam;
-  const awayTeam = matchDetails.AwayTeam;
-  const title = homeTeam + ' vs ' + awayTeam;
-  // Call the function to get the stadium detail
-  const stadium = stadiumDetails ? stadiumDetails.StadiumName : 'Loading...';
-  const price = matchDetails.Price;
-  const ticketNumber = matchDetails.TicketNumber;
-
-
-  console.log("i am here in match card");
-  console.log(matchDetails);
-  console.log(stadiumDetails);
-
+  // Guest view of the match card
   const guestView = (
     <div className="matchCard">
       <div className="date">
@@ -62,11 +49,12 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-     <button onClick={() => props.handleTicketsClick('guestView', matchDetails, stadiumDetails)}>Tickets</button>
+        <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
       </div>
     </div>
   );
 
+  // Fan view of the match card
   const fanView = (
     <div className="matchCard">
       <div className="date">
@@ -84,11 +72,12 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-      <button onClick={() => props.handleTicketsClick('bookView', matchDetails, stadiumDetails)}>Tickets</button>
+        <button onClick={() => props.handleTicketsClick('bookView', matchDetails)}>Tickets</button>
       </div>
     </div>
   );
 
+  // Edit view of the match card
   const editView = (
     <div className="matchCard">
       <div className="date">
@@ -106,12 +95,13 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-      <button onClick={() => props.handleTicketsClick('guestView', matchDetails, stadiumDetails)}>Tickets</button>
-        <button onClick={() => props.handleTicketsClick('editView', matchDetails, stadiumDetails)}><img src={editIcon} alt="" /></button>
+        <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
+        <button onClick={() => props.handleTicketsClick('editView', matchDetails)}><img src={editIcon} alt="" /></button>
       </div>
     </div>
   );
 
+  // Reserved view of the match card
   const reservedView = (
     <div className="matchCard">
       <div className="date">
@@ -129,22 +119,29 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-      <button onClick={() => props.handleTicketsClick('guestView', matchDetails, stadiumDetails)}>Tickets</button>
+        <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
         <button className='cancel'>Cancel</button>
       </div>
     </div>
   );
 
+  // Determine which view to render based on props.view
+  let view;
   switch (props.view) {
     case 'fanView':
-      return fanView;
+      view = fanView;
+      break;
     case 'editView':
-      return editView;
+      view = editView;
+      break;
     case 'reservedView':
-      return reservedView;
+      view = reservedView;
+      break;
     default:
-      return guestView;
+      view = guestView;
   }
+
+  return view;
 };
 
 export default MatchCard;

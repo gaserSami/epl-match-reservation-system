@@ -29,6 +29,23 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Create multiple Linesmen
+router.post('/bulk', async (req, res) => {
+  try {
+    const { error } = Joi.array().items(linesmanValidationSchema).validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const linesmen = req.body.map(linesmanData => new Linesman(linesmanData));
+    const savedLinesmen = await Linesman.insertMany(linesmen);
+    res.status(201).json(savedLinesmen);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
 // Create a Linesman
 router.post('/', async (req, res) => {
   try {
