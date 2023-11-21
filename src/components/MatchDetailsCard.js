@@ -9,29 +9,54 @@ import SeatsReservation from "./SeatsReservation";
 function MatchDetailsCard(props) {
   // State to store match details
   const [matchDetails, setMatchDetails] = useState(props.matchDetails);
-
+  const [homeTeamName, setHomeTeamName] = useState('');
+  const [awayTeamName, setAwayTeamName] = useState('');
+  const [date, setMatchDate] = useState(new Date());
+  const [time, setTime] = useState('');
+  const [stadium, setStadium] = useState('');
+  const [rows, setRows] = useState(0);
+  const [cols, setCols] = useState(0);
+  const [refereeName, setRefereeName] = useState('');
+  const [lineman1Name, setLineman1Name] = useState('');
+  const [lineman2Name, setLineman2Name] = useState('');
+  const [price, setPrice] = useState(0);
   // Destructure matchDetails object
-  const {
-    HomeTeamID: { TeamName: homeTeamName },
-    AwayTeamID: { TeamName: awayTeamName },
-    MatchDate: matchDate,
-    MatchTime: time,
-    StadiumID: { StadiumName: stadium },
-    StadiumID: { Rows: rows },
-    StadiumID: { Columns: cols },
-    MainRefereeID: { Name: refereeName },
-    Lineman1ID: { Name: lineman1Name },
-    Lineman2ID: { Name: lineman2Name },
-    Price: price
-  } = matchDetails || {};
+  
 
-  // Format date
-  const date = new Date(matchDate);
+ // Update matchDetails when props.matchDetails changes
+ useEffect(() => {
+  setMatchDetails(props.matchDetails);
+}, [props.matchDetails]);
 
-  // Update matchDetails when props.matchDetails changes
   useEffect(() => {
-    setMatchDetails(props.matchDetails);
-  }, [props.matchDetails]);
+    const {
+      HomeTeamID: { TeamName: homeTeamName } = {},
+      AwayTeamID: { TeamName: awayTeamName } = {},
+      MatchDate: matchDate,
+      MatchTime: time,
+      StadiumID: { StadiumName: stadium } = {},
+      StadiumID: { Rows: rows } = {},
+      StadiumID: { Columns: cols } = {},
+      MainRefereeID: { Name: refereeName } = {},
+      Lineman1ID: { Name: lineman1Name } = {},
+      Lineman2ID: { Name: lineman2Name }  = {},
+      Price: price = 0,
+    } = matchDetails || {};
+  
+    setHomeTeamName(homeTeamName);
+    setAwayTeamName(awayTeamName);
+    setMatchDate(new date(matchDate));
+    setTime(time);
+    setStadium(stadium);
+    setRows(rows);
+    setCols(cols);
+    setRefereeName(refereeName);
+    setLineman1Name(lineman1Name);
+    setLineman2Name(lineman2Name);
+    setPrice(price);
+    // update other state variables
+  }, [matchDetails]);
+
 
   // Handle form submit for editing match details
   const handleEditSubmit = async (e) => {
@@ -180,7 +205,7 @@ function MatchDetailsCard(props) {
         <span>{awayTeamName}</span>
       </div>
       <p className="stadiumInfo">{stadium}, Egypt</p>
-      <span className="gray">Ticket#{matchDetails.ticketNumber} | your Seats are in yellow </span>
+      <span className="gray">Ticket#{231} | your Seats are in yellow </span>
       <SeatsReservation rows={rows} cols={cols} disabled={true}/>
       <div className="ticketInfo">
         <div className="datetime">
@@ -277,7 +302,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="referee">Referee</label>
             <select
               id="referee"
-              value={matchDetails.MainReferee}
+              value={refereeName}
               onChange={handleRefereeChange}
             >
               <option value="">Select referee</option>
@@ -293,7 +318,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="linesman1">Linesman 1</label>
             <select
               id="linesman1"
-              value={matchDetails.Linesman1}
+              value={lineman1Name}
               onChange={handleLineman1Change}
             >
               <option value="">Select linesman 1</option>
@@ -309,7 +334,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="linesman2">Linesman 2</label>
             <select
               id="linesman2"
-              value={matchDetails.Linesman2}
+              value={lineman2Name}
               onChange={handleLineman2Change}
             >
               <option value="">Select linesman 2</option>
@@ -406,7 +431,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="referee">Referee</label>
             <select
               id="referee"
-              value={matchDetails.MainReferee}
+              value={refereeName}
               onChange={handleRefereeChange}
             >
               <option value="">Select referee</option>
@@ -422,7 +447,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="linesman1">Linesman 1</label>
             <select
               id="linesman1"
-              value={matchDetails.Linesman1}
+              value={lineman1Name}
               onChange={handleLineman1Change}
             >
               <option value="">Select linesman 1</option>
@@ -438,7 +463,7 @@ function MatchDetailsCard(props) {
             <label htmlFor="linesman2">Linesman 2</label>
             <select
               id="linesman2"
-              value={matchDetails.Linesman2}
+              value={lineman2Name}
               onChange={handleLineman2Change}
             >
               <option value="">Select linesman 2</option>

@@ -35,7 +35,7 @@ const MatchCard = (props) => {
   const guestView = (
     <div className="matchCard">
       <div className="date">
-        <span className="month">{date.getDate()}</span>
+        <span className="month">date</span>
         <span className="day">{month}</span>
         <span className="year">{date.getFullYear()}</span>
       </div>
@@ -58,7 +58,7 @@ const MatchCard = (props) => {
   const fanView = (
     <div className="matchCard">
       <div className="date">
-        <span className="month">{date.getDate()}</span>
+        <span className="month">date</span>
         <span className="day">{month}</span>
         <span className="year">{date.getFullYear()}</span>
       </div>
@@ -81,7 +81,7 @@ const MatchCard = (props) => {
   const editView = (
     <div className="matchCard">
       <div className="date">
-        <span className="month">{date.getDate()}</span>
+        <span className="month">date</span>
         <span className="day">{month}</span>
         <span className="year">{date.getFullYear()}</span>
       </div>
@@ -105,7 +105,7 @@ const MatchCard = (props) => {
   const reservedView = (
     <div className="matchCard">
       <div className="date">
-        <span className="month">{date.getDate()}</span>
+        <span className="month">date</span>
         <span className="day">{month}</span>
         <span className="year">{date.getFullYear()}</span>
       </div>

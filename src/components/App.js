@@ -165,7 +165,7 @@ function App() {
       {page === 'signUp' && <SignUp />}
       {showMatchDetails && (
         <OverlayContainer onClose={handleClose}>
-          <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} />
+          <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen}  />
         </OverlayContainer>
       )}
       {showPersonalDetails && (
