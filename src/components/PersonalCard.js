@@ -14,6 +14,8 @@ function PersonalCard(props) {
   const [password, setPassword] = useState(props.personalDetails.Password);
   const [address, setAddress] = useState(props.personalDetails.Address);
   const [username, setUsername] = useState(props.personalDetails.Username);
+  const [statusMessage, setStatusMessage] = useState('');
+
 
   // Fetch user data when component mounts
   useEffect(() => {
@@ -59,10 +61,12 @@ function PersonalCard(props) {
 
     try {
       const response = await axios.put(`http://localhost:5000/users/${userID}`, updatedUser);
-      fetchUserData(); // Fetch the latest user data after updating it
       console.log(response.data);
+      fetchUserData(); // Fetch the latest user data after updating it
+      setStatusMessage({ text: 'Update successful', color: 'green' });
     } catch (error) {
       console.error('There was an error!', error);
+      setStatusMessage({ text: 'Update failed', color: 'red' });
     }
   };
 
@@ -230,6 +234,7 @@ function PersonalCard(props) {
           </div>
           <button type="submit">Save</button>
         </form>
+        <p style={{ color: statusMessage.color }}>{statusMessage.text}</p>
       </div>
     </div>
   );

@@ -7,9 +7,6 @@ const SeatsReservation = (props) => {
   const [seats, setSeats] = useState(() => {
     const initialSeats = Array.from({length: rows}, () => Array(cols).fill('vacant'));
     // Reserve some seats for testing
-    initialSeats[0][0] = 'reserved'; // Reserve the seat at row 0, column 0
-    initialSeats[0][1] = 'reserved'; // Reserve the seat at row 0, column 1
-    initialSeats[1][0] = 'reserved'; // Reserve the seat at row 1, column 0
     return initialSeats;
   });
   const [mySeats, setMySeats] = useState([]);

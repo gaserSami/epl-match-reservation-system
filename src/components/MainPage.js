@@ -1,20 +1,32 @@
 // Import necessary libraries and components
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import "../styles/MainPage.css";
 import MatchCard from "./MatchCard";
 
 // Define MainPage component
-function MainPage({ onSignUp, handleTicketsClick, matchesDetails}) {
+function MainPage({ onSignUp, handleTicketsClick}) {
   // Define state variables
-  const [matches, setMatches] = useState(matchesDetails || []);
+  const [matches, setMatches] = useState([]);
   const [error, setError] = useState(null);
 
 
-  // Use useEffect to fetch match details when the component mounts
+  console.log('MainPage');
+
   useEffect(() => {
-    setMatches(matches);
-    console.log(matches);
-  }, [matchesDetails]);
+    const fetchMatches = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/matches');
+        setMatches(response.data);
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    };
+  
+    fetchMatches();
+  }, []);
+
+
 
   // Render the component
   return (
@@ -35,7 +47,7 @@ function MainPage({ onSignUp, handleTicketsClick, matchesDetails}) {
       {error ? (
         <div>Error: {error}</div>
       ) : (
-        matchesDetails.map((match, index) => (
+        matches.map((match, index) => (
           <MatchCard key={index} matchDetails={match} handleTicketsClick={handleTicketsClick} view="guestView"/>
         ))
       )}

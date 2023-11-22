@@ -6,6 +6,7 @@ import editIcon from '../assets/editing.png';
 const MatchCard = (props) => {
   // State to store match details
   const [matchDetails, setMatchDetails] = useState(props.matchDetails || {});
+  const [matchID, setMatchID] = useState(props.matchDetails._id);
 
   // Update matchDetails when props.matchDetails changes
   useEffect(() => {
@@ -23,7 +24,7 @@ const MatchCard = (props) => {
   } = matchDetails || {};
 
   // Format date
-  const date = new Date(matchDate);
+  const date = isNaN(Date.parse(matchDate)) ? null : new Date(matchDate);
   const month = date.toLocaleString('default', { month: 'long' });
 
   // Generate random ticket number
@@ -31,11 +32,18 @@ const MatchCard = (props) => {
   // Generate match title
   const title = `${homeTeamName} vs ${awayTeamName}`;
 
+  // Re-render MainPage when forceMainPageRender changes
+  useEffect(() => {
+    // Your code here...
+    console.log('forceMainPageRender');
+    console.log('useEffect');
+  }, [props.triggerMainPageRender]);
+
   // Guest view of the match card
   const guestView = (
     <div className="matchCard">
       <div className="date">
-        <span className="month">date</span>
+        <span className="month">{date.getDate()}</span>
         <span className="day">{month}</span>
         <span className="year">{date.getFullYear()}</span>
       </div>
@@ -58,7 +66,7 @@ const MatchCard = (props) => {
   const fanView = (
     <div className="matchCard">
       <div className="date">
-        <span className="month">date</span>
+      <span className="month">{date.getDate()}</span>
         <span className="day">{month}</span>
         <span className="year">{date.getFullYear()}</span>
       </div>
@@ -81,7 +89,7 @@ const MatchCard = (props) => {
   const editView = (
     <div className="matchCard">
       <div className="date">
-        <span className="month">date</span>
+      <span className="month">{date.getDate()}</span>
         <span className="day">{month}</span>
         <span className="year">{date.getFullYear()}</span>
       </div>
@@ -105,7 +113,7 @@ const MatchCard = (props) => {
   const reservedView = (
     <div className="matchCard">
       <div className="date">
-        <span className="month">date</span>
+      <span className="month">{date.getDate()}</span>
         <span className="day">{month}</span>
         <span className="year">{date.getFullYear()}</span>
       </div>

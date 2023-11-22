@@ -9,36 +9,56 @@ import axios from 'axios';
 function FanView(props) {
 
   const listItems = ["Reserved", "Matches"];
-  const [matchesDetails, setMatchesDetails] = useState(props.matchesDetails || []);
-  const [reservedMatchesDetails, setReservedMatchesDetails] = useState(props.matchesDetails || []);
+  const [matchesDetails, setMatchesDetails] = useState([]);
+  const [reservedMatchesDetails, setReservedMatchesDetails] = useState([]);
   const [userID, setUserID] = useState(props.userID);
   const [activeItem, setActiveItem] = useState(listItems[0]);
 
-  
 
   useEffect(() => {
-    const fetchReservedMatches = async () => {
+    setUserID(props.userID);
+  }, [props.userID]);
+
+  useEffect(() => {
+    const userID = props.userID;
+    const fetchMatchesAndTickets = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/tickets`);
-        const allTickets = response.data;
-    
+        // Fetch all matches
+        const matchesResponse = await axios.get(`http://localhost:5000/matches`);
+        const allMatches = matchesResponse.data;
+
+        // Fetch all tickets
+        const ticketsResponse = await axios.get(`http://localhost:5000/tickets`);
+        const allTickets = ticketsResponse.data;
+
+        // Filter tickets reserved by the user
         const userTickets = allTickets.filter(ticket => ticket.UserID._id === userID);
-    
-        console.log(userTickets);
-    
+
+        // Get matches reserved by the user
         const userMatches = userTickets.map(ticket => ticket.MatchID);
         setReservedMatchesDetails(userMatches);
-  
-        // Set matchesDetails after reservedMatchesDetails has been updated
-        const matchesDetails = props.matchesDetails || [];
-        setMatchesDetails(matchesDetails.filter(match => !userMatches.some(userMatch => userMatch._id === match._id)));
+        console.log("user matches: ", userMatches);
+
+        // Get matches not reserved by the user
+        const notReservedMatches = allMatches.filter(match => !userMatches.some(userMatch => userMatch._id === match._id));
+        setMatchesDetails(notReservedMatches);
       } catch (error) {
         console.error('There was an error!', error);
       }
     };
-    
-    fetchReservedMatches();
-  }, [props.matchesDetails, userID]); // Add userID to the dependency array
+
+    fetchMatchesAndTickets();
+  }, [userID]); // Add userID to the dependency array
+
+
+
+  const userMatches = matchesDetails.map((match, index) => (
+    <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="fanView"/>
+  ));
+  
+  const notUserMatches = reservedMatchesDetails.map((match, index) => (
+    <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="reservedView"/>
+  ));
 
   const handleItemClick = (item) => {
     setActiveItem(item);
@@ -49,15 +69,7 @@ return (
     <Sidebar listItems={listItems} activeItem={activeItem} handleItemClick={handleItemClick} handleSettingsClick={() => props.handleSettingsClick()} userID={props.userID}/>
       <div className="main">
         <div className="cardsContainer">
-          {activeItem === 'Matches' ? (
-            matchesDetails.map((match, index) => (
-              <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="fanView"/>
-            ))
-          ) : (
-            reservedMatchesDetails.map((match, index) => (
-              <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="reservedView"/>
-            ))
-          )}
+        {activeItem === 'Matches' ? userMatches : notUserMatches}
         </div>  
       </div>
     </div>

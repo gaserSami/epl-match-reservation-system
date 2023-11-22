@@ -15,6 +15,7 @@ import SiteAdminView from './SiteAdminView';
 import SuccessCard from './SuccessCard';
 import FailedCard from './FailedCard';
 import PaymentCard from './PaymentCard';
+import { set } from 'mongoose';
 
 function App() {
   const [userID, setUserID] = useState(null);
@@ -39,6 +40,14 @@ function App() {
   const [stadiums, setStadiums] = useState([]);
   const [linesmen, setLinesmen] = useState([]);
   const [referees, setReferees] = useState([]);
+  const [triggerMainPageRender, setTriggerMainPageRender] = useState(false);
+
+  const forceMainPageRender = () => {
+     // Toggle the state to force re-render
+    setTriggerMainPageRender(!triggerMainPageRender);
+    console.log('forceMainPageRender');
+    console.log(triggerMainPageRender);
+  };
 
   useEffect(() => {
     const fetchTeamsAndStadiums = async () => {
@@ -61,10 +70,14 @@ function App() {
   }, []);
 
   const handleTicketsClick = (view, matchdetails) => {
+    if(!matchdetails) {
+      matchdetails = matchesDetails[0];
+    }
     setMatchDetails(matchdetails);
     setMatchDetailsCardView(view);
     setShowMatchDetails(true);
   };
+
 
   const onLogin = (id, UserType) => {
     setUserID(id);
@@ -156,40 +169,41 @@ function App() {
     setPage('signUp');
   };
 
+  
   return (
     <div className="App">
       <Header currentPage={page} onSignIn={handleSignIn} username={username} />
-      {page === 'mainPage' && <MainPage onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick} matchesDetails={matchesDetails} />}
+      {page === 'mainPage' && <MainPage  onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick} />}
       {page === 'signIn' && <SignIn onSignUp={handleSignUp} onLogin={onLogin} />}
       {page === 'siteAdminPage' && <SiteAdminView handleSettingsClick={handleSettingsClick} userID={userID} />}
       {page === 'signUp' && <SignUp />}
+      {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} userID={userID}/>}
+      {page === 'EFAPage' && (
+        <EFAview handleClose={handleClose} triggerMainPageRender={triggerMainPageRender} handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleEditMatch={handleEditMatch} handleAddNewStadium={handleAddNewStadium} matchesDetails={matchesDetails} userID={userID} />
+      )}
       {showMatchDetails && (
         <OverlayContainer onClose={handleClose}>
-          <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen}  />
+          <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} forceMainPageRender={forceMainPageRender}  />
         </OverlayContainer>
       )}
       {showPersonalDetails && (
         <OverlayContainer onClose={handleClose}>
           <PersonalCard personalDetails={personalDetails} />
         </OverlayContainer>
-      )}
-      {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} userID={userID}  matchesDetails={matchesDetails}/>}
-      {page === 'EFAPage' && (
-        <EFAview handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleEditMatch={handleEditMatch} handleAddNewStadium={handleAddNewStadium} matchDetails={matchDetails} userID={userID} />
-      )}
+      )}  
       {addNewMatch && (
         <OverlayContainer onClose={handleClose}>
-          <MatchDetailsCard view="addView" teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} />
+          <MatchDetailsCard view="addView" teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} forceMainPageRender={forceMainPageRender} handleClose={handleClose}/>
         </OverlayContainer>
       )}
       {editMatch && (
         <OverlayContainer onClose={handleClose}>
-          <MatchDetailsCard view="editView" matchDetails={matchDetails} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} />
+          <MatchDetailsCard view="editView" matchDetails={matchDetails} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} forceMainPageRender={forceMainPageRender} handleClose={handleClose}/>
         </OverlayContainer>
       )}
       {addNewStadium && (
         <OverlayContainer onClose={handleClose}>
-          <StadiumDetailsCard view="editView" />
+          <StadiumDetailsCard view="editView" forceMainPageRender={forceMainPageRender} />
         </OverlayContainer>
       )}
       {showPaymentCard && (

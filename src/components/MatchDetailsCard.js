@@ -5,72 +5,132 @@ import axios from "axios";
 import "../styles/MatchDetailsCard.css";
 import stadiumIcon from '../assets/stadium.png';
 import SeatsReservation from "./SeatsReservation";
+import { set } from "mongoose";
 
 function MatchDetailsCard(props) {
   // State to store match details
   const [matchDetails, setMatchDetails] = useState(props.matchDetails);
+  // for update
   const [homeTeamName, setHomeTeamName] = useState('');
   const [awayTeamName, setAwayTeamName] = useState('');
   const [date, setMatchDate] = useState(new Date());
   const [time, setTime] = useState('');
-  const [stadium, setStadium] = useState('');
-  const [rows, setRows] = useState(20);
-  const [cols, setCols] = useState(20);
+  const [stadiumID, setStadiumID] = useState('');
+  const [stadiumName, setStadiumName] = useState('');
+  const [close, setClose] = useState(false);
+  const {
+    StadiumID: { Rows: rows1 } = {},
+    StadiumID: { Columns: cols1 } = {},
+  } = props.matchDetails || {};
+  const [rows, setRows] = useState(rows1);
+  const [cols, setCols] = useState(cols1);
   const [refereeName, setRefereeName] = useState('');
   const [lineman1Name, setLineman1Name] = useState('');
   const [lineman2Name, setLineman2Name] = useState('');
   const [price, setPrice] = useState(0);
+  const [homeTeamID, setHomeTeamID] = useState('');
+  const [awayTeamID, setAwayTeamID] = useState('');
+  const [mainRefereeID, setMainRefereeID] = useState('');
+  const [lineman1ID, setLineman1ID] = useState('');
+  const [lineman2ID, setLineman2ID] = useState('');
   // Destructure matchDetails object
-  
-
- // fetch data initially
- useEffect(() => {
-  setMatchDetails(props.matchDetails);
-  console.log("====================================")
-  console.log(matchDetails);
-  console.log(props.matchDetails);
-  console.log("====================================")
-  const {
-    StadiumID: { Rows: rows } = {},
-    StadiumID: { Columns: cols } = {},
-  } = props.matchDetails || {};
-  setRows(rows);
-  setCols(cols);
-}, [props.matchDetails]);
+  //function
+  const [refresher, setRefresher] = useState(false);
+  const {forceMainPageRender} = props;
 
   useEffect(() => {
+    forceMainPageRender();
+  }, [refresher]);
+  
+ // useEffect(() => {
+  //  props.handleClose();
+  //}, [close]);
+
+ 
+ useEffect(() => {
+  setMatchDetails(props.matchDetails);
+  if(props.view !== 'addView'){
     const {
+      StadiumID: { Rows: rows1 } = {},
+      StadiumID: { Columns: cols1 } = {},
+      StadiumID: { StadiumName: stadiumName } = {},
       HomeTeamID: { TeamName: homeTeamName } = {},
       AwayTeamID: { TeamName: awayTeamName } = {},
-      MatchDate: matchDate,
-      MatchTime: time,
-      StadiumID: { StadiumName: stadium } = {},
+      MatchDate: matchDate = new Date(),
+      MatchTime: time = '',
+      StadiumID: { _id: stadiumID } = {},
       MainRefereeID: { Name: refereeName } = {},
       Lineman1ID: { Name: lineman1Name } = {},
       Lineman2ID: { Name: lineman2Name }  = {},
-      Price: price = 0,
-    } = matchDetails || {};
-  
+      HomeTeamID: {_id:homeTeamID} = {},
+      AwayTeamID: {_id:awayTeamID} = {},
+      MainRefereeID: {_id:mainRefereeID} = {},
+      Lineman1ID: {_id:lineman1ID} = {},
+      Lineman2ID: {_id:lineman2ID} = {},
+      Price: price = 0
+    } = props.matchDetails || {};
+    setRows(rows1);
+    setCols(cols1);
     setHomeTeamName(homeTeamName);
     setAwayTeamName(awayTeamName);
     setMatchDate(isNaN(Date.parse(matchDate)) ? null : new Date(matchDate));
     setTime(time);
-    setStadium(stadium);
+    setStadiumID(stadiumID);
     setRefereeName(refereeName);
     setLineman1Name(lineman1Name);
     setLineman2Name(lineman2Name);
     setPrice(price);
-    // update other state variables
-  }, [matchDetails]);
+    setHomeTeamID(homeTeamID);
+    setAwayTeamID(awayTeamID);
+    setMainRefereeID(mainRefereeID);
+    setLineman1ID(lineman1ID);
+    setLineman2ID(lineman2ID);
+    setStadiumName(stadiumName);
+  }
+  else{
+    setHomeTeamName('');
+    setAwayTeamName('');
+    setMatchDate(new Date());
+    setTime('');
+    setStadiumID('');
+    setRefereeName('');
+    setLineman1Name('');
+    setLineman2Name('');
+    setPrice(0);
+    setHomeTeamID('');
+    setAwayTeamID('');
+    setMainRefereeID('');
+    setLineman1ID('');
+    setLineman2ID('');
+    setStadiumName('');
+  }
+}, [props.matchDetails]);
+
 
 
   // Handle form submit for editing match details
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { _id, __v, ...update } = matchDetails;
+      const { _id, __v, ...detailsToUpdate } = matchDetails;
+      const update = {
+        ...detailsToUpdate, // Spread the remaining properties
+        HomeTeamID: homeTeamID, // Updated home team ID
+        AwayTeamID: awayTeamID, // Updated away team ID
+        MatchDate: date, // Updated match date
+        MatchTime: time, // Updated match time
+        StadiumID: stadiumID, // Updated stadium ID
+        MainRefereeID: mainRefereeID, // Updated main referee ID
+        Lineman1ID: lineman1ID, // Updated lineman 1 ID
+        Lineman2ID: lineman2ID, // Updated lineman 2 ID
+        Price: price // Updated price
+      };
       const response = await axios.put(`http://localhost:5000/matches/${_id}`, update);
       console.log(response.data);
+      alert('Match details updated successfully!');
+      setMatchDetails(update);
+      setRefresher(prev => !prev);
+      setClose(true);
     } catch (error) {
       console.error('There was an error!', error);
     }
@@ -80,11 +140,25 @@ function MatchDetailsCard(props) {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { _id, __v, ...newMatch } = matchDetails;
+     // Create a new match object from the individual state variables
+    const newMatch = {
+      HomeTeamID: homeTeamID, // Updated home team ID
+      AwayTeamID: awayTeamID, // Updated away team ID
+      MatchDate: date, // Updated match date
+      MatchTime: time, // Updated match time
+      StadiumID: stadiumID, // Updated stadium ID
+      MainRefereeID: mainRefereeID, // Updated main referee ID
+      Lineman1ID: lineman1ID, // Updated lineman 1 ID
+      Lineman2ID: lineman2ID, // Updated lineman 2 ID
+      Price: price // Updated price
+    };
       console.log(newMatch);
       const response = await axios.post('http://localhost:5000/matches', newMatch);
       console.log(response.data);
+      alert('Match details added successfully!');
+      setRefresher(prev => !prev);
     } catch (error) {
+      alert('There was an error! Please check your inputs.');
       console.error('There was an error!', error);
     }
   };
@@ -109,48 +183,50 @@ function MatchDetailsCard(props) {
   }, []);
 
   // Handle home team selection change
-  const handleHomeTeamChange = (e) => {
-    setMatchDetails({ ...matchDetails, HomeTeam: e.target.value });
+  const handleHomeTeamChange = (event) => {
+    // Set the homeTeamID state to the value of the selected option
+    setHomeTeamID(event.target.value);
   };
+  
 
   // Handle away team selection change
   const handleAwayTeamChange = (e) => {
-    setMatchDetails({ ...matchDetails, AwayTeam: e.target.value });
+    setAwayTeamID(e.target.value);
   };
 
   // Handle match date change
   const handleDateChange = (e) => {
-    setMatchDetails({ ...matchDetails, MatchDate: new Date(e.target.value) });
+    setMatchDate(new Date(e.target.value));
   };
 
   // Handle match time change
   const handleTimeChange = (e) => {
-    setMatchDetails({ ...matchDetails, MatchTime: e.target.value });
+    setTime(e.target.value);
   };
 
   // Handle stadium change
   const handleStadiumChange = (e) => {
-    setMatchDetails({ ...matchDetails, StadiumID: e.target.value });
+    setStadiumID(e.target.value);
   };
 
   // Handle price change
   const handlePriceChange = (e) => {
-    setMatchDetails({ ...matchDetails, Price: e.target.value });
+    setPrice(e.target.value);
   };
 
   // Handle referee change
   const handleRefereeChange = (e) => {
-    setMatchDetails({ ...matchDetails, MainReferee: e.target.value });
+    setMainRefereeID(e.target.value);
   };
 
   // Handle lineman 1 change
   const handleLineman1Change = (e) => {
-    setMatchDetails({ ...matchDetails, Lineman1: e.target.value });
+    setLineman1ID(e.target.value);
   };
 
   // Handle lineman 2 change
   const handleLineman2Change = (e) => {
-    setMatchDetails({ ...matchDetails, Lineman2: e.target.value });
+    setLineman2ID(e.target.value);
   };
 
   const bookView = (
@@ -160,7 +236,7 @@ function MatchDetailsCard(props) {
         <img src={stadiumIcon} alt="" />
         <span>{awayTeamName}</span>
       </div>
-      <p className="stadiumInfo">{stadium}, Egypt</p>
+      <p className="stadiumInfo">{stadiumName}, Egypt</p>
       <span className="gray">Choose your seat</span>
       <SeatsReservation rows={rows} cols={cols}/>
             <div className="ticketInfo">
@@ -185,7 +261,7 @@ function MatchDetailsCard(props) {
         <img src={stadiumIcon} alt="" />
         <span>{awayTeamName}</span>
       </div>
-      <p className="stadiumInfo">{stadium}, Egypt</p>
+      <p className="stadiumInfo">{stadiumName}, Egypt</p>
       <span className="gray">Choose your seat</span>
       <SeatsReservation rows={rows} cols={cols} disabled={true}/>
       <div className="ticketInfo">
@@ -194,6 +270,11 @@ function MatchDetailsCard(props) {
             {date.getDate()} {date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}
           </span>
           <span className="time">{time}</span>
+        </div>
+        <div className="referee-lineman">
+          <span>Referee <div>{refereeName}</div></span>
+          <span>Lineman1 <div>{lineman1Name}</div></span>
+          <span>Lineman2 <div>{lineman2Name}</div></span>
         </div>
         <div className="priceBook">
           <span className="price">{price} L.E</span>
@@ -210,7 +291,7 @@ function MatchDetailsCard(props) {
         <img src={stadiumIcon} alt="" />
         <span>{awayTeamName}</span>
       </div>
-      <p className="stadiumInfo">{stadium}, Egypt</p>
+      <p className="stadiumInfo">{stadiumName}, Egypt</p>
       <span className="gray">Ticket#{231} | your Seats are in yellow </span>
       <SeatsReservation rows={rows} cols={cols} disabled={true}/>
       <div className="ticketInfo">
@@ -237,13 +318,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="home-team">Home Team</label>
             <select
               id="home-team"
-              value={homeTeamName}
+              value={homeTeamID}
               onChange={handleHomeTeamChange}
+              required
             >
               <option>Select home team</option>
               {props.teams &&
                 props.teams.map((team, index) => (
-                  <option key={index} value={team.TeamName}>
+                  <option key={index} value={team._id}>
                     {team.TeamName}
                   </option>
                 ))}
@@ -253,13 +335,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="away-team">Away Team</label>
             <select
               id="away-team"
-              value={awayTeamName}
+              value={awayTeamID}
               onChange={handleAwayTeamChange}
+              required
             >
               <option value="">Select away team</option>
               {props.teams &&
                 props.teams.map((team, index) => (
-                  <option key={index} value={team.TeamName}>
+                  <option key={index} value={team._id}>
                     {team.TeamName}
                   </option>
                 ))}
@@ -272,17 +355,29 @@ function MatchDetailsCard(props) {
               id="date"
               value={date.toISOString().split("T")[0]}
               onChange={handleDateChange}
+              required
             />
           </div>
           <div className="input-group">
             <label htmlFor="time">Time</label>
-            <input type="time" id="time" value={time} onChange={handleTimeChange} />
+            <input
+              type="time"
+              id="time"
+              value={time}
+              onChange={handleTimeChange}
+              required
+            />
           </div>
         </div>
         <div className="form-row">
           <div className="input-group">
             <label htmlFor="stadium">Stadium</label>
-            <select id="stadium" value={stadium} onChange={handleStadiumChange}>
+            <select
+              id="stadium"
+              value={stadiumID}
+              onChange={handleStadiumChange}
+              required
+            >
               <option value="">Select Stadium</option>
               {props.stadiums &&
                 props.stadiums.map((stadium, index) => (
@@ -300,6 +395,7 @@ function MatchDetailsCard(props) {
               placeholder="Enter price"
               value={price}
               onChange={handlePriceChange}
+              required
             />
           </div>
         </div>
@@ -308,13 +404,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="referee">Referee</label>
             <select
               id="referee"
-              value={refereeName}
+              value={mainRefereeID}
               onChange={handleRefereeChange}
+              required
             >
               <option value="">Select referee</option>
               {props.referees &&
                 props.referees.map((referee, index) => (
-                  <option key={index} value={referee.Name}>
+                  <option key={index} value={referee._id}>
                     {referee.Name}
                   </option>
                 ))}
@@ -324,13 +421,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="linesman1">Linesman 1</label>
             <select
               id="linesman1"
-              value={lineman1Name}
+              value={lineman1ID}
               onChange={handleLineman1Change}
+              required
             >
               <option value="">Select linesman 1</option>
               {props.linesmen &&
                 props.linesmen.map((linesman, index) => (
-                  <option key={index} value={linesman.Name}>
+                  <option key={index} value={linesman._id}>
                     {linesman.Name}
                   </option>
                 ))}
@@ -340,13 +438,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="linesman2">Linesman 2</label>
             <select
               id="linesman2"
-              value={lineman2Name}
+              value={lineman2ID}
               onChange={handleLineman2Change}
+              required
             >
               <option value="">Select linesman 2</option>
               {props.linesmen &&
                 props.linesmen.map((linesman, index) => (
-                  <option key={index} value={linesman.Name}>
+                  <option key={index} value={linesman._id}>
                     {linesman.Name}
                   </option>
                 ))}
@@ -366,13 +465,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="home-team">Home Team</label>
             <select
               id="home-team"
-              value={homeTeamName}
+              value={homeTeamID}
               onChange={handleHomeTeamChange}
+              required
             >
-              <option value="">Select home team</option>
+              <option>Select home team</option>
               {props.teams &&
                 props.teams.map((team, index) => (
-                  <option key={index} value={team.TeamName}>
+                  <option key={index} value={team._id}>
                     {team.TeamName}
                   </option>
                 ))}
@@ -382,13 +482,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="away-team">Away Team</label>
             <select
               id="away-team"
-              value={awayTeamName}
+              value={awayTeamID}
               onChange={handleAwayTeamChange}
+              required
             >
               <option value="">Select away team</option>
               {props.teams &&
                 props.teams.map((team, index) => (
-                  <option key={index} value={team.TeamName}>
+                  <option key={index} value={team._id}>
                     {team.TeamName}
                   </option>
                 ))}
@@ -401,17 +502,29 @@ function MatchDetailsCard(props) {
               id="date"
               value={date.toISOString().split("T")[0]}
               onChange={handleDateChange}
+              required
             />
           </div>
           <div className="input-group">
             <label htmlFor="time">Time</label>
-            <input type="time" id="time" value={time} onChange={handleTimeChange} />
+            <input
+              type="time"
+              id="time"
+              value={time}
+              onChange={handleTimeChange}
+              required
+            />
           </div>
         </div>
         <div className="form-row">
           <div className="input-group">
             <label htmlFor="stadium">Stadium</label>
-            <select id="stadium" value={stadium} onChange={handleStadiumChange}>
+            <select
+              id="stadium"
+              value={stadiumID}
+              onChange={handleStadiumChange}
+              required
+            >
               <option value="">Select Stadium</option>
               {props.stadiums &&
                 props.stadiums.map((stadium, index) => (
@@ -429,6 +542,7 @@ function MatchDetailsCard(props) {
               placeholder="Enter price"
               value={price}
               onChange={handlePriceChange}
+              required
             />
           </div>
         </div>
@@ -437,13 +551,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="referee">Referee</label>
             <select
               id="referee"
-              value={refereeName}
+              value={mainRefereeID}
               onChange={handleRefereeChange}
+              required
             >
               <option value="">Select referee</option>
               {props.referees &&
                 props.referees.map((referee, index) => (
-                  <option key={index} value={referee.Name}>
+                  <option key={index} value={referee._id}>
                     {referee.Name}
                   </option>
                 ))}
@@ -453,13 +568,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="linesman1">Linesman 1</label>
             <select
               id="linesman1"
-              value={lineman1Name}
+              value={lineman1ID}
               onChange={handleLineman1Change}
+              required
             >
               <option value="">Select linesman 1</option>
               {props.linesmen &&
                 props.linesmen.map((linesman, index) => (
-                  <option key={index} value={linesman.Name}>
+                  <option key={index} value={linesman._id}>
                     {linesman.Name}
                   </option>
                 ))}
@@ -469,13 +585,14 @@ function MatchDetailsCard(props) {
             <label htmlFor="linesman2">Linesman 2</label>
             <select
               id="linesman2"
-              value={lineman2Name}
+              value={lineman2ID}
               onChange={handleLineman2Change}
+              required
             >
               <option value="">Select linesman 2</option>
               {props.linesmen &&
                 props.linesmen.map((linesman, index) => (
-                  <option key={index} value={linesman.Name}>
+                  <option key={index} value={linesman._id}>
                     {linesman.Name}
                   </option>
                 ))}
