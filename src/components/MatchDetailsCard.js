@@ -24,6 +24,7 @@ function MatchDetailsCard(props) {
   } = props.matchDetails || {};
   const [rows, setRows] = useState(rows1);
   const [cols, setCols] = useState(cols1);
+  const [matchID, setMatchID] = useState('');
   const [refereeName, setRefereeName] = useState('');
   const [lineman1Name, setLineman1Name] = useState('');
   const [lineman2Name, setLineman2Name] = useState('');
@@ -51,6 +52,7 @@ function MatchDetailsCard(props) {
   setMatchDetails(props.matchDetails);
   if(props.view !== 'addView'){
     const {
+      _id: ID,
       StadiumID: { Rows: rows1 } = {},
       StadiumID: { Columns: cols1 } = {},
       StadiumID: { StadiumName: stadiumName } = {},
@@ -69,6 +71,7 @@ function MatchDetailsCard(props) {
       Lineman2ID: {_id:lineman2ID} = {},
       Price: price = 0
     } = props.matchDetails || {};
+    setMatchID(ID);
     setRows(rows1);
     setCols(cols1);
     setHomeTeamName(homeTeamName);
@@ -238,13 +241,18 @@ function MatchDetailsCard(props) {
       </div>
       <p className="stadiumInfo">{stadiumName}, Egypt</p>
       <span className="gray">Choose your seat</span>
-      <SeatsReservation rows={rows} cols={cols}/>
+      <SeatsReservation rows={rows} cols={cols} matchID={matchID}/>
             <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
             {date.getDate()} {date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}
           </span>
           <span className="time">{time}</span>
+        </div>
+        <div className="referee-lineman">
+          <span>Referee <div>{refereeName}</div></span>
+          <span>Lineman1 <div>{lineman1Name}</div></span>
+          <span>Lineman2 <div>{lineman2Name}</div></span>
         </div>
         <div className="priceBook">
           <span className="price">{price} L.E</span>
@@ -263,7 +271,7 @@ function MatchDetailsCard(props) {
       </div>
       <p className="stadiumInfo">{stadiumName}, Egypt</p>
       <span className="gray">Choose your seat</span>
-      <SeatsReservation rows={rows} cols={cols} disabled={true}/>
+      <SeatsReservation rows={rows} cols={cols} disabled={true} matchID={matchID}/>
       <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
@@ -292,14 +300,19 @@ function MatchDetailsCard(props) {
         <span>{awayTeamName}</span>
       </div>
       <p className="stadiumInfo">{stadiumName}, Egypt</p>
-      <span className="gray">Ticket#{231} | your Seats are in yellow </span>
-      <SeatsReservation rows={rows} cols={cols} disabled={true}/>
+      <span className="gray">Ticket#{(matchDetails.ticketNumber || 0)} | your Seats are in yellow </span>
+      <SeatsReservation rows={rows} cols={cols} disabled={true} matchID={matchID}/>
       <div className="ticketInfo">
         <div className="datetime">
           <span className="date gray">
             {date.getDate()} {date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}
           </span>
           <span className="time">{time}</span>
+        </div>
+        <div className="referee-lineman">
+          <span>Referee <div>{refereeName}</div></span>
+          <span>Lineman1 <div>{lineman1Name}</div></span>
+          <span>Lineman2 <div>{lineman2Name}</div></span>
         </div>
         <div className="priceBook">
           <span className="price">{price} L.E</span>

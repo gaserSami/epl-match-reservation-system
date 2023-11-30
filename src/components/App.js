@@ -41,6 +41,7 @@ function App() {
   const [linesmen, setLinesmen] = useState([]);
   const [referees, setReferees] = useState([]);
   const [triggerMainPageRender, setTriggerMainPageRender] = useState(false);
+  const [triggerFanPageRender, setTriggerFanPageRender] = useState(false);
 
   const forceMainPageRender = () => {
      // Toggle the state to force re-render
@@ -48,6 +49,8 @@ function App() {
     console.log('forceMainPageRender');
     console.log(triggerMainPageRender);
   };
+
+ 
 
   useEffect(() => {
     const fetchTeamsAndStadiums = async () => {
@@ -70,8 +73,13 @@ function App() {
   }, []);
 
   const handleTicketsClick = (view, matchdetails) => {
+    console.log("here in handleTicketsClick");
+    console.log(matchdetails);
+    console.log(view);
+    console.log("====================================")
     if(!matchdetails) {
       matchdetails = matchesDetails[0];
+      view = 'bookView';
     }
     setMatchDetails(matchdetails);
     setMatchDetailsCardView(view);

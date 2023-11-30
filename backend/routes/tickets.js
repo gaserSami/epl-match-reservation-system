@@ -39,6 +39,36 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+
+// Create multiple Tickets
+router.post('/bulk', async (req, res) => {
+  try {
+    const tickets = req.body;
+
+    // Validate each ticket
+    for (let ticket of tickets) {
+      const validationResult = ticketValidationSchema.validate(ticket);
+      if (validationResult.error) {
+        return res.status(400).json({ message: validationResult.error.details[0].message });
+      }
+    }
+
+    // Create each ticket
+    const newTickets = tickets.map(ticket => ({
+      MatchID: new mongoose.Types.ObjectId(ticket.MatchID),
+      UserID: new mongoose.Types.ObjectId(ticket.UserID),
+      SeatsNumber: ticket.SeatsNumber,
+      Price: ticket.Price
+    }));
+
+    // Save all tickets to the database
+    const savedTickets = await Ticket.insertMany(newTickets);
+    res.status(201).json(savedTickets);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 // Create a Ticket
 router.post('/', async (req, res) => {
   try {

@@ -11,7 +11,7 @@ function PersonalCard(props) {
   const [gender, setGender] = useState(props.personalDetails.Gender);
   const [email, setEmail] = useState(props.personalDetails.Email);
   const [birthdate, setBirthdate] = useState(new Date(props.personalDetails.DateOfBirth).toISOString().split('T')[0]);
-  const [password, setPassword] = useState(props.personalDetails.Password);
+  const [password, setPassword] = useState("password");
   const [address, setAddress] = useState(props.personalDetails.Address);
   const [username, setUsername] = useState(props.personalDetails.Username);
   const [statusMessage, setStatusMessage] = useState('');
@@ -33,7 +33,7 @@ function PersonalCard(props) {
       setGender(user.Gender);
       setEmail(user.Email);
       setBirthdate(new Date(user.DateOfBirth).toISOString().split('T')[0]);
-      setPassword(user.Password);
+      setPassword("password");
       setAddress(user.Address);
       setUsername(user.Username);
     } catch (error) {
@@ -109,6 +109,7 @@ function PersonalCard(props) {
 
   return (
     <div className="personal-container">
+      <p style={{ color: 'red' }}><b>NOTE:</b> don't change password textbox unless you want to change password to avoid account loss</p>
       <div className="personal-card-box">
         <h2>Personal Info</h2>
         <p>Please enter your details.</p>
@@ -122,7 +123,6 @@ function PersonalCard(props) {
                 placeholder="example"
                 value={username}
                 onChange={handleUsernameChange}
-                disabled
                 required
               />
             </div>

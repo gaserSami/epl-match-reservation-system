@@ -56,7 +56,7 @@ function SignUp() {
       setError(null);
     } catch (error) {
       setError('Error creating user. Please try again.');
-      console.error('There was an error!', error);
+      alert("There was an error" + error);
     }
   };
 

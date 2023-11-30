@@ -4,6 +4,7 @@ import '../styles/SeatsReservation.css';
 const SeatsReservation = (props) => {
   const rows = props.rows;
   const cols = props.cols;
+  const matchID = props.matchID;
   const [seats, setSeats] = useState(() => {
     const initialSeats = Array.from({length: rows}, () => Array(cols).fill('vacant'));
     // Reserve some seats for testing

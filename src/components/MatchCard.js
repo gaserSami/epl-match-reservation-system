@@ -23,12 +23,15 @@ const MatchCard = (props) => {
     Price: price
   } = matchDetails || {};
 
+
+  const {forceFanPageRender} = props;
+
   // Format date
   const date = isNaN(Date.parse(matchDate)) ? null : new Date(matchDate);
   const month = date.toLocaleString('default', { month: 'long' });
 
   // Generate random ticket number
-  const ticketNumber = Math.floor(Math.random() * 1000000) + 1;
+  const ticketNumber = matchDetails && matchDetails.ticketNumber ? matchDetails.ticketNumber : 0;
   // Generate match title
   const title = `${homeTeamName} vs ${awayTeamName}`;
 
@@ -39,8 +42,30 @@ const MatchCard = (props) => {
     console.log('useEffect');
   }, [props.triggerMainPageRender]);
 
-  // Guest view of the match card
-  const guestView = (
+  const cancel = async () => {
+    if (ticketNumber !== 0) {
+      try {
+        // Send a DELETE request to the server
+        const response = await axios.delete(`http://localhost:5000/tickets/${ticketNumber}`);
+
+        // Check if the request was successful
+        if (response.status === 200) {
+          console.log('Ticket cancelled successfully');
+        // update the UI here to reflect the cancellation'
+        alert('Ticket cancelled successfully');
+        if (forceFanPageRender) {
+          forceFanPageRender();
+        }
+        } else {
+          console.log('Failed to cancel the ticket');
+        }
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    }
+  };
+
+  return (
     <div className="matchCard">
       <div className="date">
         <span className="month">{date.getDate()}</span>
@@ -48,7 +73,7 @@ const MatchCard = (props) => {
         <span className="year">{date.getFullYear()}</span>
       </div>
       <div className="info">
-        <h2>EGYPTIAN PREMIER LEAGUE</h2>
+        <h2>{props.view === 'reservedView' ? `#${ticketNumber}` : 'EGYPTIAN PREMIER LEAGUE'}</h2>
         <h1 className='teams'>{title}</h1>
         <span className='time'>{time}</span>
         <p className='stadium'>{stadium}, Egypt</p>
@@ -57,99 +82,21 @@ const MatchCard = (props) => {
         {price} L.E
       </div>
       <div className="buttons">
-        <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
+        {props.view !== 'reservedView' && (
+          <button onClick={() => props.handleTicketsClick(props.view === 'fanView' ? 'bookView' : 'guestView', matchDetails)}>Tickets</button>
+        )}
+        {props.view === 'editView' && (
+          <button onClick={() => props.handleTicketsClick('editView', matchDetails)}><img src={editIcon} alt="" /></button>
+        )}
+        {props.view === 'reservedView' && (
+          <>
+          <button className='cancel' onClick={cancel}>Cancel</button>
+          <button onClick={() => props.handleTicketsClick('reservedView', matchDetails)}>view</button>
+          </>
+        )}
       </div>
     </div>
   );
-
-  // Fan view of the match card
-  const fanView = (
-    <div className="matchCard">
-      <div className="date">
-      <span className="month">{date.getDate()}</span>
-        <span className="day">{month}</span>
-        <span className="year">{date.getFullYear()}</span>
-      </div>
-      <div className="info">
-        <h2>EGYPTIAN PREMIER LEAGUE</h2>
-        <h1 className='teams'>{title}</h1>
-        <span className='time'>{time}</span>
-        <p className='stadium'>{stadium}, Egypt</p>
-      </div>
-      <div className="price">
-        {price} L.E
-      </div>
-      <div className="buttons">
-        <button onClick={() => props.handleTicketsClick('bookView', matchDetails)}>Tickets</button>
-      </div>
-    </div>
-  );
-
-  // Edit view of the match card
-  const editView = (
-    <div className="matchCard">
-      <div className="date">
-      <span className="month">{date.getDate()}</span>
-        <span className="day">{month}</span>
-        <span className="year">{date.getFullYear()}</span>
-      </div>
-      <div className="info">
-        <h2>EGYPTIAN PREMIER LEAGUE</h2>
-        <h1 className='teams'>{title}</h1>
-        <span className='time'>{time}</span>
-        <p className='stadium'>{stadium}, Egypt</p>
-      </div>
-      <div className="price">
-        {price} L.E
-      </div>
-      <div className="buttons">
-        <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
-        <button onClick={() => props.handleTicketsClick('editView', matchDetails)}><img src={editIcon} alt="" /></button>
-      </div>
-    </div>
-  );
-
-  // Reserved view of the match card
-  const reservedView = (
-    <div className="matchCard">
-      <div className="date">
-      <span className="month">{date.getDate()}</span>
-        <span className="day">{month}</span>
-        <span className="year">{date.getFullYear()}</span>
-      </div>
-      <div className="info">
-        <h2>#{ticketNumber}</h2>
-        <h1 className='teams'>{title}</h1>
-        <span className='time'>{time}</span>
-        <p className='stadium'>{stadium}, Egypt</p>
-      </div>
-      <div className="price">
-        {price} L.E
-      </div>
-      <div className="buttons">
-        <button onClick={() => props.handleTicketsClick('guestView', matchDetails)}>Tickets</button>
-        <button className='cancel'>Cancel</button>
-      </div>
-    </div>
-  );
-
-  // Determine which view to render based on props.view
-  let view;
-  switch (props.view) {
-    case 'fanView':
-      view = fanView;
-      break;
-    case 'editView':
-      view = editView;
-      break;
-    case 'reservedView':
-      view = reservedView;
-      break;
-    default:
-      view = guestView;
-  }
-
-  return view;
 };
 
 export default MatchCard;
