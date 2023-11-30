@@ -44,10 +44,10 @@
   background-color: green;
 }
 
-.seat.reserved {
-  background-color: red;
-}
-
 .seat.mine {
   background-color: yellow;
+}
+
+.seat.reserved {
+  background-color: red;
 }

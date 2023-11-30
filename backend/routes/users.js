@@ -119,6 +119,20 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Update the state of a user by id
+router.put('/:id/state', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { State } = req.body;
+
+    // Update the state of the user
+    const updatedUser = await User.findByIdAndUpdate(id, { State }, { new: true });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 
 // Delete a User

@@ -15,6 +15,7 @@ import SiteAdminView from './SiteAdminView';
 import SuccessCard from './SuccessCard';
 import FailedCard from './FailedCard';
 import PaymentCard from './PaymentCard';
+import ReservationContext from './ReservationContext';
 import { set } from 'mongoose';
 
 function App() {
@@ -42,6 +43,10 @@ function App() {
   const [referees, setReferees] = useState([]);
   const [triggerMainPageRender, setTriggerMainPageRender] = useState(false);
   const [triggerFanPageRender, setTriggerFanPageRender] = useState(false);
+  const [mySeatsNumber, setMySeatsNumber] = useState([]); // New state for seat numbers like [1, 2, 3]
+  const [userIDD, setUserIDD] = useState(null);
+  const [Pricee, setPricee] = useState(null);
+  const [MatchIDD, setMatchIDD] = useState(null); // New state for seat numbers like [1, 2, 3
 
   const forceMainPageRender = () => {
      // Toggle the state to force re-render
@@ -189,11 +194,6 @@ function App() {
       {page === 'EFAPage' && (
         <EFAview handleClose={handleClose} triggerMainPageRender={triggerMainPageRender} handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleEditMatch={handleEditMatch} handleAddNewStadium={handleAddNewStadium} matchesDetails={matchesDetails} userID={userID} />
       )}
-      {showMatchDetails && (
-        <OverlayContainer onClose={handleClose}>
-          <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} forceMainPageRender={forceMainPageRender}  />
-        </OverlayContainer>
-      )}
       {showPersonalDetails && (
         <OverlayContainer onClose={handleClose}>
           <PersonalCard personalDetails={personalDetails} />
@@ -214,11 +214,20 @@ function App() {
           <StadiumDetailsCard view="editView" forceMainPageRender={forceMainPageRender} />
         </OverlayContainer>
       )}
+
+      <ReservationContext.Provider value={{ mySeatsNumber, setMySeatsNumber, userIDD, setUserIDD, Pricee, setPricee, MatchIDD, setMatchIDD }}>
+      {showMatchDetails && (
+        <OverlayContainer onClose={handleClose}>
+          <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} forceMainPageRender={forceMainPageRender} userID={userID} />
+        </OverlayContainer>
+      )}
       {showPaymentCard && (
         <OverlayContainer onClose={handleClose}>
           <PaymentCard handleBookTicket={handleBookTicket} />
         </OverlayContainer>
       )}
+    </ReservationContext.Provider>
+
       {showSuccessCard && (
         <OverlayContainer onClose={handleClose}>
           <SuccessCard message={successMessage} />

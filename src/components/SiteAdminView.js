@@ -29,28 +29,13 @@ function SiteAdminView({ handleSettingsClick, userID }) {
 
   // Handle user approval
   const handleApprove = async (id) => {
-    const user = newUsers.find(user => user._id === id);
-
-    const updatedUser = {
-      FirstName: user.FirstName,
-      LastName: user.LastName,
-      City: user.City,
-      Gender: user.Gender,
-      Email: user.Email,
-      DateOfBirth: new Date(user.DateOfBirth),
-      Password: user.Password,
-      Address: user.Address,
-      Username: user.Username,
-      UserType: user.UserType,
-      State: "accepted"
-    };
-
     try {
-      await axios.put(`http://localhost:5000/users/${id}`, updatedUser);
+      await axios.put(`http://localhost:5000/users/${id}/state`, { State: 'accepted' });
       // Remove the approved user from the newUsers array
       const updatedNewUsers = newUsers.filter(user => user._id !== id);
       // Add the approved user to the existingUsers array
-      const updatedExistingUsers = [...existingUsers, { ...updatedUser, _id: id }];
+      const approvedUser = newUsers.find(user => user._id === id);
+      const updatedExistingUsers = [...existingUsers, { ...approvedUser, State: 'accepted' }];
       // Update the state
       setNewUsers(updatedNewUsers);
       setExistingUsers(updatedExistingUsers);

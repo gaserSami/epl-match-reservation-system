@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import '../styles/PaymentCard.css';
+import ReservationContext from './ReservationContext';
 
 const PaymentCard = (props) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [cardHolderName, setCardHolderName] = useState('');
+  const {mySeatsNumber , Pricee, MatchIDD, UserIDD} = useContext(ReservationContext);
+
+  console.log("payment card");
+  console.log(mySeatsNumber);
+  console.log(Pricee);
+  console.log(MatchIDD);
+  console.log(UserIDD);
 
   const handleSubmit = (e) => {
     e.preventDefault();

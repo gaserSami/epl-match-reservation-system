@@ -1,13 +1,14 @@
 // Import dependencies
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 // import files
 import "../styles/MatchDetailsCard.css";
 import stadiumIcon from '../assets/stadium.png';
 import SeatsReservation from "./SeatsReservation";
-import { set } from "mongoose";
+import ReservationContext from "./ReservationContext";
 
 function MatchDetailsCard(props) {
+  const { setUserIDD , setMatchIDD , setPricee } = useContext(ReservationContext);
   // State to store match details
   const [matchDetails, setMatchDetails] = useState(props.matchDetails);
   // for update
@@ -89,6 +90,8 @@ function MatchDetailsCard(props) {
     setLineman1ID(lineman1ID);
     setLineman2ID(lineman2ID);
     setStadiumName(stadiumName);
+    setMatchIDD(ID);
+    setPricee(price);
   }
   else{
     setHomeTeamName('');
@@ -106,10 +109,14 @@ function MatchDetailsCard(props) {
     setLineman1ID('');
     setLineman2ID('');
     setStadiumName('');
+    setMatchIDD('');
+    setPricee(0);
   }
 }, [props.matchDetails]);
 
-
+useEffect(() => {
+  setUserIDD(props.userID);
+}, [props.userID]);
 
   // Handle form submit for editing match details
   const handleEditSubmit = async (e) => {
