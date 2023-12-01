@@ -69,26 +69,62 @@ router.post('/bulk', async (req, res) => {
   }
 });
 
-// Create a Ticket
-router.post('/', async (req, res) => {
-  try {
-    const validationResult = ticketValidationSchema.validate(req.body);
-    if (validationResult.error) {
-      return res.status(400).json({ message: validationResult.error.details[0].message });
+let ticketCreationQueue = [];
+
+const processQueue = async () => {
+  while (ticketCreationQueue.length > 0) {
+    const req = ticketCreationQueue.shift();
+
+    try {
+      const validationResult = ticketValidationSchema.validate(req.body);
+      if (validationResult.error) {
+        return req.res.status(400).json({ message: validationResult.error.details[0].message });
+      }
+
+      // Fetch all tickets for the match
+      const allTicketsForMatch = await Ticket.find({ 'MatchID': new mongoose.Types.ObjectId(req.body.MatchID) });
+
+      // Flatten all reserved seats numbers
+      const allReservedSeats = allTicketsForMatch.reduce((acc, ticket) => {
+        return acc.concat(ticket.SeatsNumber);
+      }, []);
+
+      // Check if any of the requested seats are already reserved
+      const requestedSeats = req.body.SeatsNumber;
+      const isAnySeatReserved = requestedSeats.some(seat => allReservedSeats.includes(seat));
+
+      if (isAnySeatReserved) {
+        // If any seats are already reserved, do not proceed with ticket creation
+        req.res.status(400).json({ message: 'One or more selected seats are already reserved.' });
+      } else {
+        // If all seats are free, create the ticket
+        const newTicket = new Ticket({
+          MatchID: new mongoose.Types.ObjectId(req.body.MatchID),
+          UserID: new mongoose.Types.ObjectId(req.body.UserID),
+          SeatsNumber: req.body.SeatsNumber,
+          Price: req.body.Price
+        });
+
+        const savedTicket = await newTicket.save();
+        req.res.status(201).json(savedTicket);
+      }
+    } catch (error) {
+      console.error('Error processing ticket creation:', error);
+      req.res.status(500).json({ message: 'Internal Server Error' });
     }
-
-    const newTicket = new Ticket({
-      MatchID: new mongoose.Types.ObjectId(req.body.MatchID),
-      UserID: new mongoose.Types.ObjectId(req.body.UserID),
-      SeatsNumber: req.body.SeatsNumber,
-      Price: req.body.Price
-    });
-
-    const savedTicket = await newTicket.save();
-    res.status(201).json(savedTicket);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
   }
+};
+
+
+
+// Create a Ticket
+router.post('/', (req, res) => {
+  // Add the request to the queue
+  req.res = res;
+  ticketCreationQueue.push(req);
+
+  // Process the queue
+  processQueue();
 });
 
 // Create a GET route to fetch tickets by matchID as a URL parameter

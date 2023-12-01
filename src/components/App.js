@@ -150,7 +150,14 @@ function App() {
   };
 
   const handlePaymentCard = () => {
-    setShowPaymentCard(true);
+    if(mySeatsNumber.length !==0)
+    {
+      console.log(mySeatsNumber);
+      setShowPaymentCard(true);
+    }
+   else{
+    alert("Please select at least one seat");
+   }
   };
 
   const handleBookTicket = (status) => {
@@ -227,17 +234,17 @@ function App() {
       )}
 
       <ReservationContext.Provider value={{ mySeatsNumber, setMySeatsNumber, UserIDD, setUserIDD, Pricee, setPricee, MatchIDD, setMatchIDD }}>
-      {showMatchDetails && (
-        <OverlayContainer onClose={handleClose}>
-          <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} forceMainPageRender={forceMainPageRender} userID={userID} />
-        </OverlayContainer>
-      )}
-      {showPaymentCard && (
-        <OverlayContainer onClose={handleClose}>
-          <PaymentCard handleBookTicket={handleBookTicket} forceFanPageRender={forceFanPageRender}/>
-        </OverlayContainer>
-      )}
-    </ReservationContext.Provider>
+        {showMatchDetails && (
+          <OverlayContainer onClose={handleClose}>
+            <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} forceMainPageRender={forceMainPageRender} userID={userID} />
+          </OverlayContainer>
+        )}
+        {showPaymentCard && (
+          <OverlayContainer onClose={handleClose}>
+            <PaymentCard handleBookTicket={handleBookTicket} forceFanPageRender={forceFanPageRender}/>
+          </OverlayContainer>
+        )}
+      </ReservationContext.Provider>
 
       {showSuccessCard && (
         <OverlayContainer onClose={handleClose}>

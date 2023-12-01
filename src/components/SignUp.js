@@ -14,7 +14,7 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [address, setAddress] = useState('');
   const [error, setError] = useState(null);
-  const [userType, setUserType] = useState(''); // ['fan', 'EFA'
+  const [userType, setUserType] = useState('fan'); // ['fan', 'EFA'
 
   const getAuthority = (userType) => {
     if (userType === 'fan') {
@@ -83,6 +83,15 @@ function SignUp() {
             <div className="input-group">
               <label htmlFor="username">Username</label>
               <input type="text" id="username" placeholder="example" value={username} onChange={e => setUsername(e.target.value)} required />
+            </div>
+            <div className="input-group">
+              <label htmlFor="Authority">Authority</label>
+              <select id="authority" value={userType} onChange={e => setUserType(e.target.value)} required>
+                <option value="">Select Authority</option>
+                <option value="fan">{getAuthority("fan")}</option>
+                <option value="EFAmanager">{getAuthority("EFAmanager")}</option>
+                <option value="siteAdmin">{getAuthority("siteAdmin")}</option>
+              </select>
             </div>
           </div>
           <div className="input-row">

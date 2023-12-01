@@ -12,8 +12,15 @@ const SeatsReservation = (props) => {
   const [mySeats, setMySeats] = useState([]); // [{ row, col }
   const { setMySeatsNumber } = useContext(ReservationContext);
   const { UserIDD } = useContext(ReservationContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
+useEffect(() => {
+    setMySeatsNumber([]);
+    const timer = setTimeout(() => {
+    setIsLoading(false);
+  }, 1500);
+   return () => clearTimeout(timer);
+}, []);
 
   useEffect(() => {
     const fetchSeats = async () => {
