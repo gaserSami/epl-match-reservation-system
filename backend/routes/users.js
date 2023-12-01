@@ -25,6 +25,21 @@ const userValidationSchema = Joi.object({
   State: Joi.string().valid('accepted', 'pending').optional()
 });
 
+// Validation schema for User
+const userUpdateValidationSchema = Joi.object({
+  Username: Joi.string().required(),
+  Password: Joi.string().required(),
+  FirstName: Joi.string().required(),
+  LastName: Joi.string().required(),
+  DateOfBirth: Joi.date().required(),
+  Gender: Joi.string().required(),
+  City: Joi.string().required(),
+  Address: Joi.string().optional(),
+  Email: Joi.string().email().required(),
+  UserType: Joi.string().required(),
+  State: Joi.string().valid('accepted', 'pending').optional()
+});
+
 // Get all Users
 router.get('/', async (req, res) => {
   try {
@@ -93,7 +108,7 @@ router.put('/:id', async (req, res) => {
   try {
     console.log(req.body);
     const { id } = req.params;
-    const { error } = userValidationSchema.validate(req.body);
+    const { error } = userUpdateValidationSchema.validate(req.body);
     if (error) {
       throw new Error(error.details[0].message);
     }

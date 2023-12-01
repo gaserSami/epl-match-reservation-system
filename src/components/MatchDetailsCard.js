@@ -6,11 +6,14 @@ import "../styles/MatchDetailsCard.css";
 import stadiumIcon from '../assets/stadium.png';
 import SeatsReservation from "./SeatsReservation";
 import ReservationContext from "./ReservationContext";
+import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
 
 function MatchDetailsCard(props) {
   const { setUserIDD , setMatchIDD , setPricee } = useContext(ReservationContext);
+  const { Vieww, MatchDetailss } = useContext(MatchCardAndDetailsContext);
   // State to store match details
-  const [matchDetails, setMatchDetails] = useState(props.matchDetails);
+  //const [matchDetails, setMatchDetails] = useState(props.matchDetails);
+  const [matchDetails, setMatchDetails] = useState(MatchDetailss);
   // for update
   const [homeTeamName, setHomeTeamName] = useState('');
   const [awayTeamName, setAwayTeamName] = useState('');
@@ -22,7 +25,7 @@ function MatchDetailsCard(props) {
   const {
     StadiumID: { Rows: rows1 } = {},
     StadiumID: { Columns: cols1 } = {},
-  } = props.matchDetails || {};
+  } = matchDetails || {};
   const [rows, setRows] = useState(rows1);
   const [cols, setCols] = useState(cols1);
   const [matchID, setMatchID] = useState('');
@@ -50,8 +53,8 @@ function MatchDetailsCard(props) {
 
  
  useEffect(() => {
-  setMatchDetails(props.matchDetails);
-  if(props.view !== 'addView'){
+  setMatchDetails(MatchDetailss);
+  if(Vieww !== 'addView'){
     const {
       _id: ID,
       StadiumID: { Rows: rows1 } = {},
@@ -71,7 +74,7 @@ function MatchDetailsCard(props) {
       Lineman1ID: {_id:lineman1ID} = {},
       Lineman2ID: {_id:lineman2ID} = {},
       Price: price = 0
-    } = props.matchDetails || {};
+    } = matchDetails || {};
     setMatchID(ID);
     setRows(rows1);
     setCols(cols1);
@@ -112,7 +115,7 @@ function MatchDetailsCard(props) {
     setMatchIDD('');
     setPricee(0);
   }
-}, [props.matchDetails]);
+}, [matchDetails]);
 
 useEffect(() => {
   setUserIDD(props.userID);
@@ -624,7 +627,7 @@ useEffect(() => {
     </div>
   );
 
-  switch (props.view) {
+  switch (Vieww) {
     case "guestView":
       return guestView;
     case "editView":

@@ -155,6 +155,13 @@ function PersonalCard(props) {
                 <option value="Cairo">Cairo</option>
                 <option value="Alexandria">Alexandria</option>
                 <option value="Giza">Giza</option>
+                <option value="Luxor">Luxor</option>
+                <option value="Aswan">Aswan</option>
+                <option value="Sharm El Sheikh">Sharm El Sheikh</option>
+                <option value="Hurghada">Hurghada</option>
+                <option value="Mansoura">Mansoura</option>
+                <option value="Tanta">Tanta</option>
+                <option value="Port Said">Port Said</option>
               </select>
             </div>
             <div className="input-group gender">
@@ -165,7 +172,7 @@ function PersonalCard(props) {
                   type="radio"
                   id="male"
                   name="gender"
-                  value="male"
+                  value="Male"
                   checked={gender === "Male"}
                   onChange={handleGenderChange}
                   disabled
@@ -178,7 +185,7 @@ function PersonalCard(props) {
                   type="radio"
                   id="female"
                   name="gender"
-                  value="female"
+                  value="Female"
                   checked={gender === "Female"}
                   onChange={handleGenderChange}
                   disabled

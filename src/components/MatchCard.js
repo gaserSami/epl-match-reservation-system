@@ -10,10 +10,28 @@ const MatchCard = (props) => {
   // State to store match details
   const [matchDetails, setMatchDetails] = useState(props.matchDetails || {});
   const [matchID, setMatchID] = useState(props.matchDetails._id);
+  const { setMatchDetailss } = useContext(MatchCardAndDetailsContext);
+  const { setVieww } = useContext(MatchCardAndDetailsContext);
 
   // Update matchDetails when props.matchDetails changes
   useEffect(() => {
     setMatchDetails(props.matchDetails);
+    setMatchDetailss(props.matchDetails);
+    let vieww;
+    switch (props.view) {
+      case 'fanView':
+        vieww = 'bookView';
+        break;
+      case 'editView':
+        vieww = 'editView';
+        break;
+      case 'reservedView':
+        vieww = 'reservedView';
+        break;
+      default:
+        vieww = 'guestView';
+    }
+    setVieww(vieww);
   }, [props.matchDetails]);
 
   // Destructure matchDetails object
@@ -86,15 +104,33 @@ const MatchCard = (props) => {
       </div>
       <div className="buttons">
         {props.view !== 'reservedView' && (
-          <button onClick={() => props.handleTicketsClick(props.view === 'fanView' ? 'bookView' : 'guestView', matchDetails)}>Tickets</button>
+          <button onClick={() => {
+            setMatchDetailss(matchDetails);
+            setVieww(props.view === 'fanView' ? 'bookView' : 'guestView');
+            props.handleTicketsClick(props.view === 'fanView' ? 'bookView' : 'guestView', matchDetails);
+          }}>
+            Tickets
+          </button>
         )}
         {props.view === 'editView' && (
-          <button onClick={() => props.handleTicketsClick('editView', matchDetails)}><img src={editIcon} alt="" /></button>
+          <button onClick={() => {
+            setMatchDetailss(matchDetails);
+            setVieww("editView");
+            props.handleTicketsClick('editView', matchDetails);
+          }}>
+            <img src={editIcon} alt="" />
+          </button>
         )}
         {props.view === 'reservedView' && (
           <>
-          <button className='cancel' onClick={cancel}>Cancel</button>
-          <button onClick={() => props.handleTicketsClick('reservedView', matchDetails)}>view</button>
+            <button className='cancel' onClick={cancel}>Cancel</button>
+            <button onClick={() => {
+              setMatchDetailss(matchDetails);
+              setVieww("reservedView");
+              props.handleTicketsClick('reservedView', matchDetails);
+            }}>
+              view
+            </button>
           </>
         )}
       </div>
