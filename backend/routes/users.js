@@ -19,7 +19,7 @@ const userValidationSchema = Joi.object({
   DateOfBirth: Joi.date().required(),
   Gender: Joi.string().required(),
   City: Joi.string().required(),
-  Address: Joi.string().optional(),
+  Address: Joi.string().allow('', null).optional(),
   Email: Joi.string().email().required(),
   UserType: Joi.string().required(),
   State: Joi.string().valid('accepted', 'pending').optional()
@@ -34,7 +34,7 @@ const userUpdateValidationSchema = Joi.object({
   DateOfBirth: Joi.date().required(),
   Gender: Joi.string().required(),
   City: Joi.string().required(),
-  Address: Joi.string().optional(),
+  Address: Joi.string().allow('', null).optional(),
   Email: Joi.string().email().required(),
   UserType: Joi.string().required(),
   State: Joi.string().valid('accepted', 'pending').optional()

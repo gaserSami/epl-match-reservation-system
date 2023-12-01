@@ -124,6 +124,7 @@ function PersonalCard(props) {
                 value={username}
                 onChange={handleUsernameChange}
                 required
+                disabled
               />
             </div>
             <div className="input-group">
@@ -204,6 +205,7 @@ function PersonalCard(props) {
                 value={email}
                 onChange={handleEmailChange}
                 required
+                disabled
               />
             </div>
             <div className="input-group">
@@ -236,7 +238,6 @@ function PersonalCard(props) {
               placeholder="136 example, example"
               value={address}
               onChange={handleAddressChange}
-              required
             />
           </div>
           <button type="submit">Save</button>

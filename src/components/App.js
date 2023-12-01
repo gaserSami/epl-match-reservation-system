@@ -96,8 +96,8 @@ function App() {
       matchdetails = matchesDetails[0];
       view = 'bookView';
     }
-    setMatchDetails(matchdetails);
-    setMatchDetailsCardView(view);
+    //setMatchDetails(matchdetails);
+    //setMatchDetailsCardView(view);
     setShowMatchDetails(true);
   };
 

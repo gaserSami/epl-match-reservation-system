@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import axios from 'axios';
 import '../styles/EFAview.css'
 import Sidebar from "./Sidebar";
 import MatchCard from "./MatchCard";
 import StadiumCard from "./StadiumCard";
-import { set } from 'mongoose';
+import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
+
 
 function EFAview({ handleTicketsClick, handleSettingsClick, handleAddNewMatch, handleAddNewStadium, userID, handleEditMatch,triggerMainPageRender, handleClose }) {
   // Define the list items for the sidebar
   const listItems = ["Stadiums", "Matches"];
+  const { setMatchDetailss } = useContext(MatchCardAndDetailsContext);
+  const { setVieww } = useContext(MatchCardAndDetailsContext);
 
   // Define the state variables
   const [matchesDetails, setMatchesDetails] = useState([]);
@@ -62,7 +66,10 @@ function EFAview({ handleTicketsClick, handleSettingsClick, handleAddNewMatch, h
                 ))
               )}
               {activeItem === 'Matches' ? (
-                <button className="addSideButton" onClick={handleAddNewMatch}>Add new Match</button>
+                <button className="addSideButton" onClick={() => {
+                  setVieww("addView");
+                  handleAddNewMatch();
+                }}>Add new Match</button>
               ) : (
                 <button className="addSideButton" onClick={handleAddNewStadium}>Add new Stadium</button>
               )}

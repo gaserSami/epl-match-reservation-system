@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../styles/SeatsReservation.css';
 import ReservationContext from './ReservationContext';
+import { set } from 'mongoose';
 
 const SeatsReservation = (props) => {
   const { rows, cols, matchID, disabled } = props;
@@ -10,6 +11,8 @@ const SeatsReservation = (props) => {
   );
   const [mySeats, setMySeats] = useState([]); // [{ row, col }
   const { setMySeatsNumber } = useContext(ReservationContext);
+  const { UserIDD } = useContext(ReservationContext);
+  const [isLoading, setIsLoading] = useState(false);
 
 
   useEffect(() => {
@@ -17,14 +20,24 @@ const SeatsReservation = (props) => {
       try {
         const response = await axios.get(`http://localhost:5000/tickets?MatchID=${matchID}`);
         const ticketsForMatch = response.data.filter(ticket => ticket.MatchID._id === matchID);
+        const myTickets = ticketsForMatch.filter(ticket => ticket.UserID._id === UserIDD);
+        const notMyTickets = ticketsForMatch.filter(ticket => ticket.UserID._id !== UserIDD);
         
         const newSeats = Array.from({ length: rows }, () => Array(cols).fill('vacant'));
         
-        ticketsForMatch.forEach(ticket => {
+        notMyTickets.forEach(ticket => {
           ticket.SeatsNumber.forEach(seatNumber => {
             const rowIndex = Math.floor((seatNumber - 1) / cols);
             const colIndex = (seatNumber - 1) % cols;
             newSeats[rowIndex][colIndex] = 'reserved';
+          });
+        });
+
+        myTickets.forEach(ticket => {
+          ticket.SeatsNumber.forEach(seatNumber => {
+            const rowIndex = Math.floor((seatNumber - 1) / cols);
+            const colIndex = (seatNumber - 1) % cols;
+            newSeats[rowIndex][colIndex] = 'mine';
           });
         });
 
@@ -39,6 +52,7 @@ const SeatsReservation = (props) => {
               prevMySeatNumbers.filter(number => number !== seatIndex)
             );
 
+          
             // Update mySeats to remove the seat
             setMySeats(prevMySeats => 
               prevMySeats.filter(s => s.row !== seat.row || s.col !== seat.col)
@@ -55,13 +69,13 @@ const SeatsReservation = (props) => {
 
 
         setSeats(newSeats);
+       
       } catch (error) {
         console.error('Error fetching seats:', error);
       }
     };
     // Fetch seats initially
     fetchSeats();
-
     // Fetch seats every one second
     const interval = setInterval(fetchSeats, 1000);
     return () => clearInterval(interval);
@@ -102,22 +116,26 @@ const SeatsReservation = (props) => {
 
 
   return (
-    <div className={`seats-container ${disabled ? 'disabled' : ''}`}>
-      {seats.map((rowSeats, rowIndex) => (
-        <div key={rowIndex} className="seat-row">
-          {rowSeats.map((seatStatus, colIndex) => (
-            <button 
-              key={colIndex} 
-              onClick={() => handleSeatClick(rowIndex, colIndex)} 
-              title={seatStatus} 
-              className={`seat ${seatStatus} ${isMySeat(rowIndex, colIndex) ? 'mine' : ''}`}
-              disabled={disabled}
-            />
-          ))}
-        </div>
-      ))}
-    </div>
+    isLoading ? (
+      <div>Loading...</div>
+    ) : (
+      <div className={`seats-container ${disabled ? 'disabled' : ''}`}>
+        {seats.map((rowSeats, rowIndex) => (
+          <div key={rowIndex} className="seat-row">
+            {rowSeats.map((seatStatus, colIndex) => (
+              <button 
+                key={colIndex} 
+                onClick={() => handleSeatClick(rowIndex, colIndex)} 
+                title={seatStatus} 
+                className={`seat ${seatStatus} ${isMySeat(rowIndex, colIndex) ? 'mine' : ''}`}
+                disabled={disabled}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    )
   );
-};
+            };
 
 export default SeatsReservation;

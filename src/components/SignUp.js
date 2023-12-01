@@ -14,13 +14,24 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [address, setAddress] = useState('');
   const [error, setError] = useState(null);
+  const [userType, setUserType] = useState(''); // ['fan', 'EFA'
+
+  const getAuthority = (userType) => {
+    if (userType === 'fan') {
+      return 'Fan';
+    } else if (userType === 'EFAmanager') {
+      return 'EFA Manager';
+    } else if (userType === 'siteAdmin') {
+      return 'Site Administrator';
+    }
+  };
 
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     
     // Validate inputs
-    if (!username || !firstName || !lastName || !city || !gender || !email || !birthdate || !password || !address) {
+    if (!username || !firstName || !lastName || !city || !gender || !email || !birthdate || !password) {
       setError('Please fill in all fields.');
       return;
     }
@@ -36,7 +47,7 @@ function SignUp() {
       DateOfBirth: new Date(birthdate),
       Password: password,
       Address: address,
-      UserType: "fan"
+      UserType: userType,
     };
 
     try {
@@ -53,6 +64,7 @@ function SignUp() {
       setBirthdate('');
       setPassword('');
       setAddress('');
+      setUserType('');
       setError(null);
     } catch (error) {
       setError('Error creating user. Please try again.');
@@ -126,7 +138,7 @@ function SignUp() {
           </div>
           <div className="input-group full-width">
             <label htmlFor="address">Address</label>
-            <input type="text" id="address" placeholder="136 example, example" value={address} onChange={e => setAddress(e.target.value)} required />
+            <input type="text" id="address" placeholder="136 example, example" value={address} onChange={e => setAddress(e.target.value)} />
           </div>
           <button type="submit">SIGN UP</button>
         </form>

@@ -16,7 +16,7 @@ function SiteAdminView({ handleSettingsClick, userID }) {
         const response = await axios.get('http://localhost:5000/users');
         const users = response.data;
         const newUsers = users.filter(user => user.State === 'pending');
-        const existingUsers = users.filter(user => user.State === 'accepted');
+        const existingUsers = users.filter(user => user.State === 'accepted' && user._id !== userID);
         setNewUsers(newUsers);
         setExistingUsers(existingUsers);
       } catch (error) {
@@ -81,13 +81,23 @@ const handleDelete = (id) => {
     setActiveItem(item);
   };
 
+    const getAuthority = (userType) => {
+      if (userType === 'fan') {
+        return 'Fan';
+      } else if (userType === 'EFAmanager') {
+        return 'EFA Manager';
+      } else if (userType === 'siteAdmin') {
+        return 'Site Administrator';
+      }
+    };
   // Render user rows based on active item
   const renderUserRows = () => {
     if (activeItem === "New Users") {
       return newUsers.map((user, index) => (
         <tr key={index}>
-          <td>{user.FirstName}</td>
+          <td>{user.Username}</td>
           <td>{user.Email}</td>
+          <td>{getAuthority(user.UserType)}</td>
           <td className="button">
             <button className="btn approve" onClick={() => handleApprove(user._id)}>Approve</button>
           </td>
@@ -99,8 +109,9 @@ const handleDelete = (id) => {
     } else if (activeItem === "Existing Users") {
       return existingUsers.map((user, index) => (
         <tr key={index}>
-          <td>{user.FirstName}</td>
+          <td>{user.Username}</td>
           <td>{user.Email}</td>
+          <td>{getAuthority(user.UserType)}</td>
           <td className="button"></td>
           <td className="button">
             <button className="btn decline" onClick={() => handleDelete(user._id)}>Remove</button>
@@ -118,8 +129,9 @@ const handleDelete = (id) => {
           <table className="user-table">
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Username</th>
                 <th>Email</th>
+                <th>Authority</th>
                 <th colSpan="2"></th>
               </tr>
             </thead>

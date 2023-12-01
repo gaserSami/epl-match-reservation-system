@@ -345,13 +345,15 @@ useEffect(() => {
               onChange={handleHomeTeamChange}
               required
             >
-              <option>Select home team</option>
-              {props.teams &&
-                props.teams.map((team, index) => (
+             <option>Select home team</option>
+            {props.teams &&
+              props.teams.map((team, index) => (
+                team._id !== awayTeamID && (
                   <option key={index} value={team._id}>
                     {team.TeamName}
                   </option>
-                ))}
+                )
+              ))}
             </select>
           </div>
           <div className="input-group">
@@ -362,13 +364,15 @@ useEffect(() => {
               onChange={handleAwayTeamChange}
               required
             >
-              <option value="">Select away team</option>
-              {props.teams &&
-                props.teams.map((team, index) => (
+             <option value="">Select away team</option>
+            {props.teams &&
+              props.teams.map((team, index) => (
+                team._id !== homeTeamID && (
                   <option key={index} value={team._id}>
                     {team.TeamName}
                   </option>
-                ))}
+                )
+              ))}
             </select>
           </div>
           <div className="input-group">
@@ -419,6 +423,7 @@ useEffect(() => {
               value={price}
               onChange={handlePriceChange}
               required
+              min={0}
             />
           </div>
         </div>
@@ -448,12 +453,14 @@ useEffect(() => {
               onChange={handleLineman1Change}
               required
             >
-              <option value="">Select linesman 1</option>
+               <option value="">Select linesman 1</option>
               {props.linesmen &&
                 props.linesmen.map((linesman, index) => (
-                  <option key={index} value={linesman._id}>
-                    {linesman.Name}
-                  </option>
+                  linesman._id !== lineman2ID && (
+                    <option key={index} value={linesman._id}>
+                      {linesman.Name}
+                    </option>
+                  )
                 ))}
             </select>
           </div>
@@ -465,12 +472,14 @@ useEffect(() => {
               onChange={handleLineman2Change}
               required
             >
-              <option value="">Select linesman 2</option>
+               <option value="">Select linesman 2</option>
               {props.linesmen &&
                 props.linesmen.map((linesman, index) => (
-                  <option key={index} value={linesman._id}>
-                    {linesman.Name}
-                  </option>
+                  linesman._id !== lineman1ID && (
+                    <option key={index} value={linesman._id}>
+                      {linesman.Name}
+                    </option>
+                  )
                 ))}
             </select>
           </div>
@@ -492,12 +501,14 @@ useEffect(() => {
               onChange={handleHomeTeamChange}
               required
             >
-              <option>Select home team</option>
+               <option>Select home team</option>
               {props.teams &&
                 props.teams.map((team, index) => (
-                  <option key={index} value={team._id}>
-                    {team.TeamName}
-                  </option>
+                  team._id !== awayTeamID && (
+                    <option key={index} value={team._id}>
+                      {team.TeamName}
+                    </option>
+                  )
                 ))}
             </select>
           </div>
@@ -509,13 +520,15 @@ useEffect(() => {
               onChange={handleAwayTeamChange}
               required
             >
-              <option value="">Select away team</option>
-              {props.teams &&
-                props.teams.map((team, index) => (
+             <option value="">Select away team</option>
+            {props.teams &&
+              props.teams.map((team, index) => (
+                team._id !== homeTeamID && (
                   <option key={index} value={team._id}>
                     {team.TeamName}
                   </option>
-                ))}
+                )
+              ))}
             </select>
           </div>
           <div className="input-group">
@@ -566,6 +579,7 @@ useEffect(() => {
               value={price}
               onChange={handlePriceChange}
               required
+              min={0}
             />
           </div>
         </div>
@@ -596,12 +610,14 @@ useEffect(() => {
               required
             >
               <option value="">Select linesman 1</option>
-              {props.linesmen &&
-                props.linesmen.map((linesman, index) => (
+            {props.linesmen &&
+              props.linesmen.map((linesman, index) => (
+                linesman._id !== lineman2ID && (
                   <option key={index} value={linesman._id}>
                     {linesman.Name}
                   </option>
-                ))}
+                )
+              ))}
             </select>
           </div>
           <div className="input-group">
@@ -612,13 +628,15 @@ useEffect(() => {
               onChange={handleLineman2Change}
               required
             >
-              <option value="">Select linesman 2</option>
-              {props.linesmen &&
-                props.linesmen.map((linesman, index) => (
+             <option value="">Select linesman 2</option>
+            {props.linesmen &&
+              props.linesmen.map((linesman, index) => (
+                linesman._id !== lineman1ID && (
                   <option key={index} value={linesman._id}>
                     {linesman.Name}
                   </option>
-                ))}
+                )
+              ))}
             </select>
           </div>
         </div>

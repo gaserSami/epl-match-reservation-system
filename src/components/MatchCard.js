@@ -12,7 +12,7 @@ const MatchCard = (props) => {
   const [matchID, setMatchID] = useState(props.matchDetails._id);
   const { setMatchDetailss } = useContext(MatchCardAndDetailsContext);
   const { setVieww } = useContext(MatchCardAndDetailsContext);
-
+  const [ticketPrice, setTicketPrice] = useState(0);
   // Update matchDetails when props.matchDetails changes
   useEffect(() => {
     setMatchDetails(props.matchDetails);
@@ -31,7 +31,6 @@ const MatchCard = (props) => {
       default:
         vieww = 'guestView';
     }
-    setVieww(vieww);
   }, [props.matchDetails]);
 
   // Destructure matchDetails object
@@ -53,6 +52,15 @@ const MatchCard = (props) => {
 
   // Generate random ticket number
   const ticketNumber = matchDetails && matchDetails.ticketNumber ? matchDetails.ticketNumber : 0;
+
+    if (ticketNumber !== 0) {
+      axios.get(`http://localhost:5000/tickets/${ticketNumber}`)
+        .then(response => {
+          const ticket = response.data;
+          setTicketPrice(ticket.Price);
+        })
+        .catch(error => console.error('Error fetching ticket:', error));
+    }
   // Generate match title
   const title = `${homeTeamName} vs ${awayTeamName}`;
 
@@ -66,17 +74,43 @@ const MatchCard = (props) => {
   const cancel = async () => {
     if (ticketNumber !== 0) {
       try {
+        // Fetch the ticket data
+        const ticketResponse = await axios.get(`http://localhost:5000/tickets/${ticketNumber}`);
+        const ticket = ticketResponse.data;
+
+        console.log("ticket:")
+        console.log(ticket);
+
+        // Fetch the match data
+        const matchResponse = await axios.get(`http://localhost:5000/matches/${ticket.MatchID._id}`);
+        const match = matchResponse.data;
+
+        console.log("match:")
+        console.log(matchResponse.data)
+
+        // Get today's date and the match date
+        const today = new Date();
+        const matchDate = new Date(match.MatchDate);
+
+        // Calculate the difference in days
+        const diffInDays = Math.floor((matchDate - today) / (1000 * 60 * 60 * 24));
+
+        // Only allow cancellation if the match is 3 days away or more
+        if (diffInDays < 3) {
+          alert('Cannot cancel a ticket less than 3 days before the match');
+          return;
+        }
+
         // Send a DELETE request to the server
         const response = await axios.delete(`http://localhost:5000/tickets/${ticketNumber}`);
 
         // Check if the request was successful
         if (response.status === 200) {
           console.log('Ticket cancelled successfully');
-        // update the UI here to reflect the cancellation'
-        alert('Ticket cancelled successfully');
-        if (forceFanPageRender) {
-          forceFanPageRender();
-        }
+          alert('Ticket cancelled successfully');
+          if (forceFanPageRender) {
+            forceFanPageRender();
+          }
         } else {
           console.log('Failed to cancel the ticket');
         }
@@ -100,7 +134,7 @@ const MatchCard = (props) => {
         <p className='stadium'>{stadium}, Egypt</p>
       </div>
       <div className="price">
-        {price} L.E
+        {ticketNumber !== 0 ? ticketPrice : price} L.E
       </div>
       <div className="buttons">
         {props.view !== 'reservedView' && (
