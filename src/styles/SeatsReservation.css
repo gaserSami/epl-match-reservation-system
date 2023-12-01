@@ -57,7 +57,7 @@
   background-color: red;
 }
 
-.seats-container:not(.disabled) .seat:hover {
+.seats-container:not(.disabled) .seat:not(.reserved):hover {
   scale: 1.1;
   background-color: yellow;
   cursor: pointer;
