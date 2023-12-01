@@ -16,6 +16,7 @@ import SuccessCard from './SuccessCard';
 import FailedCard from './FailedCard';
 import PaymentCard from './PaymentCard';
 import ReservationContext from './ReservationContext';
+import MatchCardAndDetailsContext from './MatchCardAndDetailsContext';
 import { set } from 'mongoose';
 
 function App() {
@@ -44,9 +45,11 @@ function App() {
   const [triggerMainPageRender, setTriggerMainPageRender] = useState(false);
   const [triggerFanPageRender, setTriggerFanPageRender] = useState(false);
   const [mySeatsNumber, setMySeatsNumber] = useState([]); // New state for seat numbers like [1, 2, 3]
-  const [userIDD, setUserIDD] = useState(null);
+  const [UserIDD, setUserIDD] = useState(null);
   const [Pricee, setPricee] = useState(null);
   const [MatchIDD, setMatchIDD] = useState(null); // New state for seat numbers like [1, 2, 3
+  const [MatchDetailss, setMatchDetailss] = useState([]); // [matchDetails
+  const [Vieww, setVieww] = useState('guestView'); // [matchDetails
 
   const forceMainPageRender = () => {
      // Toggle the state to force re-render
@@ -54,6 +57,13 @@ function App() {
     console.log('forceMainPageRender');
     console.log(triggerMainPageRender);
   };
+
+  const forceFanPageRender = () => {
+    // Toggle the state to force re-render
+   setTriggerFanPageRender(!triggerFanPageRender);
+   console.log('forceFanPageRender');
+   console.log(triggerFanPageRender);
+  }
 
  
 
@@ -186,11 +196,12 @@ function App() {
   return (
     <div className="App">
       <Header currentPage={page} onSignIn={handleSignIn} username={username} />
+      <MatchCardAndDetailsContext.Provider value={{ MatchDetailss, setMatchDetailss, Vieww, setVieww }}>
       {page === 'mainPage' && <MainPage  onSignUp={handleSignUp} handleTicketsClick={handleTicketsClick} />}
       {page === 'signIn' && <SignIn onSignUp={handleSignUp} onLogin={onLogin} />}
       {page === 'siteAdminPage' && <SiteAdminView handleSettingsClick={handleSettingsClick} userID={userID} />}
       {page === 'signUp' && <SignUp />}
-      {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} userID={userID}/>}
+      {page === 'fanPage' && <FanView handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} userID={userID} triggerFanPageRender={triggerFanPageRender}/>}
       {page === 'EFAPage' && (
         <EFAview handleClose={handleClose} triggerMainPageRender={triggerMainPageRender} handleTicketsClick={handleTicketsClick} handleSettingsClick={handleSettingsClick} handleAddNewMatch={handleAddNewMatch} handleEditMatch={handleEditMatch} handleAddNewStadium={handleAddNewStadium} matchesDetails={matchesDetails} userID={userID} />
       )}
@@ -215,7 +226,7 @@ function App() {
         </OverlayContainer>
       )}
 
-      <ReservationContext.Provider value={{ mySeatsNumber, setMySeatsNumber, userIDD, setUserIDD, Pricee, setPricee, MatchIDD, setMatchIDD }}>
+      <ReservationContext.Provider value={{ mySeatsNumber, setMySeatsNumber, UserIDD, setUserIDD, Pricee, setPricee, MatchIDD, setMatchIDD }}>
       {showMatchDetails && (
         <OverlayContainer onClose={handleClose}>
           <MatchDetailsCard view={MatchDetailsCardView} matchDetails={matchDetails} handlePaymentCard={handlePaymentCard} teams={teams} stadiums={stadiums} referees={referees} linesmen={linesmen} forceMainPageRender={forceMainPageRender} userID={userID} />
@@ -223,7 +234,7 @@ function App() {
       )}
       {showPaymentCard && (
         <OverlayContainer onClose={handleClose}>
-          <PaymentCard handleBookTicket={handleBookTicket} />
+          <PaymentCard handleBookTicket={handleBookTicket} forceFanPageRender={forceFanPageRender}/>
         </OverlayContainer>
       )}
     </ReservationContext.Provider>
@@ -238,6 +249,7 @@ function App() {
           <FailedCard message={failedMessage} />
         </OverlayContainer>
       )}
+      </MatchCardAndDetailsContext.Provider>
     </div>
   );
 }

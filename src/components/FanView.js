@@ -16,6 +16,7 @@ function FanView(props) {
   const [activeItem, setActiveItem] = useState(listItems[0]);
   const [userMatches, setUserMatches] = useState([]);
   const [notUserMatches, setNotUserMatches] = useState([]);
+  const [triggerFanPageRender, setTriggerFanPageRender] = useState(false);
   //function
   const [refresher, setRefresher] = useState(false);
 
@@ -24,6 +25,10 @@ const forceFanPageRender = () => {
   console.log("forceRender");
   console.log(refresher);
 }
+
+useEffect(() => {
+ setRefresher(!refresher);
+}, [props.triggerFanPageRender]);
 
 
   useEffect(() => {
@@ -81,7 +86,7 @@ const forceFanPageRender = () => {
       ));
       
      const nnotUserMatches = matchesDetails.map((match, index) => (
-        <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="fanView"/>
+        <MatchCard key={index} matchDetails={match} handleTicketsClick={() => props.handleTicketsClick()} view="fanView" forceFanPageRender={forceFanPageRender}/>
       ));
 
       setUserMatches(uuserMatches);

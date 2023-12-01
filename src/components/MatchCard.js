@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/MatchCard.css';
 import editIcon from '../assets/editing.png';
+import { useContext } from 'react';
+import MatchCardAndDetailsContext from './MatchCardAndDetailsContext';
+
 
 const MatchCard = (props) => {
   // State to store match details

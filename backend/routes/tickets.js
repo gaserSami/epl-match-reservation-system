@@ -91,6 +91,29 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Create a GET route to fetch tickets by matchID as a URL parameter
+router.get('/tickets/:matchID', async (req, res) => {
+  const matchID = req.params.matchID;
+
+  try {
+    const matchObjectId = mongoose.Types.ObjectId(matchID);
+    const tickets = await Ticket.find({ 'MatchID._id': matchObjectId });
+
+    if (tickets.length === 0) {
+      return res.status(404).send('Ticket not found.');
+    }
+
+    res.json(tickets);
+  } catch (error) {
+    if (error.kind === 'ObjectId') {
+      return res.status(400).send('Invalid matchID format');
+    }
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 // Update a ticket by id
 router.put('/:id', async (req, res) => {
   try {
