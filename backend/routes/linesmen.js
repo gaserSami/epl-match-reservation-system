@@ -29,6 +29,23 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Create multiple Linesmen
+router.post('/bulk', async (req, res) => {
+  try {
+    const { error } = Joi.array().items(linesmanValidationSchema).validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const linesmen = req.body.map(linesmanData => new Linesman(linesmanData));
+    const savedLinesmen = await Linesman.insertMany(linesmen);
+    res.status(201).json(savedLinesmen);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
 // Create a Linesman
 router.post('/', async (req, res) => {
   try {
@@ -49,6 +66,9 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const linesman = await Linesman.findById(id);
+    if (!linesman) return res.status(404).send('Linesman not found.');
+
     const { error } = linesmanValidationSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
@@ -59,13 +79,15 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-  
 });
 
 // Delete a Linesman
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const linesman = await Linesman.findById(id);
+    if (!linesman) return res.status(404).send('Linesman not found.');
+
     await Linesman.findByIdAndDelete(id);
     res.json({ message: 'Linesman deleted successfully' });
   } catch (error) {

@@ -1,12 +1,14 @@
+/* Container for the sign-up form */
 .signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh; /* Full screen height */
   background-color: hsl(210, 16%, 93%); /* Light grey background */
-width: 100%;
+  width: 100%;
 }
 
+/* Sign-up box */
 .signup-container .signup-box {
   background-color: #fff;
   padding: 40px;
@@ -17,41 +19,48 @@ width: 100%;
   text-align: center;
 }
 
+/* Heading in the sign-up box */
 .signup-container h2 {
   margin-bottom: 10px;
 }
 
+/* Paragraph in the sign-up box */
 .signup-container p {
   color: #6c757d; /* Grey text */
   margin-bottom: 20px;
 }
 
+/* Label in the sign-up box */
 .signup-container label {
- font-weight:600;
+  font-weight: 600;
 }
 
+/* Input row container */
 .signup-container .input-row {
   display: flex;
   flex-wrap: wrap; /* Ensure it wraps on smaller screens */
 }
 
+/* Input group */
 .signup-container .input-group {
   margin-bottom: 20px;
   flex: 1;
   text-align: left;
   margin-right: 4%;
-
 }
 
+/* Full-width input group */
 .signup-container .input-group.full-width {
   flex-basis: 100%; /* Full width input field */
 }
 
+/* Label in the input group */
 .signup-container .input-group label {
   display: block;
   margin-bottom: 5px;
 }
 
+/* Input field in the input group */
 .signup-container .input-group input {
   width: 100%;
   padding: 10px;
@@ -59,6 +68,7 @@ width: 100%;
   border-radius: 5px;
 }
 
+/* Sign-up button */
 .signup-container button {
   width: 100%;
   padding: 10px;
@@ -70,25 +80,28 @@ width: 100%;
   margin-top: 20px; /* Space above the button */
 }
 
+/* Hover effect on the sign-up button */
 .signup-container button:hover {
   background-color: #03297a;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .input-group {
     flex-basis: calc(50% - 10px); /* Make inputs take half-width on smaller screens */
   }
 }
 
+/* Responsive adjustments for very small screens */
 @media (max-width: 480px) {
   .input-group {
     flex-basis: 100%; /* Stack inputs on very small screens */
   }
 }
 
-
-.select-group, .gender {
+/* Select group and gender container */
+.select-group,
+.gender {
   flex-basis: calc(50% - 10px); /* Adjust width for select and radio group */
 }
 
@@ -102,8 +115,8 @@ width: 100%;
   appearance: none;
 }
 
-.signup-container .genderContainer
-{
+/* Gender container */
+.signup-container .genderContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -111,7 +124,7 @@ width: 100%;
 
 /* Style individual radio button labels */
 .signup-container .gender label {
-flex: 0.15;
+  flex: 0.15;
 }
 
 /* Space out the radio buttons */
@@ -119,12 +132,11 @@ flex: 0.15;
   flex: 0.15;
 }
 
-
-/* Responsive adjustments */
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
-  .input-group, .select-group, .gender {
+  .input-group,
+  .select-group,
+  .gender {
     flex-basis: 100%; /* Make inputs take full-width on smaller screens */
   }
 }
-
-

@@ -29,6 +29,22 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Create multiple referees
+router.post('/bulk', async (req, res) => {
+  try {
+    const referees = req.body;
+    if (!Array.isArray(referees)) {
+      return res.status(400).json({ message: 'Invalid input. Expected an array of referees.' });
+    }
+
+    const createdReferees = await Referee.create(referees);
+    res.status(201).json(createdReferees);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
 // Create a Referee
 router.post('/', async (req, res) => {
   try {
@@ -49,6 +65,9 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const referee = await Referee.findById(id);
+    if (!referee) return res.status(404).send('Referee not found.');
+
     const { error } = refereeValidationSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
@@ -59,13 +78,15 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-  
 });
 
 // Delete a Referee
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const referee = await Referee.findById(id);
+    if (!referee) return res.status(404).send('Referee not found.');
+
     await Referee.findByIdAndDelete(id);
     res.json({ message: 'Referee deleted successfully' });
   } catch (error) {

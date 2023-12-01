@@ -31,6 +31,27 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+
+
+// Create multiple stadiums
+router.post('/bulk', async (req, res) => {
+  try {
+    const stadiums = req.body;
+    const validationPromises = stadiums.map(stadium => stadiumValidationSchema.validateAsync(stadium));
+    const validationResults = await Promise.all(validationPromises);
+    const validationErrors = validationResults.filter(result => result.error);
+    if (validationErrors.length > 0) {
+      const errorMessages = validationErrors.map(result => result.error.details[0].message);
+      return res.status(400).json({ message: errorMessages });
+    }
+
+    const savedStadiums = await Stadium.insertMany(stadiums);
+    res.status(201).json(savedStadiums);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 // Create a Stadium
 router.post('/', async (req, res) => {
   try {
@@ -47,10 +68,14 @@ router.post('/', async (req, res) => {
   }
 });
 
+
 // Update a stadium by id
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const stadium = await Stadium.findById(id);
+    if (!stadium) return res.status(404).send('Stadium not found.');
+
     const { error } = stadiumValidationSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
@@ -61,13 +86,15 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-  
 });
 
 // Delete a Stadium
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const stadium = await Stadium.findById(id);
+    if (!stadium) return res.status(404).send('Stadium not found.');
+
     await Stadium.findByIdAndDelete(id);
     res.json({ message: 'Stadium deleted successfully' });
   } catch (error) {

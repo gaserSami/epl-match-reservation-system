@@ -47,6 +47,8 @@ app.post('/login', async (req, res) => {
   const user = await User.findOne({ Username });
   if (!user) return res.status(400).send('Invalid username or password.');
 
+  if (user.State !== 'accepted') return res.status(400).send('Your account has not been accepted yet.');
+
   const validPassword = await bcrypt.compare(Password, user.Password);
   if (!validPassword) return res.status(400).send('Invalid username or password.');
 

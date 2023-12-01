@@ -1,17 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import '../styles/PersonalCard.css';
 
 function PersonalCard(props) {
-  const [firstName, setFirstName] = useState(props.personalDetails.firstName);
-  const [lastName, setLastName] = useState(props.personalDetails.lastName);
-  const [city, setCity] = useState(props.personalDetails.city);
-  const [gender, setGender] = useState(props.personalDetails.gender);
-  const [email, setEmail] = useState(props.personalDetails.email);
-  const [birthdate, setBirthdate] = useState(props.personalDetails.birthdate);
-  const [password, setPassword] = useState(props.personalDetails.password);
-  const [address, setAddress] = useState(props.personalDetails.address);
-  const [username, setUsername] = useState(props.personalDetails.username);
+  // State variables for personal details
+  const [userID, setUserID] = useState(props.personalDetails._id);
+  const [firstName, setFirstName] = useState(props.personalDetails.FirstName);
+  const [lastName, setLastName] = useState(props.personalDetails.LastName);
+  const [city, setCity] = useState(props.personalDetails.City);
+  const [gender, setGender] = useState(props.personalDetails.Gender);
+  const [email, setEmail] = useState(props.personalDetails.Email);
+  const [birthdate, setBirthdate] = useState(new Date(props.personalDetails.DateOfBirth).toISOString().split('T')[0]);
+  const [password, setPassword] = useState("password");
+  const [address, setAddress] = useState(props.personalDetails.Address);
+  const [username, setUsername] = useState(props.personalDetails.Username);
+  const [statusMessage, setStatusMessage] = useState('');
 
+
+  // Fetch user data when component mounts
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  // Fetch user data from the server
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/users/${userID}`);
+      const user = response.data;
+      setFirstName(user.FirstName);
+      setLastName(user.LastName);
+      setCity(user.City);
+      setGender(user.Gender);
+      setEmail(user.Email);
+      setBirthdate(new Date(user.DateOfBirth).toISOString().split('T')[0]);
+      setPassword("password");
+      setAddress(user.Address);
+      setUsername(user.Username);
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
+
+  // Update user data on form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const updatedUser = {
+      FirstName: firstName,
+      LastName: lastName,
+      City: city,
+      Gender: gender,
+      Email: email,
+      DateOfBirth: new Date(birthdate),
+      Password: password,
+      Address: address,
+      Username: username,
+      UserType: props.personalDetails.UserType,
+      State: props.personalDetails.State
+    };
+
+    try {
+      const response = await axios.put(`http://localhost:5000/users/${userID}`, updatedUser);
+      console.log(response.data);
+      fetchUserData(); // Fetch the latest user data after updating it
+      setStatusMessage({ text: 'Update successful', color: 'green' });
+    } catch (error) {
+      console.error('There was an error!', error);
+      setStatusMessage({ text: 'Update failed', color: 'red' });
+    }
+  };
+
+  // Event handlers for input changes
   const handleFirstNameChange = (event) => {
     setFirstName(event.target.value);
   };
@@ -50,10 +109,11 @@ function PersonalCard(props) {
 
   return (
     <div className="personal-container">
+      <p style={{ color: 'red' }}><b>NOTE:</b> don't change password textbox unless you want to change password to avoid account loss</p>
       <div className="personal-card-box">
         <h2>Personal Info</h2>
         <p>Please enter your details.</p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="input-row">
             <div className="input-group">
               <label htmlFor="username">Username</label>
@@ -63,6 +123,7 @@ function PersonalCard(props) {
                 placeholder="example"
                 value={username}
                 onChange={handleUsernameChange}
+                required
                 disabled
               />
             </div>
@@ -74,6 +135,7 @@ function PersonalCard(props) {
                 placeholder="example"
                 value={firstName}
                 onChange={handleFirstNameChange}
+                required
               />
             </div>
             <div className="input-group">
@@ -84,15 +146,23 @@ function PersonalCard(props) {
                 placeholder="example"
                 value={lastName}
                 onChange={handleLastNameChange}
+                required
               />
             </div>
             <div className="input-group">
               <label htmlFor="city">City</label>
-              <select id="city" value={city} onChange={handleCityChange}>
+              <select id="city" value={city} onChange={handleCityChange} required>
                 <option value="">Select a city</option>
                 <option value="Cairo">Cairo</option>
                 <option value="Alexandria">Alexandria</option>
                 <option value="Giza">Giza</option>
+                <option value="Luxor">Luxor</option>
+                <option value="Aswan">Aswan</option>
+                <option value="Sharm El Sheikh">Sharm El Sheikh</option>
+                <option value="Hurghada">Hurghada</option>
+                <option value="Mansoura">Mansoura</option>
+                <option value="Tanta">Tanta</option>
+                <option value="Port Said">Port Said</option>
               </select>
             </div>
             <div className="input-group gender">
@@ -103,10 +173,11 @@ function PersonalCard(props) {
                   type="radio"
                   id="male"
                   name="gender"
-                  value="male"
-                  checked={gender === "male"}
+                  value="Male"
+                  checked={gender === "Male"}
                   onChange={handleGenderChange}
                   disabled
+                  required
                 />
               </div>
               <div className="genderContainer">
@@ -115,10 +186,11 @@ function PersonalCard(props) {
                   type="radio"
                   id="female"
                   name="gender"
-                  value="female"
-                  checked={gender === "female"}
+                  value="Female"
+                  checked={gender === "Female"}
                   onChange={handleGenderChange}
                   disabled
+                  required
                 />
               </div>
             </div>
@@ -132,6 +204,8 @@ function PersonalCard(props) {
                 placeholder="example@gmail.com"
                 value={email}
                 onChange={handleEmailChange}
+                required
+                disabled
               />
             </div>
             <div className="input-group">
@@ -141,6 +215,7 @@ function PersonalCard(props) {
                 id="birthdate"
                 value={birthdate}
                 onChange={handleBirthdateChange}
+                required
               />
             </div>
             <div className="input-group">
@@ -151,6 +226,7 @@ function PersonalCard(props) {
                 placeholder="********"
                 value={password}
                 onChange={handlePasswordChange}
+                required
               />
             </div>
           </div>
@@ -166,6 +242,7 @@ function PersonalCard(props) {
           </div>
           <button type="submit">Save</button>
         </form>
+        <p style={{ color: statusMessage.color }}>{statusMessage.text}</p>
       </div>
     </div>
   );

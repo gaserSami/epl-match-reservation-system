@@ -9,9 +9,10 @@ const UserSchema = new mongoose.Schema({
   DateOfBirth: { type: Date, required: true },
   Gender: { type: String, required: true },
   City: { type: String, required: true },
-  Address: { type: String, required: true },
+  Address: { type: String, required: false },
   Email: { type: String, required: true, unique: true },
-  UserType: { type: String, required: true }
+  UserType: { type: String, required: true },
+  State: { type: String, required: false, default: 'pending', enum: ['accepted', 'pending'] }
 });
 
 // Create a model from the schema

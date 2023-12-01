@@ -1,22 +1,34 @@
+// Import necessary libraries and components
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "../styles/MainPage.css";
 import MatchCard from "./MatchCard";
 
-
+// Define MainPage component
 function MainPage({ onSignUp, handleTicketsClick}) {
-  const [matchesDetails, setMatchesDetails] = useState([]);
+  // Define state variables
+  const [matches, setMatches] = useState([]);
+  const [error, setError] = useState(null);
+
+
+  console.log('MainPage');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/matches') // Adjust the URL as necessary
-      .then(response => {
-        setMatchesDetails(response.data);
-      })
-      .catch(error => {
+    const fetchMatches = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/matches');
+        setMatches(response.data);
+      } catch (error) {
         console.error('There was an error!', error);
-      });
+      }
+    };
+  
+    fetchMatches();
   }, []);
 
+
+
+  // Render the component
   return (
     <div className="mainPage">
       <div className="landingSection">
@@ -31,9 +43,14 @@ function MainPage({ onSignUp, handleTicketsClick}) {
       </div>
       <h1>UPCOMING MATCHES</h1>
       <div className="matchesContainer">
-      {matchesDetails.map((match, index) => (
-     <MatchCard key={index} matchDetails={match} handleTicketsClick={handleTicketsClick} view="guestView"/>
-     ))}
+      {/* If there's an error, display it. Otherwise, map over matchesDetails and render a MatchCard for each match. */}
+      {error ? (
+        <div>Error: {error}</div>
+      ) : (
+        matches.map((match, index) => (
+          <MatchCard key={index} matchDetails={match} handleTicketsClick={handleTicketsClick} view="guestView"/>
+        ))
+      )}
       </div>
       <button className="sideButton" onClick={onSignUp}>Sign in now to book your ticket!</button>
     </div>

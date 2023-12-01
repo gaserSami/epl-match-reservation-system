@@ -29,6 +29,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+
 // Create a Team
 router.post('/', async (req, res) => {
   try {
@@ -45,10 +46,14 @@ router.post('/', async (req, res) => {
   }
 });
 
+
 // Update a team by id
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const team = await Team.findById(id);
+    if (!team) return res.status(404).send('Team not found.');
+
     const { error } = teamValidationSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
@@ -59,13 +64,15 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-  
 });
 
 // Delete a Team
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const team = await Team.findById(id);
+    if (!team) return res.status(404).send('Team not found.');
+
     await Team.findByIdAndDelete(id);
     res.json({ message: 'Team deleted successfully' });
   } catch (error) {

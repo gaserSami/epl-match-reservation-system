@@ -1,101 +1,84 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import axios from 'axios';
 import '../styles/EFAview.css'
 import Sidebar from "./Sidebar";
 import MatchCard from "./MatchCard";
 import StadiumCard from "./StadiumCard";
-import { useState } from "react";
+import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
 
-function EFAview({handleTicketsClick, handleSettingsClick, handleAddNewMatch, handleAddNewStadium}) {
+
+function EFAview({ handleTicketsClick, handleSettingsClick, handleAddNewMatch, handleAddNewStadium, userID, handleEditMatch,triggerMainPageRender, handleClose }) {
+  // Define the list items for the sidebar
   const listItems = ["Stadiums", "Matches"];
+  const { setMatchDetailss } = useContext(MatchCardAndDetailsContext);
+  const { setVieww } = useContext(MatchCardAndDetailsContext);
+
+  // Define the state variables
+  const [matchesDetails, setMatchesDetails] = useState([]);
+  const [stadiumsDetails, setStadiumsDetails] = useState([{}]);
   const [activeItem, setActiveItem] = useState(listItems[1]);
+  const [triggerMainPageRenderr, setTriggerMainPageRender] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Handle the click event on sidebar items
   const handleItemClick = (item) => {
     setActiveItem(item);
   };
-  const matchesDetails = [
-    {
-      date: '2023-01-01',
-      time: '18:00',
-      homeTeam: 'Al AHLY',
-      awayTeam: 'Al GOUNA',
-      stadium: 'Cairo Stadium',
-      price: 69.99
-    },
-    {
-      date: '2023-04-11',
-      time: '12:00',
-      homeTeam: 'Al BHLY',
-      awayTeam: 'GESOOO',
-      stadium: 'Giza Stadium',
-      price: 79.99
-    },
-    {
-      date: '2023-11-21',
-      time: '11:00',
-      homeTeam: 'AYMOOON',
-      awayTeam: 'AL ATTAWY',
-      stadium: 'Cairo Stadium',
-      price: 89.99
-    },
-    {
-      date: '2023-02-03',
-      time: '10:00',
-      homeTeam: 'FAHDOKA',
-      awayTeam: 'GHANNA',
-      stadium: 'Cairo Stadium',
-      price: 99.99
-    }
-  ];
 
-  const stadiumsDetails = [
-    {
-      name: 'Cairo Stadium',
-      shape: 'rectangular',
-      rows: 100,
-      columns: 100
-    },
-    {
-      name: 'Giza Stadium',
-      shape: 'rectangular',
-      rows: 40,
-      columns: 40
-    },
-    {
-      name: 'Alex Stadium',
-      shape: 'rectangular',
-      rows: 50,
-      columns: 60
-    },
-    {
-      name: 'Suez Stadium',
-      shape: 'rectangular',
-      rows: 90,
-      columns: 100
-    }
-  ]
+  // Fetch the matches and stadiums data from the server
+  useEffect(() => {
+    setLoading(true);
+    const fetchMatchesAndStadiums = async () => {
+      try {
+        const matchesResponse = await axios.get('http://localhost:5000/matches');
+        const stadiumsResponse = await axios.get('http://localhost:5000/stadiums');
+  
+        setMatchesDetails(matchesResponse.data);
+        setStadiumsDetails(stadiumsResponse.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    };
+  
+    fetchMatchesAndStadiums();
+  }, [triggerMainPageRender]);
 
-return (
-  <div className="EFAview">
-    <Sidebar listItems={listItems} activeItem={activeItem} handleItemClick={handleItemClick} handleSettingsClick={handleSettingsClick}/>
-  <div className="main">
-    <div className="cardsContainer">
-    {activeItem === 'Matches' ? (
-            matchesDetails.map((match, index) => (
-              <MatchCard key={index} matchDetails={match} handleTicketsClick={handleTicketsClick} view="editView" />
-            ))
-          ) : (
-            stadiumsDetails.map((stadium, index) => (
-              <StadiumCard key={index} stadiumDetails={stadium} />
-            ))
-          )}
-      {activeItem === 'Matches' ? (
-    <button className="addSideButton" onClick={handleAddNewMatch}>Add new Match</button>
-    ) : (
-    <button className="addSideButton" onClick={handleAddNewStadium}>Add new Stadium</button>
-    )}
-    </div>  
-  </div>
-</div>
-);
+
+
+  return (
+    <div className="EFAview">
+      {loading ? (
+        <div>Loading...</div> // Replace this with your loading spinner or message
+      ) : (
+        <>
+          <Sidebar listItems={listItems} activeItem={activeItem} handleItemClick={handleItemClick} handleSettingsClick={handleSettingsClick} userID={userID}/>
+          <div className="main">
+            <div className="cardsContainer">
+              {activeItem === 'Matches' ? (
+                matchesDetails.map((match, index) => (
+                  <MatchCard key={index} matchDetails={match} handleTicketsClick={handleTicketsClick} handleClose={handleClose} view="editView"/>
+                ))
+              ) : (
+                stadiumsDetails.map((stadium, index) => (
+                  <StadiumCard key={index} stadiumDetails={stadium}/>
+                ))
+              )}
+              {activeItem === 'Matches' ? (
+                <button className="addSideButton" onClick={() => {
+                  setVieww("addView");
+                  handleAddNewMatch();
+                }}>Add new Match</button>
+              ) : (
+                <button className="addSideButton" onClick={handleAddNewStadium}>Add new Stadium</button>
+              )}
+            </div>  
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default EFAview;

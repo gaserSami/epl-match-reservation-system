@@ -1,40 +1,56 @@
+/* Sidebar container */
 .sidebar {
-  height: 90vh;
-  position: fixed;
-  background-color: #4C6EA5; /* Replace with the exact color code from the image */
-  color: white;
+  height: 90vh; /* Set the height to 90% of the viewport height */
+  position: fixed; /* Fix the position of the sidebar */
+  background-color: #4c6ea588; /* Replace with the exact color code from the image */
+  color: white; /* Set the text color to white */
   width: 15%; /* Adjust width to match your design */
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Arrange items vertically */
+  box-sizing: border-box; /* Include padding and border in the total width and height */
 }
 
+/* Sidebar menu items */
 .sidebar .menu-item {
-  padding: 20px;
-  text-align: center;
-  border-bottom: 1px solid #365882; /* Darker shade for the border */
-  background-color: #365882;
-  cursor: pointer;
+  padding: 20px; /* Add padding around the menu items */
+  text-align: center; /* Center align the text */
+  border-bottom: 1px solid #365882; /* Add a bottom border with a darker shade */
+  background-color: #365882; /* Set the background color */
+  cursor: pointer; /* Change cursor to pointer on hover */
 }
 
+/* Text color for menu items */
 .sidebar .menu-item > span {
-  color: white;
+  color: white; /* Set the text color to white */
 }
 
-.sidebar .menu-item.active{
-  background-color: #01329d;
+/* Active menu item */
+.sidebar .menu-item.active {
+  background-color: #01329d; /* Set a different background color for the active menu item */
 }
 
+/* Hover effect for menu items */
+.sidebar .menu-item:hover {
+  background-color: #4caf50; /* Change background color on hover */
+}
+
+/* Remove bottom border for last menu item */
 .sidebar .menu-item:last-child {
   border-bottom: none; /* No border for the last item */
 }
 
+/* Settings menu item */
 .sidebar .menu-item.settings {
   align-self: flex-end; /* Align settings to the bottom */
   position: absolute; /* Position at the bottom */
-  bottom: 0px;
-  width: 100%;
-  background-color: #444444;
+  bottom: 0px; /* Set distance from the bottom */
+  width: 100%; /* Set width to 100% */
+  background-color: #202020d0; /* Set the background color */
+}
+
+/* Hover effect for settings menu item */
+.sidebar .menu-item.settings:hover {
+  background-color: #202020; /* Change background color on hover */
 }
 
 /* Icons and further styling can be added with pseudo-elements or additional spans/classes */
