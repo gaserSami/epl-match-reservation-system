@@ -1,17 +1,19 @@
 /* Style for the main page container */
 .mainPage {
   height: 100%;
+  width: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 /* Style for the landing section of the main page */
 .mainPage .landingSection {
-  background-image: URL('../assets/aboSalah.jpeg');
+  background-image: URL('../assets/ALAHLY.jpg');
   opacity: 0.8;
-  background-size: cover;
-  background-blend-mode: overlay;
+  background-size:cover;
+  background-blend-mode:multiply;
   height: 85vh;
   width: 100%;
   display: flex;
@@ -25,6 +27,28 @@
 /* Style for the main heading on the main page */
 .mainPage > h1 {
   color: white;
+}
+
+/* Style for the landing text on the main page */
+.mainPage .landingSection .landingText {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style for the first heading in the landing text on the main page */
+.mainPage .landingSection .landingText > h1:nth-child(2) {
+  font-size: 3rem;
+  margin-bottom: 0;
+  color: yellow;
+}
+
+/* Style for the second heading in the landing text on the main page */
+.mainPage .landingSection .landingText > h1:last-child {
+  font-size: 2rem;
+  margin-bottom: 0;
 }
 
 /* Style for the container that holds the matches on the main page */

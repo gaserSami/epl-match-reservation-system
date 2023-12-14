@@ -1,21 +1,31 @@
-import React, { useState,useEffect } from "react";
-import axios from "axios";
-import "../styles/StadiumDetailsCard.css";
-import stadiumIcon from '../assets/stadium.png';
+/*
+  This component is used to display the stadium details card in the main page.
+*/
 
+// importing dependencies
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+// importing styles
+import "../styles/StadiumDetailsCard.css";
+// importing assets
+import stadiumIcon from "../assets/stadium.png";
+
+// Define StadiumDetailsCard component
 function StadiumDetailsCard(props) {
-  const [stadiumDetails, setStadiumDetails] = useState(props.stadiumDetails || {
-    StadiumName: "",
-    Rows: "",
-    Columns: ""
-  });
-   //function
-   const [refresher, setRefresher] = useState(false);
-   const {forceMainPageRender} = props;
- 
-   useEffect(() => {
-     forceMainPageRender();
-   }, [refresher]);
+  const [stadiumDetails, setStadiumDetails] = useState(
+    props.stadiumDetails || {
+      StadiumName: "",
+      Rows: "",
+      Columns: "",
+    }
+  );
+  //function
+  const [refresher, setRefresher] = useState(false);
+  const { forceMainPageRender } = props;
+
+  useEffect(() => {
+    forceMainPageRender();
+  }, [refresher]);
 
   const handleNameChange = (e) => {
     setStadiumDetails({ ...stadiumDetails, StadiumName: e.target.value });
@@ -32,17 +42,18 @@ function StadiumDetailsCard(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Make a POST request to the backend server to add the stadium details to the database
-    axios.post("http://localhost:5000/stadiums", stadiumDetails)
-      .then(response => {
+    axios
+      .post("http://localhost:5000/stadiums", stadiumDetails)
+      .then((response) => {
         // Handle the response from the server
         console.log(response.data); // You can customize this based on your requirements
-        setRefresher(prev => !prev);
-        alert('Stadium details added successfully!');
+        setRefresher((prev) => !prev);
+        alert("Stadium details added successfully!");
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle any errors that occur during the request
-        setRefresher(prev => !prev);
-        alert('There was an error! Please re-check the form.');
+        setRefresher((prev) => !prev);
+        alert("There was an error! Please re-check the form.");
         console.error(error);
       });
   };

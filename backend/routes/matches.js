@@ -1,3 +1,12 @@
+/*
+  This file contains the routes for the Match model.
+  The routes are mounted at /matches.
+  The routes use the Match model and Joi validation.
+  The routes are exported for use in server.js.
+*/
+
+
+// requires: express, router, Match model, Joi
 const express = require('express');
 const router = express.Router();
 const Match = require('../models/Match'); // Adjust the path as necessary
@@ -119,4 +128,5 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Export the router
 module.exports = router;
