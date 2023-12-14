@@ -18,7 +18,6 @@ import PaymentCard from "./PaymentCard";
 import ReservationContext from "./ReservationContext";
 import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
 
-
 function App() {
   const [userID, setUserID] = useState(null);
   const [username, setUsername] = useState("");
