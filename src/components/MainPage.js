@@ -1,7 +1,16 @@
-// Import necessary libraries and components
+/*
+ * This component renders the main page of the website. (guest)
+ * It contains the landing section and the match cards.
+ * It also fetches the matches data from the server.
+ * It also handles the click events on the sign up button.
+ * It also handles the click events on the tickets button.
+ */
+// importing dependencies
 import React, { useState, useEffect } from "react"; // React
 import axios from "axios"; // Axios
+// importing styles
 import "../styles/MainPage.css"; // CSS
+// importing components
 import MatchCard from "./MatchCard"; // MatchCard component
 
 // Define MainPage component

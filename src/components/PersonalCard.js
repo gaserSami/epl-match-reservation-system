@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
-import '../styles/PersonalCard.css';
+/*
+  This component is responsible for rendering the personal details card.
+  It is used to display the personal details of the user.
+*/
 
+// importing dependencies
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+// importing styles
+import "../styles/PersonalCard.css";
+
+// Define PersonalCard component
 function PersonalCard(props) {
   // State variables for personal details
   const [userID, setUserID] = useState(props.personalDetails._id);
@@ -10,12 +18,13 @@ function PersonalCard(props) {
   const [city, setCity] = useState(props.personalDetails.City);
   const [gender, setGender] = useState(props.personalDetails.Gender);
   const [email, setEmail] = useState(props.personalDetails.Email);
-  const [birthdate, setBirthdate] = useState(new Date(props.personalDetails.DateOfBirth).toISOString().split('T')[0]);
+  const [birthdate, setBirthdate] = useState(
+    new Date(props.personalDetails.DateOfBirth).toISOString().split("T")[0]
+  );
   const [password, setPassword] = useState("password");
   const [address, setAddress] = useState(props.personalDetails.Address);
   const [username, setUsername] = useState(props.personalDetails.Username);
-  const [statusMessage, setStatusMessage] = useState('');
-
+  const [statusMessage, setStatusMessage] = useState("");
 
   // Fetch user data when component mounts
   useEffect(() => {
@@ -32,12 +41,12 @@ function PersonalCard(props) {
       setCity(user.City);
       setGender(user.Gender);
       setEmail(user.Email);
-      setBirthdate(new Date(user.DateOfBirth).toISOString().split('T')[0]);
+      setBirthdate(new Date(user.DateOfBirth).toISOString().split("T")[0]);
       setPassword("password");
       setAddress(user.Address);
       setUsername(user.Username);
     } catch (error) {
-      console.error('There was an error!', error);
+      console.error("There was an error!", error);
     }
   };
 
@@ -56,17 +65,20 @@ function PersonalCard(props) {
       Address: address,
       Username: username,
       UserType: props.personalDetails.UserType,
-      State: props.personalDetails.State
+      State: props.personalDetails.State,
     };
 
     try {
-      const response = await axios.put(`http://localhost:5000/users/${userID}`, updatedUser);
+      const response = await axios.put(
+        `http://localhost:5000/users/${userID}`,
+        updatedUser
+      );
       console.log(response.data);
       fetchUserData(); // Fetch the latest user data after updating it
-      setStatusMessage({ text: 'Update successful', color: 'green' });
+      setStatusMessage({ text: "Update successful", color: "green" });
     } catch (error) {
-      console.error('There was an error!', error);
-      setStatusMessage({ text: 'Update failed', color: 'red' });
+      console.error("There was an error!", error);
+      setStatusMessage({ text: "Update failed", color: "red" });
     }
   };
 
@@ -109,7 +121,10 @@ function PersonalCard(props) {
 
   return (
     <div className="personal-container">
-      <p style={{ color: 'red' }}><b>NOTE:</b> don't change password textbox unless you want to change password to avoid account loss</p>
+      <p style={{ color: "red" }}>
+        <b>NOTE:</b> don't change password textbox unless you want to change
+        password to avoid account loss
+      </p>
       <div className="personal-card-box">
         <h2>Personal Info</h2>
         <p>Please enter your details.</p>
@@ -151,7 +166,12 @@ function PersonalCard(props) {
             </div>
             <div className="input-group">
               <label htmlFor="city">City</label>
-              <select id="city" value={city} onChange={handleCityChange} required>
+              <select
+                id="city"
+                value={city}
+                onChange={handleCityChange}
+                required
+              >
                 <option value="">Select a city</option>
                 <option value="Cairo">Cairo</option>
                 <option value="Alexandria">Alexandria</option>

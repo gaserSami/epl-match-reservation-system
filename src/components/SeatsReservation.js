@@ -1,9 +1,18 @@
+/*
+  This component is responsible for displaying the seats of a match and allowing the user to reserve seats.
+  It is used to display the seats of a match and allow the user to reserve seats.
+*/
+
+// importing dependencies
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+// importing styles
 import '../styles/SeatsReservation.css';
+// importing context
 import ReservationContext from './ReservationContext';
-import { set } from 'mongoose';
 
+
+// Define SeatsReservation component
 const SeatsReservation = (props) => {
   const { rows, cols, matchID, disabled } = props;
   const [seats, setSeats] = useState(() => 
@@ -22,6 +31,7 @@ useEffect(() => {
    return () => clearTimeout(timer);
 }, []);
 
+// Fetch seats from the server
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -88,6 +98,8 @@ useEffect(() => {
     return () => clearInterval(interval);
   }, [matchID, rows, cols]);
 
+
+  // Event handler for seat clicks
   const handleSeatClick = (row, col) => {
     if (disabled) return;
 

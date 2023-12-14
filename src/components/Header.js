@@ -1,7 +1,16 @@
-import React from 'react';
-import '../styles/Header.css';
-import userIcon from '../assets/user.png';
-import logo from '../assets/logo.png';
+/*
+  Header component
+  This component is responsible for rendering the header of the page.
+  It also handles the click events on the sign in button.
+*/
+
+// importing dependencies
+import React from "react";
+// importing styles
+import "../styles/Header.css";
+// importing assets
+import userIcon from "../assets/user.png";
+import logo from "../assets/logo.png";
 
 // Logo component
 function Logo() {
@@ -46,16 +55,16 @@ function Header(props) {
   // Determine which view to render based on the current page
   let view;
   switch (currentPage) {
-    case 'signUp':
-    case 'signIn':
+    case "signUp":
+    case "signIn":
       view = idleView;
       break;
-    case 'mainPage':
+    case "mainPage":
       view = guestView;
       break;
-    case 'fanPage':
-    case 'EFAPage':
-    case 'siteAdminPage':
+    case "fanPage":
+    case "EFAPage":
+    case "siteAdminPage":
       view = userView;
       break;
     default:

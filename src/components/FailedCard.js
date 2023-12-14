@@ -1,6 +1,14 @@
-import React from 'react';
-import '../styles/FailedCard.css';
+/*
+  This component is used to display a failed card.
+  It takes a message as a prop.
+ */
 
+// importing dependencies
+import React from "react";
+// importing styles
+import "../styles/FailedCard.css";
+
+// component
 const FailedCard = ({ message }) => {
   return (
     <div className="failed-card">
@@ -11,4 +19,5 @@ const FailedCard = ({ message }) => {
   );
 };
 
+// export component
 export default FailedCard;

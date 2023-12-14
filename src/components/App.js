@@ -17,7 +17,7 @@ import FailedCard from "./FailedCard";
 import PaymentCard from "./PaymentCard";
 import ReservationContext from "./ReservationContext";
 import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
-import { set } from "mongoose";
+
 
 function App() {
   const [userID, setUserID] = useState(null);
@@ -235,13 +235,10 @@ function App() {
         {page === "EFAPage" && (
           <EFAview
             handleClose={handleClose}
-            triggerMainPageRender={triggerMainPageRender}
             handleTicketsClick={handleTicketsClick}
             handleSettingsClick={handleSettingsClick}
             handleAddNewMatch={handleAddNewMatch}
-            handleEditMatch={handleEditMatch}
             handleAddNewStadium={handleAddNewStadium}
-            matchesDetails={matchesDetails}
             userID={userID}
           />
         )}
