@@ -10,25 +10,28 @@
   */
 
 // importing dependencies
-import React, { useState } from "react";
+import React, { useState , useContext} from "react";
 import axios from "axios";
 // importing styles
 import "../styles/SignIn.css";
+// context
+import LoadingContext from "./LoadingContext";
 
 // Define SignIn component
 function SignIn(props) {
   const [Username, setUsername] = useState(""); // State variable to store the username
   const [Password, setPassword] = useState(""); // State variable to store the password
   const [error, setError] = useState(null); // State variable to store the error message
+  const { setOverlayLoading } = useContext(LoadingContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     // Validate inputs
     if (!Username || !Password) {
       setError("Please enter your username and password."); // Set error message if username or password is empty
       return;
     }
+    setOverlayLoading(true);
 
     try {
       const response = await axios.post("http://localhost:5000/login", {
@@ -39,8 +42,10 @@ function SignIn(props) {
       const { _id, UserType } = response.data;
       // Call the callback function with id and authority
       props.onLogin(_id, UserType);
+      setOverlayLoading(false);
     } catch (error) {
       setError(error.response.data); // Set error message if there is an error during login
+      setOverlayLoading(false);
       console.error("Error logging in:", error);
     }
   };

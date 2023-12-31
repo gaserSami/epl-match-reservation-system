@@ -26,6 +26,7 @@ import LoadingCard from "./Loading";
 // importing context
 import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
 import LoadingContext from "./LoadingContext";
+import { set } from "mongoose";
 
 function EFAview({
   handleTicketsClick,
@@ -68,6 +69,7 @@ function EFAview({
         setLoading(false);
       } catch (error) {
         console.error("There was an error!", error);
+        setLoading(false);
       }
     };
 

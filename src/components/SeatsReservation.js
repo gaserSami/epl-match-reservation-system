@@ -10,6 +10,8 @@ import axios from 'axios';
 import '../styles/SeatsReservation.css';
 // importing context
 import ReservationContext from './ReservationContext';
+import LoadingContext from "./LoadingContext";
+import { set } from 'mongoose';
 
 
 // Define SeatsReservation component
@@ -22,11 +24,14 @@ const SeatsReservation = (props) => {
   const { setMySeatsNumber } = useContext(ReservationContext);
   const { UserIDD } = useContext(ReservationContext);
   const [isLoading, setIsLoading] = useState(true);
+  const { setOverlayLoading } = useContext(LoadingContext);
 
 useEffect(() => {
+  setOverlayLoading(true);
     setMySeatsNumber([]);
     const timer = setTimeout(() => {
     setIsLoading(false);
+    setOverlayLoading(false);
   }, 1500);
    return () => clearTimeout(timer);
 }, []);

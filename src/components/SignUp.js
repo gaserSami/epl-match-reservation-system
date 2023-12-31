@@ -7,10 +7,13 @@
 */
 
 // importing dependencies
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 // importing styles
 import "../styles/SignUp.css";
+// context
+import LoadingContext from "./LoadingContext";
+import { set } from "mongoose";
 
 // Define SignUp component
 function SignUp() {
@@ -27,6 +30,7 @@ function SignUp() {
   const [error, setError] = useState(null);
   const [userType, setUserType] = useState("fan"); // ['fan', 'EFA'
   const [showPassword, setShowPassword] = useState(false);
+  const { setOverlayLoading } = useContext(LoadingContext);
 
   const getAuthority = (userType) => {
     if (userType === "fan") {
@@ -41,7 +45,6 @@ function SignUp() {
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     // Validate inputs
     if (
       !username ||
@@ -63,7 +66,7 @@ function SignUp() {
     return;
   }
 
-
+    setOverlayLoading(true);
     // Create new user object
     const newUser = {
       Username: username,
@@ -81,6 +84,7 @@ function SignUp() {
     try {
       // Send POST request to create user
       await axios.post("http://localhost:5000/users", newUser);
+      setOverlayLoading(false);
       alert("User created successfully!");
       // Reset state
       setUsername("");
@@ -96,6 +100,7 @@ function SignUp() {
       setError(null);
     } catch (error) {
       setError("Error creating user: " + error.response.data.message);
+      setOverlayLoading(false);
     }
   };
 
