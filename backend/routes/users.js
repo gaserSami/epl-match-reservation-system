@@ -140,7 +140,7 @@ router.put("/:id", async (req, res) => {
 
     // Check if the password was provided
     let updateData = req.body;
-    if (req.body.Password && req.body.Password.trim() !== "password") {
+    if (req.body.Password && req.body.Password.trim() !== "password124#@$%@$") {
       // If a new password was provided, hash it
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(req.body.Password, saltRounds);

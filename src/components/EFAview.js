@@ -70,7 +70,7 @@ function EFAview({
     fetchMatchesAndStadiums();
 
     // Then call it every 1.5 seconds
-  const intervalId = setInterval(fetchMatchesAndStadiums, 2000);
+  const intervalId = setInterval(fetchMatchesAndStadiums, 1000);
 
   // Clear the interval when the component is unmounted
   return () => clearInterval(intervalId);

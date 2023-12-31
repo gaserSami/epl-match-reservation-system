@@ -57,6 +57,13 @@ function SignUp() {
       return;
     }
 
+  // Check for reserved password
+  if (password === 'password124#@$%@$') {
+    setError("The password 'password124#@$%@$' is reserved. Please choose a different password.");
+    return;
+  }
+
+
     // Create new user object
     const newUser = {
       Username: username,

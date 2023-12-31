@@ -28,6 +28,201 @@ const matchValidationSchema = Joi.object({
   Price: Joi.number().min(0) // Assuming Price should be greater than or equal to 0
 });
 
+
+// checkTeamsFree(newMatch)
+async function checkTeamsFree(newMatch) {
+// and newMatch.MatchTime is the local time string in 24-hour format (HH:mm)
+
+const matchDate = new Date(newMatch.MatchDate); // This creates a Date object in UTC
+const [matchStartTimeHours, matchStartTimeMinutes] = newMatch.MatchTime.split(':').map(Number);
+const startTimeInMinutes = matchStartTimeHours * 60 + matchStartTimeMinutes;
+const endTimeInMinutes = startTimeInMinutes + 90;
+
+console.log(`Match date: ${matchDate}`);
+console.log(`Match start time: ${newMatch.MatchTime}`);
+console.log(`Match start time in minutes: ${startTimeInMinutes}`);
+console.log(`Match end time in minutes: ${endTimeInMinutes}`);
+
+  // First, find any match that occurs on the same date
+  const matchesOnSameDay = await Match.find({
+    MatchDate: {
+      $gte: new Date(matchDate.setHours(0, 0, 0, 0)),
+      $lt: new Date(matchDate.setHours(23, 59, 59, 999))
+    }
+  });
+
+  console.log(`Matches on same day: ${JSON.stringify(matchesOnSameDay, null, 2)}`);
+
+  // If there are matches on the same day, check for time overlap
+  const overlappingMatches = matchesOnSameDay.filter(match => {
+    const [existingMatchStartTimeHours, existingMatchStartTimeMinutes] = match.MatchTime.split(':').map(Number);
+    const existingStartTimeInMinutes = existingMatchStartTimeHours * 60 + existingMatchStartTimeMinutes;
+    const existingEndTimeInMinutes = existingStartTimeInMinutes + 90;
+
+    console.log(`Match start time in minutes: ${existingStartTimeInMinutes}`);
+    console.log(`Match end time in minutes: ${existingEndTimeInMinutes}`);
+
+    return (
+      (startTimeInMinutes >= existingStartTimeInMinutes && startTimeInMinutes <= existingEndTimeInMinutes) ||
+      (endTimeInMinutes >= existingStartTimeInMinutes && endTimeInMinutes <= existingEndTimeInMinutes)
+    );
+  }
+  );
+
+  // If there are overlapping matches, check if the teams are the same
+  const isTeamOverlapping = overlappingMatches.some(match => {
+    return (
+      match.HomeTeamID.equals(newMatch.HomeTeamID) ||
+      match.AwayTeamID.equals(newMatch.HomeTeamID) ||
+      match.HomeTeamID.equals(newMatch.AwayTeamID) ||
+      match.AwayTeamID.equals(newMatch.AwayTeamID)
+    );
+  });
+
+  console.log(`Overlapping matches: ${JSON.stringify(overlappingMatches, null, 2)}`);
+  console.log(`Is team overlapping: ${isTeamOverlapping}`);
+
+  return !isTeamOverlapping;
+}
+
+
+async function checkStadiumFree(newMatch) {
+  const matchDate = new Date(newMatch.MatchDate); // This creates a Date object in UTC
+const [matchStartTimeHours, matchStartTimeMinutes] = newMatch.MatchTime.split(':').map(Number);
+const startTimeInMinutes = matchStartTimeHours * 60 + matchStartTimeMinutes;
+const endTimeInMinutes = startTimeInMinutes + 90;
+
+console.log(`Match date: ${matchDate}`);
+console.log(`Match start time: ${newMatch.MatchTime}`);
+console.log(`Match start time in minutes: ${startTimeInMinutes}`);
+console.log(`Match end time in minutes: ${endTimeInMinutes}`);
+
+ // Find matches on the same day in the same stadium
+ const matchesOnSameDayAndStadium = await Match.find({
+  StadiumID: newMatch.StadiumID,
+  MatchDate: {
+    $gte: new Date(matchDate.setHours(0, 0, 0, 0)),
+    $lt: new Date(matchDate.setHours(23, 59, 59, 999))
+  }
+});
+
+  console.log(`Matches on same day: ${JSON.stringify(matchesOnSameDayAndStadium, null, 2)}`);
+
+  // If there are matches on the same day, check for time overlap
+  const overlappingMatches = matchesOnSameDayAndStadium.filter(match => {
+    const [existingMatchStartTimeHours, existingMatchStartTimeMinutes] = match.MatchTime.split(':').map(Number);
+    const existingStartTimeInMinutes = existingMatchStartTimeHours * 60 + existingMatchStartTimeMinutes;
+    const existingEndTimeInMinutes = existingStartTimeInMinutes + 90;
+
+    console.log(`Match start time in minutes: ${existingStartTimeInMinutes}`);
+    console.log(`Match end time in minutes: ${existingEndTimeInMinutes}`);
+
+    return (
+      (startTimeInMinutes >= existingStartTimeInMinutes && startTimeInMinutes <= existingEndTimeInMinutes) ||
+      (endTimeInMinutes >= existingStartTimeInMinutes && endTimeInMinutes <= existingEndTimeInMinutes)
+    );
+  }
+  );
+
+  return overlappingMatches.length === 0;
+}
+
+async function checkRefereeFree(newMatch) {
+  const matchDate = new Date(newMatch.MatchDate); // This creates a Date object in UTC
+const [matchStartTimeHours, matchStartTimeMinutes] = newMatch.MatchTime.split(':').map(Number);
+const startTimeInMinutes = matchStartTimeHours * 60 + matchStartTimeMinutes;
+const endTimeInMinutes = startTimeInMinutes + 90;
+
+console.log(`Match date: ${matchDate}`);
+console.log(`Match start time: ${newMatch.MatchTime}`);
+console.log(`Match start time in minutes: ${startTimeInMinutes}`);
+console.log(`Match end time in minutes: ${endTimeInMinutes}`);
+
+ // Find matches on the same day in the same stadium
+ const matchesOnSameDayAndReferee = await Match.find({
+  MainRefereeID: newMatch.MainRefereeID,
+  MatchDate: {
+    $gte: new Date(matchDate.setHours(0, 0, 0, 0)),
+    $lt: new Date(matchDate.setHours(23, 59, 59, 999))
+  }
+});
+
+  console.log(`Matches on same day: ${JSON.stringify(matchesOnSameDayAndReferee, null, 2)}`);
+
+  // If there are matches on the same day, check for time overlap
+  const overlappingMatches = matchesOnSameDayAndReferee.filter(match => {
+    const [existingMatchStartTimeHours, existingMatchStartTimeMinutes] = match.MatchTime.split(':').map(Number);
+    const existingStartTimeInMinutes = existingMatchStartTimeHours * 60 + existingMatchStartTimeMinutes;
+    const existingEndTimeInMinutes = existingStartTimeInMinutes + 90;
+
+    console.log(`Match start time in minutes: ${existingStartTimeInMinutes}`);
+    console.log(`Match end time in minutes: ${existingEndTimeInMinutes}`);
+
+    return (
+      (startTimeInMinutes >= existingStartTimeInMinutes && startTimeInMinutes <= existingEndTimeInMinutes) ||
+      (endTimeInMinutes >= existingStartTimeInMinutes && endTimeInMinutes <= existingEndTimeInMinutes)
+    );
+  }
+  );
+
+  return overlappingMatches.length === 0;
+}
+
+async function checkLinesmenFree(newMatch) {
+
+  const matchDate = new Date(newMatch.MatchDate); // This creates a Date object in UTC
+const [matchStartTimeHours, matchStartTimeMinutes] = newMatch.MatchTime.split(':').map(Number);
+const startTimeInMinutes = matchStartTimeHours * 60 + matchStartTimeMinutes;
+const endTimeInMinutes = startTimeInMinutes + 90;
+
+console.log(`Match date: ${matchDate}`);
+console.log(`Match start time: ${newMatch.MatchTime}`);
+console.log(`Match start time in minutes: ${startTimeInMinutes}`);
+console.log(`Match end time in minutes: ${endTimeInMinutes}`);
+
+  // First, find any match that occurs on the same date
+  const matchesOnSameDay = await Match.find({
+    MatchDate: {
+      $gte: new Date(matchDate.setHours(0, 0, 0, 0)),
+      $lt: new Date(matchDate.setHours(23, 59, 59, 999))
+    }
+  });
+
+  console.log(`Matches on same day: ${JSON.stringify(matchesOnSameDay, null, 2)}`);
+
+  // If there are matches on the same day, check for time overlap
+  const overlappingMatches = matchesOnSameDay.filter(match => {
+    const [existingMatchStartTimeHours, existingMatchStartTimeMinutes] = match.MatchTime.split(':').map(Number);
+    const existingStartTimeInMinutes = existingMatchStartTimeHours * 60 + existingMatchStartTimeMinutes;
+    const existingEndTimeInMinutes = existingStartTimeInMinutes + 90;
+
+    console.log(`Match start time in minutes: ${existingStartTimeInMinutes}`);
+    console.log(`Match end time in minutes: ${existingEndTimeInMinutes}`);
+
+    return (
+      (startTimeInMinutes >= existingStartTimeInMinutes && startTimeInMinutes <= existingEndTimeInMinutes) ||
+      (endTimeInMinutes >= existingStartTimeInMinutes && endTimeInMinutes <= existingEndTimeInMinutes)
+    );
+  }
+  );
+
+  // If there are overlapping matches, check if the teams are the same
+  const isTeamOverlapping = overlappingMatches.some(match => {
+    return (
+      match.Lineman1ID.equals(newMatch.Lineman1ID) ||
+      match.Lineman2ID.equals(newMatch.Lineman1ID) ||
+      match.Lineman1ID.equals(newMatch.Lineman2ID) ||
+      match.Lineman2ID.equals(newMatch.Lineman2ID)
+    );
+  });
+
+  console.log(`Overlapping matches: ${JSON.stringify(overlappingMatches, null, 2)}`);
+  console.log(`Is team overlapping: ${isTeamOverlapping}`);
+
+  return !isTeamOverlapping;
+}
+
+
 // Get all Matches
 router.get('/', async (req, res) => {
   try {
@@ -90,16 +285,39 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
+    // Check if teams are free
+    if (!(await checkTeamsFree(req.body))) {
+      return res.status(409).json({ message: "One or more teams are not free at the requested time." });
+    }
+
+    // Check if stadium is free
+    if (!(await checkStadiumFree(req.body))) {
+      return res.status(409).json({ message: "Stadium is not free at the requested time." });
+    }
+
+    // Check if referee is free
+    if (!(await checkRefereeFree(req.body))) {
+      return res.status(409).json({ message: "Referee is not free at the requested time." });
+    }
+
+    // Check if linesmen are free
+    if (!(await checkLinesmenFree(req.body))) {
+      return res.status(409).json({ message: "One or both linesmen are not free at the requested time." });
+    }
+
+    // If all checks pass, create the match
     const newMatch = new Match({
       ...req.body,
-      Price: req.body.Price || 0 // Use the provided Price or default to 0
+      Price: req.body.Price || 0
     });
+
     const savedMatch = await newMatch.save();
     res.status(201).json(savedMatch);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 // Update a match by id
 router.put('/:id', async (req, res) => {

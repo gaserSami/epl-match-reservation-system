@@ -1,6 +1,7 @@
 // Import dependencies
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
+import TimePicker from 'react-time-picker';
 // import styles
 import "../styles/MatchDetailsCard.css";
 // import assets
@@ -21,7 +22,7 @@ function MatchDetailsCard(props) {
   const [homeTeamName, setHomeTeamName] = useState("");
   const [awayTeamName, setAwayTeamName] = useState("");
   const [date, setMatchDate] = useState(new Date());
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState("10:00");
   const [stadiumID, setStadiumID] = useState("");
   const [stadiumName, setStadiumName] = useState("");
   const [close, setClose] = useState(false);

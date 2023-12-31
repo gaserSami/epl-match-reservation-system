@@ -21,7 +21,7 @@ function PersonalCard(props) {
   const [birthdate, setBirthdate] = useState(
     new Date(props.personalDetails.DateOfBirth).toISOString().split("T")[0]
   );
-  const [password, setPassword] = useState("password");
+  const [password, setPassword] = useState("password124#@$%@$");
   const [address, setAddress] = useState(props.personalDetails.Address);
   const [username, setUsername] = useState(props.personalDetails.Username);
   const [statusMessage, setStatusMessage] = useState("");
