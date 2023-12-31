@@ -9,6 +9,8 @@ import axios from "axios";
 import "../styles/PaymentCard.css";
 // importing context
 import ReservationContext from "./ReservationContext";
+import LoadingContext from "./LoadingContext";
+import { set } from "mongoose";
 
 // Define PaymentCard component
 const PaymentCard = (props) => {
@@ -18,6 +20,7 @@ const PaymentCard = (props) => {
   const [cardHolderName, setCardHolderName] = useState("");
   const { mySeatsNumber, Pricee, MatchIDD, UserIDD } =
     useContext(ReservationContext);
+  const { setOverlayLoading } = useContext(LoadingContext);
 
   const validateFields = () => {
     const cardNumberPattern = /^\d{16}$/;
@@ -89,6 +92,7 @@ const PaymentCard = (props) => {
       return false;
     } catch (error) {
       console.error("Error while checking for clashing matches:", error);
+      setOverlayLoading(false);
       return false;
     }
   };
@@ -99,6 +103,7 @@ const PaymentCard = (props) => {
       alert("enter valid info");
       return;
     }
+    setOverlayLoading(true);
     // Define the ticket object here with the relevant data
     const ticket = {
       MatchID: MatchIDD, // Make sure this variable is defined and holds the correct match ID
@@ -127,6 +132,7 @@ const PaymentCard = (props) => {
         alert(
           "One or more selected seats are already reserved. Please choose other seats."
         );
+        setOverlayLoading(false);
         props.handleBookTicket(0);
         return;
         // Stop the submit as seats are already reserved
@@ -135,6 +141,7 @@ const PaymentCard = (props) => {
           const result = await isMatchClashing(UserIDD, MatchIDD);
           if (result) {
             // Handle the case where the matches are clashing
+            setOverlayLoading(false);
             alert(
               "this match is clashing with another match cancel the old match reservation and try again."
             );
@@ -147,10 +154,12 @@ const PaymentCard = (props) => {
               .post("http://localhost:5000/tickets", ticket)
               .then(() => {
                 props.handleBookTicket(1);
+                setOverlayLoading(false);
                 props.forceFanPageRender();
               })
               .catch((error) => {
                 console.error("Error while booking ticket:", error);
+                setOverlayLoading(false);
                 props.handleBookTicket(0);
               });
           }

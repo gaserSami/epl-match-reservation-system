@@ -4,10 +4,11 @@
 */
 
 // importing dependencies
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext} from "react";
 import axios from "axios";
 // importing styles
 import "../styles/PersonalCard.css";
+import LoadingContext from "./LoadingContext";
 
 // Define PersonalCard component
 function PersonalCard(props) {
@@ -25,6 +26,7 @@ function PersonalCard(props) {
   const [address, setAddress] = useState(props.personalDetails.Address);
   const [username, setUsername] = useState(props.personalDetails.Username);
   const [statusMessage, setStatusMessage] = useState("");
+  const { setOverlayLoading } = useContext(LoadingContext);
 
   // Fetch user data when component mounts
   useEffect(() => {
@@ -53,7 +55,7 @@ function PersonalCard(props) {
   // Update user data on form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setOverlayLoading(true);
     const updatedUser = {
       FirstName: firstName,
       LastName: lastName,
@@ -76,9 +78,11 @@ function PersonalCard(props) {
       console.log(response.data);
       fetchUserData(); // Fetch the latest user data after updating it
       setStatusMessage({ text: "Update successful", color: "green" });
+      setOverlayLoading(false);
     } catch (error) {
       console.error("There was an error!", error);
       setStatusMessage({ text: "Update failed", color: "red" });
+      setOverlayLoading(false);
     }
   };
 

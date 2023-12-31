@@ -7,9 +7,11 @@ import "../styles/MatchDetailsCard.css";
 // import assets
 import stadiumIcon from "../assets/stadium.png";
 import SeatsReservation from "./SeatsReservation";
+import LoadingContext from "./LoadingContext";
 // import context
 import ReservationContext from "./ReservationContext";
 import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
+import { set } from "mongoose";
 
 // Define MatchDetailsCard component
 function MatchDetailsCard(props) {
@@ -26,6 +28,7 @@ function MatchDetailsCard(props) {
   const [stadiumID, setStadiumID] = useState("");
   const [stadiumName, setStadiumName] = useState("");
   const [close, setClose] = useState(false);
+  const { setOverlayLoading } = useContext(LoadingContext);
   const {
     StadiumID: { Rows: rows1 } = {},
     StadiumID: { Columns: cols1 } = {},
@@ -125,6 +128,7 @@ function MatchDetailsCard(props) {
   // Handle form submit for editing match details
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    setOverlayLoading(true);
     try {
       const { _id, __v, ...detailsToUpdate } = matchDetails;
       const update = {
@@ -144,6 +148,7 @@ function MatchDetailsCard(props) {
         update
       );
       console.log(response.data);
+      setOverlayLoading(false);
       alert("Match details updated successfully!");
       setMatchDetails(update);
       setRefresher((prev) => !prev);
@@ -151,12 +156,14 @@ function MatchDetailsCard(props) {
       props.handleClose();
     } catch (error) {
       console.error("There was an error!", error);
+      setOverlayLoading(false);
     }
   };
 
   // Handle form submit for adding a new match
   const handleAddSubmit = async (e) => {
     e.preventDefault();
+    setOverlayLoading(true);
     try {
       // Create a new match object from the individual state variables
       const newMatch = {
@@ -176,12 +183,13 @@ function MatchDetailsCard(props) {
         newMatch
       );
       console.log(response.data);
+      setOverlayLoading(false);
       alert("Match details added successfully!");
       setRefresher((prev) => !prev);
     } catch (error) {
       // Log the error for debugging purposes
       console.error("There was an error!", error);
-    
+      setOverlayLoading(false);
       // Check if the error has a response and a response body with a message
       if (error.response && error.response.data && error.response.data.message) {
         // Alert the error message from the response body

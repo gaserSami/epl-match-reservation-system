@@ -3,12 +3,14 @@
 */
 
 // importing dependencies
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 // importing styles
 import "../styles/StadiumDetailsCard.css";
 // importing assets
 import stadiumIcon from "../assets/stadium.png";
+// importing context
+import LoadingContext from "./LoadingContext";
 
 // Define StadiumDetailsCard component
 function StadiumDetailsCard(props) {
@@ -22,6 +24,7 @@ function StadiumDetailsCard(props) {
   //function
   const [refresher, setRefresher] = useState(false);
   const { forceMainPageRender } = props;
+  const { setOverlayLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     forceMainPageRender();
@@ -41,6 +44,7 @@ function StadiumDetailsCard(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setOverlayLoading(true);
     // Make a POST request to the backend server to add the stadium details to the database
     axios
       .post("http://localhost:5000/stadiums", stadiumDetails)
@@ -48,11 +52,13 @@ function StadiumDetailsCard(props) {
         // Handle the response from the server
         console.log(response.data); // You can customize this based on your requirements
         setRefresher((prev) => !prev);
+        setOverlayLoading(false);
         alert("Stadium details added successfully!");
       })
       .catch((error) => {
         // Handle any errors that occur during the request
         setRefresher((prev) => !prev);
+        setOverlayLoading(false);
         alert("There was an error! Please re-check the form.");
         console.error(error);
       });

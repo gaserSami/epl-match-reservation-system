@@ -175,7 +175,7 @@ const MatchCard = (props) => {
         <p className="stadium">{stadium}, Egypt</p>
       </div>
       <div className="price">
-        {ticketNumber !== 0 ? ticketPrice : price} L.E
+        {ticketNumber !== 0 ? (ticketPrice !==0 ? ticketPrice : "loading...") : (price !==0 ? price : "loading...")} L.E
       </div>
       <div className="buttons">
         {props.view !== "reservedView" && (

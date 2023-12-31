@@ -21,8 +21,11 @@ import "../styles/EFAview.css";
 import Sidebar from "./Sidebar";
 import MatchCard from "./MatchCard";
 import StadiumCard from "./StadiumCard";
+import OverlayContainer from "./OverlayContainer";
+import LoadingCard from "./Loading";
 // importing context
 import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
+import LoadingContext from "./LoadingContext";
 
 function EFAview({
   handleTicketsClick,
@@ -42,6 +45,7 @@ function EFAview({
   const [stadiumsDetails, setStadiumsDetails] = useState([{}]);
   const [activeItem, setActiveItem] = useState(listItems[1]);
   const [loading, setLoading] = useState(true);
+  const { setOverlayLoading } = useContext(LoadingContext);
 
   // Handle the click event on sidebar items
   const handleItemClick = (item) => {
@@ -80,7 +84,11 @@ function EFAview({
   return (
     <div className="EFAview">
       {loading ? (
-        <div>Loading...</div> // Replace this with your loading spinner or message
+        (
+          <OverlayContainer>
+           <LoadingCard/>
+          </OverlayContainer>
+        )// Replace this with your loading spinner or message
       ) : (
         <>
           <Sidebar

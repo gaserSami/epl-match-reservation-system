@@ -255,11 +255,6 @@ function App() {
       <MatchCardAndDetailsContext.Provider
         value={{ MatchDetailss, setMatchDetailss, Vieww, setVieww }}
       >
-        {overlayLoading && (
-          <OverlayContainer onClose={handleClose}>
-           <LoadingCard/>
-          </OverlayContainer>
-        )}
         {page === "mainPage" && (
           <MainPage
             onSignUp={handleSignUp}
@@ -381,6 +376,11 @@ function App() {
         {showFailedCard && (
           <OverlayContainer onClose={handleClose}>
             <FailedCard message={failedMessage} />
+          </OverlayContainer>
+        )}
+         {overlayLoading && (
+          <OverlayContainer>
+           <LoadingCard/>
           </OverlayContainer>
         )}
       </MatchCardAndDetailsContext.Provider>
