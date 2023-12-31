@@ -50,6 +50,9 @@ function Header(props) {
   const idleView = (
     <header className={`Header ${props.className}`}>
       <Logo />
+      <div className="signIn">
+        <button onClick={() => props.onSignIn()}>Sign In</button>
+      </div>
     </header>
   );
 

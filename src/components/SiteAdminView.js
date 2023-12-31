@@ -44,7 +44,12 @@ function SiteAdminView({ handleSettingsClick, userID }) {
       }
     };
 
+    // Call fetchUsers immediately and then every second
     fetchUsers();
+    const intervalId = setInterval(fetchUsers, 1000);
+
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   // Handle user approval

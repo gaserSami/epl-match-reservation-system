@@ -22,6 +22,8 @@ import "../styles/MatchCard.css";
 import editIcon from "../assets/editing.png";
 // importing context
 import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
+import LoadingContext from "./LoadingContext";
+import { set } from "mongoose";
 
 // Define MatchCard component
 const MatchCard = (props) => {
@@ -30,6 +32,8 @@ const MatchCard = (props) => {
   const [matchID, setMatchID] = useState(props.matchDetails._id);
   const { setMatchDetailss } = useContext(MatchCardAndDetailsContext);
   const { setVieww } = useContext(MatchCardAndDetailsContext);
+  const { setOverlayLoading } = useContext(LoadingContext);
+
   const [ticketPrice, setTicketPrice] = useState(0);
 
   // Update matchDetails when props.matchDetails changes
@@ -94,6 +98,7 @@ const MatchCard = (props) => {
   const cancel = async () => {
     if (ticketNumber !== 0) {
       try {
+        setOverlayLoading(true);
         // Fetch the ticket data
         const ticketResponse = await axios.get(
           `http://localhost:5000/tickets/${ticketNumber}`
@@ -124,6 +129,7 @@ const MatchCard = (props) => {
         // Only allow cancellation if the match is 3 days away or more
         if (diffInDays < 3) {
           alert("Cannot cancel a ticket less than 3 days before the match");
+          setOverlayLoading(false);
           return;
         }
 
@@ -136,14 +142,17 @@ const MatchCard = (props) => {
         if (response.status === 200) {
           console.log("Ticket cancelled successfully");
           alert("Ticket cancelled successfully");
+          setOverlayLoading(false);
           if (forceFanPageRender) {
             forceFanPageRender();
           }
         } else {
           console.log("Failed to cancel the ticket");
+          setOverlayLoading(false);
         }
       } catch (error) {
         console.error("There was an error!", error);
+        setOverlayLoading(false);
       }
     }
   };

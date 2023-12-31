@@ -4,6 +4,7 @@ import "../styles/App.css";
 import Header from "./Header";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
+import LoadingCard from "./Loading";
 import MatchDetailsCard from "./MatchDetailsCard";
 import MainPage from "./MainPage";
 import OverlayContainer from "./OverlayContainer";
@@ -17,6 +18,7 @@ import FailedCard from "./FailedCard";
 import PaymentCard from "./PaymentCard";
 import ReservationContext from "./ReservationContext";
 import MatchCardAndDetailsContext from "./MatchCardAndDetailsContext";
+import LoadingContext from "./LoadingContext";
 
 function App() {
   const [userID, setUserID] = useState(null);
@@ -49,6 +51,7 @@ function App() {
   const [MatchIDD, setMatchIDD] = useState(null); // New state for seat numbers like [1, 2, 3
   const [MatchDetailss, setMatchDetailss] = useState([]); // [matchDetails
   const [Vieww, setVieww] = useState("guestView"); // [matchDetails
+  const [overlayLoading, setOverlayLoading] = useState(false);
 
 
   const forceMainPageRender = () => {
@@ -247,9 +250,16 @@ function App() {
     <div className="App">
       <Header className="sticky-header" currentPage={page} onSignIn={handleSignIn} onLogOut={onLogOut} username={username} />
       <Header className="fixed-header" currentPage={page} onSignIn={handleSignIn} onLogOut={onLogOut} username={username} />
+      
+      <LoadingContext.Provider value={{ overlayLoading, setOverlayLoading }}>
       <MatchCardAndDetailsContext.Provider
         value={{ MatchDetailss, setMatchDetailss, Vieww, setVieww }}
       >
+        {overlayLoading && (
+          <OverlayContainer onClose={handleClose}>
+           <LoadingCard/>
+          </OverlayContainer>
+        )}
         {page === "mainPage" && (
           <MainPage
             onSignUp={handleSignUp}
@@ -374,6 +384,7 @@ function App() {
           </OverlayContainer>
         )}
       </MatchCardAndDetailsContext.Provider>
+      </LoadingContext.Provider>
     </div>
   );
 }

@@ -33,6 +33,15 @@ function FanView(props) {
     setRefresher(!refresher);
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setRefresher(refresher => !refresher);
+    }, 1000);
+  
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
+
   // force fan page render
   useEffect(() => {
     setRefresher(!refresher);

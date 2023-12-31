@@ -42,7 +42,7 @@ function PersonalCard(props) {
       setGender(user.Gender);
       setEmail(user.Email);
       setBirthdate(new Date(user.DateOfBirth).toISOString().split("T")[0]);
-      setPassword("password");
+      setPassword("password124#@$%@$");
       setAddress(user.Address);
       setUsername(user.Username);
     } catch (error) {
