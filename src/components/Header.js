@@ -26,7 +26,7 @@ function Header(props) {
 
   // View for guest users
   const guestView = (
-    <header className="Header">
+    <header className={`Header ${props.className}`}>
       <Logo />
       <div className="signIn">
         <button onClick={() => props.onSignIn()}>Sign In</button>
@@ -36,18 +36,19 @@ function Header(props) {
 
   // View for logged-in users
   const userView = (
-    <header className="Header">
+    <header className={`Header ${props.className}`}>
       <Logo />
       <div className="userInfo">
         <span className="username">{props.username}</span>
         <img src={userIcon} alt="" />
+        <button className="logout-button" onClick={() => props.onLogOut()}>Log out</button>
       </div>
     </header>
   );
 
   // View for idle state
   const idleView = (
-    <header className="Header">
+    <header className={`Header ${props.className}`}>
       <Logo />
     </header>
   );

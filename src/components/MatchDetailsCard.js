@@ -147,6 +147,7 @@ function MatchDetailsCard(props) {
       setMatchDetails(update);
       setRefresher((prev) => !prev);
       setClose(true);
+      props.handleClose();
     } catch (error) {
       console.error("There was an error!", error);
     }
@@ -177,9 +178,19 @@ function MatchDetailsCard(props) {
       alert("Match details added successfully!");
       setRefresher((prev) => !prev);
     } catch (error) {
-      alert("There was an error! Please check your inputs.");
+      // Log the error for debugging purposes
       console.error("There was an error!", error);
+    
+      // Check if the error has a response and a response body with a message
+      if (error.response && error.response.data && error.response.data.message) {
+        // Alert the error message from the response body
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        // This handles cases where the error format is unexpected or when there is no network response
+        alert("There was an error! Please check your inputs.");
+      }
     }
+    
   };
 
   // Reference to the match card element
@@ -422,6 +433,8 @@ function MatchDetailsCard(props) {
               id="date"
               value={date.toISOString().split("T")[0]}
               onChange={handleDateChange}
+              min={new Date().toISOString().split("T")[0]}
+              max={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
               required
             />
           </div>
@@ -582,6 +595,8 @@ function MatchDetailsCard(props) {
               id="date"
               value={date.toISOString().split("T")[0]}
               onChange={handleDateChange}
+              min={new Date().toISOString().split("T")[0]}
+              max={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
               required
             />
           </div>

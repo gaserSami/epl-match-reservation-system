@@ -69,7 +69,7 @@
 }
 
 /* Sign-up button */
-.signup-container button {
+.signup-container button:not(.toggle-password-visibility-button) {
   width: 100%;
   padding: 10px;
   border: none;
@@ -81,7 +81,7 @@
 }
 
 /* Hover effect on the sign-up button */
-.signup-container button:hover {
+.signup-container button::not(.toggle-password-visibility-button):hover {
   background-color: #03297a;
 }
 
@@ -130,6 +130,20 @@
 /* Space out the radio buttons */
 .signup-container .gender input[type="radio"] {
   flex: 0.15;
+}
+
+.password-container {
+  position: relative;
+}
+
+.toggle-password-visibility-button {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 /* Responsive adjustments for smaller screens */

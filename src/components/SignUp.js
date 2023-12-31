@@ -26,6 +26,7 @@ function SignUp() {
   const [address, setAddress] = useState("");
   const [error, setError] = useState(null);
   const [userType, setUserType] = useState("fan"); // ['fan', 'EFA'
+  const [showPassword, setShowPassword] = useState(false);
 
   const getAuthority = (userType) => {
     if (userType === "fan") {
@@ -87,8 +88,7 @@ function SignUp() {
       setUserType("");
       setError(null);
     } catch (error) {
-      setError("Error creating user. Please try again.");
-      alert("There was an error" + error);
+      setError("Error creating user: " + error.response.data.message);
     }
   };
 
@@ -126,7 +126,6 @@ function SignUp() {
                 <option value="">Select Authority</option>
                 <option value="fan">{getAuthority("fan")}</option>
                 <option value="EFAmanager">{getAuthority("EFAmanager")}</option>
-                <option value="siteAdmin">{getAuthority("siteAdmin")}</option>
               </select>
             </div>
           </div>
@@ -182,8 +181,8 @@ function SignUp() {
                   type="radio"
                   id="male"
                   name="gender"
-                  value="male"
-                  checked={gender === "male"}
+                  value="Male"
+                  checked={gender === "Male"}
                   onChange={(e) => setGender(e.target.value)}
                   required
                 />
@@ -194,8 +193,8 @@ function SignUp() {
                   type="radio"
                   id="female"
                   name="gender"
-                  value="female"
-                  checked={gender === "female"}
+                  value="Female"
+                  checked={gender === "Female"}
                   onChange={(e) => setGender(e.target.value)}
                   required
                 />
@@ -226,14 +225,28 @@ function SignUp() {
             </div>
             <div className="input-group">
               <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                placeholder="********"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="password-container">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  placeholder="********"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  id="toggle-password-visibility"
+                  className="toggle-password-visibility-button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <i className="fas fa-eye-slash"></i>
+                  ) : (
+                    <i className="fas fa-eye"></i>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
           <div className="input-group full-width">

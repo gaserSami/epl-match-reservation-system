@@ -113,7 +113,18 @@ router.post("/", async (req, res) => {
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    if (error.code === 11000) {
+      // This is a MongoDB duplicate key error
+      if (error.message.includes('Username')) {
+        res.status(400).json({ message: "Username is already taken." });
+      } else if (error.message.includes('Email')) {
+        res.status(400).json({ message: "Email is already registered." });
+      } else {
+        res.status(400).json({ message: "Duplicate field value." });
+      }
+    } else {
+      res.status(400).json({ message: error.message });
+    }
   }
 });
 

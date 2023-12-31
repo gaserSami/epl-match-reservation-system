@@ -39,7 +39,7 @@ function MainPage({ onSignUp, handleTicketsClick }) {
         <div className="landingText">
           <h1>Welcome to</h1>
           <h1>
-            the Egyptian Premier League (EPL) - The Heartbeat of Egyptian
+            The Egyptian Premier League (EPL) - The Heartbeat of Egyptian
             Football
           </h1>
           <p className="content">
@@ -77,7 +77,7 @@ function MainPage({ onSignUp, handleTicketsClick }) {
         )}
       </div>
       <button className="sideButton" onClick={onSignUp}>
-        Sign un now to book your ticket!
+        Sign up now to book your ticket!
       </button>
     </div>
   );

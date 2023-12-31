@@ -50,6 +50,7 @@ function App() {
   const [MatchDetailss, setMatchDetailss] = useState([]); // [matchDetails
   const [Vieww, setVieww] = useState("guestView"); // [matchDetails
 
+
   const forceMainPageRender = () => {
     // Toggle the state to force re-render
     setTriggerMainPageRender(!triggerMainPageRender);
@@ -65,6 +66,28 @@ function App() {
   };
 
   useEffect(() => {
+
+    const userID = localStorage.getItem("userID");
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const currentPage = localStorage.getItem("currentPage");
+
+    if (isLoggedIn) {
+      setUserID(userID);
+      setPage(currentPage);
+      axios
+        .get(`http://localhost:5000/users/${userID}`)
+        .then((response) => {
+          const updatedPersonalDetails = response.data;
+          setPersonalDetails(updatedPersonalDetails);
+          setUserType(updatedPersonalDetails.UserType);
+          setUsername(updatedPersonalDetails.Username);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    }
+
+
     const fetchTeamsAndStadiums = async () => {
       try {
         const teamsResponse = await axios.get("http://localhost:5000/teams");
@@ -108,6 +131,8 @@ function App() {
 
   const onLogin = (id, UserType) => {
     setUserID(id);
+    localStorage.setItem("userID", id);
+    localStorage.setItem("isLoggedIn", true);
     axios
       .get(`http://localhost:5000/users/${id}`)
       .then((response) => {
@@ -119,24 +144,39 @@ function App() {
         switch (UserType) {
           case "guest":
             setPage("mainPage");
+            localStorage.setItem("currentPage", "mainPage");
             break;
           case "fan":
             setPage("fanPage");
+            localStorage.setItem("currentPage", "fanPage");
             break;
           case "EFAmanager":
             setPage("EFAPage");
+            localStorage.setItem("currentPage", "EFAPage");
             break;
           case "siteAdmin":
             setPage("siteAdminPage");
+            localStorage.setItem("currentPage", "siteAdminPage");
             break;
           default:
             setPage("mainPage");
+            localStorage.setItem("currentPage", "mainPage");
         }
       })
       .catch((error) => {
         console.error("There was an error!", error);
       });
   };
+
+  const onLogOut = () => {
+    setUserID(null);
+    setUsername("");
+    setUserType("guest");
+    setPage("mainPage");
+    localStorage.removeItem("userID");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("currentPage");
+  }
 
   const handleSettingsClick = (personaldetails) => {
     setPersonalDetails(personalDetails);
@@ -178,6 +218,8 @@ function App() {
     setEditMatch(true);
   };
 
+
+
   const handleAddNewStadium = () => {
     setAddNewStadium(true);
   };
@@ -203,7 +245,8 @@ function App() {
 
   return (
     <div className="App">
-      <Header currentPage={page} onSignIn={handleSignIn} username={username} />
+      <Header className="sticky-header" currentPage={page} onSignIn={handleSignIn} onLogOut={onLogOut} username={username} />
+      <Header className="fixed-header" currentPage={page} onSignIn={handleSignIn} onLogOut={onLogOut} username={username} />
       <MatchCardAndDetailsContext.Provider
         value={{ MatchDetailss, setMatchDetailss, Vieww, setVieww }}
       >
@@ -306,6 +349,7 @@ function App() {
                 linesmen={linesmen}
                 forceMainPageRender={forceMainPageRender}
                 userID={userID}
+                handleClose = {handleClose}
               />
             </OverlayContainer>
           )}

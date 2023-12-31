@@ -6,11 +6,23 @@
   padding: 0 20px;
   background-color: #ffffff;
   height: 10vh;
-  position: -webkit-sticky;
+}
+
+.sticky-header {
+  visibility: hidden;
   position: sticky;
   top: 0;
+  z-index: 1000;
+}
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
   z-index: 999;
 }
+
 .Header .logo img{
   height: 10vh;
 }
@@ -25,6 +37,24 @@
 }
 .Header .signIn button:hover{
   background-color: #002472;
+}
+
+.userInfo .logout-button {
+  display: none;
+  background-color: #020202;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  position: absolute;
+  top: 20%;
+  right: 2%;
+}
+
+.userInfo:hover .logout-button {
+  display: block;
 }
 
 .Header .userInfo

@@ -121,10 +121,6 @@ function PersonalCard(props) {
 
   return (
     <div className="personal-container">
-      <p style={{ color: "red" }}>
-        <b>NOTE:</b> don't change password textbox unless you want to change
-        password to avoid account loss
-      </p>
       <div className="personal-card-box">
         <h2>Personal Info</h2>
         <p>Please enter your details.</p>
