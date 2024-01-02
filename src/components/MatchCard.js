@@ -121,6 +121,11 @@ const MatchCard = (props) => {
         const today = new Date();
         const matchDate = new Date(match.MatchDate);
 
+        console.log("today:", today);
+        console.log("matchDate:", matchDate);
+        console.log("diff:", matchDate - today);
+        console.log("diff in days:", Math.floor((matchDate - today) / (1000 * 60 * 60 * 24)));
+
         // Calculate the difference in days
         const diffInDays = Math.floor(
           (matchDate - today) / (1000 * 60 * 60 * 24)

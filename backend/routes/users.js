@@ -16,13 +16,10 @@ const Joi = require("joi");
 const userValidationSchema = Joi.object({
   Username: Joi.string().required(),
   Password: Joi.string()
-    .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
-    .invalid("password") // Add this line
-    .messages({
-      "string.pattern.base":
-        "Password must contain only alphanumeric characters.",
-      "any.invalid": '"password" is a reserved word.', // Add this line
-    }),
+  .invalid("password124#@$%@$")
+  .messages({
+    "any.invalid": '"password124#@$%@$" is a reserved word.',
+  }),
   FirstName: Joi.string().required(),
   LastName: Joi.string().required(),
   DateOfBirth: Joi.date().required(),
